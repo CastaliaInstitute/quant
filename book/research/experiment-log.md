@@ -44,7 +44,7 @@ This log preserves both superseded policy experiments and the current biotech ca
 
 ## Next study: historical event-risk panel
 
-The first historical data artifact is a tiny source-verified COVID-vaccine event fixture. It is clustered and too small to fit a model. The next research record should be opened only after adding a wider trial/disclosure cohort, point-in-time event features, a licensed OHLCV file, inactive/delisted issuers, and a preregistered chronological evaluation plan. Preserve every inclusion rule and data-source revision.
+The current historical data artifact is a nine-disclosure source-lineage fixture spanning vaccines, Alzheimer's, asthma, and oncology. It remains tiny and clustered, with several date-only catalyst times, so it cannot support fitting or a stable return estimate. The next research record should be opened only after adding a wider trial/disclosure cohort, point-in-time event features, a licensed OHLCV file, inactive/delisted issuers, and a preregistered chronological evaluation plan. Preserve every inclusion rule and data-source revision.
 
 ## Data audit · CTO 2020–2024 human-label subset
 
