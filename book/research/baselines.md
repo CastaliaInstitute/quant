@@ -81,6 +81,38 @@ print("Residual cash after issuer caps:", round(cash_weight, 3))
 
 The cap is applied without reallocating excess to the other names, so the remainder stays in cash. The reusable Python baseline in [`quantlab.portfolio.allocate_portfolio`](https://github.com/CastaliaInstitute/quant/blob/main/src/quantlab/portfolio.py) implements equal-weight and inverse-volatility weights with issuer and optional sector caps, and reports excluded assets and residual cash. It does not estimate volatility, covariance, or returns. An empirical application must estimate risk from training-window returns only, define how missing and newly listed issuers enter, add total-risk limits, and charge for turnover and execution. Compare every rule using the same time-aligned net returns and XBI/SPY benchmarks; a plausible weight vector is not evidence of a profitable portfolio.
 
+## Apply close-time targets on the next return period
+
+The portfolio backtest uses one-row-lagged target weights. This short synthetic example makes the timing, idle cash, traded notional, and net returns visible. The first period stays in cash because the first target is only observed at that period's close.
+
+```{code-cell} ipython3
+synthetic_asset_returns = [[0.01, 0.02], [-0.03, 0.01], [0.05, -0.01]]
+close_time_targets = [[0.50, 0.50], [0.20, 0.40], [0.50, 0.20]]
+portfolio_net_returns = [0.0, 0.0, 0.0]
+previous_weight_0 = 0.0
+previous_weight_1 = 0.0
+cost_bps = 10.0
+
+for day in range(3):
+    if day == 0:
+        weight_0 = 0.0
+        weight_1 = 0.0
+    else:
+        weight_0 = close_time_targets[day - 1][0]
+        weight_1 = close_time_targets[day - 1][1]
+    cash_weight = 1.0 - weight_0 - weight_1
+    turnover = abs(weight_0 - previous_weight_0) + abs(weight_1 - previous_weight_1)
+    gross_return = weight_0 * synthetic_asset_returns[day][0] + weight_1 * synthetic_asset_returns[day][1]
+    transaction_cost = turnover * cost_bps / 10000.0
+    net_return = gross_return - transaction_cost
+    portfolio_net_returns[day] = net_return
+    print("period", day + 1, "cash:", round(cash_weight, 2), "turnover:", round(turnover, 2), "cost:", round(transaction_cost, 5), "net return:", round(net_return, 5))
+    previous_weight_0 = weight_0
+    previous_weight_1 = weight_1
+```
+
+This is an accounting illustration over three invented periods, not an annualized performance estimate. The Python [`portfolio_backtest`](https://github.com/CastaliaInstitute/quant/blob/main/src/quantlab/portfolio.py) applies the same lag to a date-indexed return panel, checks weight and missing-return constraints, and returns equity, turnover, costs, and net returns for the selected scorecard.
+
 ## Sensitivity is part of the result
 
 For event-risk forecasting, report calibration, Brier score or log loss for declared event-loss classes, discrimination with confidence intervals, tail-event precision/recall, and performance by phase, indication, issuer, and period. Compare against the historical training-fold base rate. For any trading rule, vary costs, execution lag, event timestamp convention, and feature windows. Show the full range; a single favorable setting is evidence of fragility, not a reason to hide alternatives.
