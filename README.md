@@ -56,7 +56,7 @@ python scripts/audit_cto_outcomes.py
 jupyter-book build book --path-output book
 ```
 
-Historical registry, biomedical-publication, and issuer filing metadata have been pulled for a five-trial pilot. Market prices are fetched separately through a provider account or imported from a licensed CSV; see [the biopharma data guide](book/data-sources.md). No stock-price file has been provided yet, so there is no historical event-return result or fitted historical model.
+Historical registry, biomedical-publication, and issuer filing metadata have been pulled for ten trial-to-issuer mappings and nine sourced disclosures across four therapeutic areas. The cohort is a source-lineage fixture, not a training sample. Market prices are fetched separately through a provider account or imported from a licensed CSV; see [the biopharma data guide](book/data-sources.md). No stock-price file has been provided yet, so there is no historical event-return result or fitted historical model.
 
 After a broader event cohort, archived point-in-time trial versions, and licensed price bars are available, build the local panel and run the gated walk-forward evaluator:
 
