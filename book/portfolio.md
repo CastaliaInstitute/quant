@@ -28,6 +28,7 @@ The portfolio is organized around evidence for the work, not a claim of readines
 | --- | --- | --- |
 | Statistical judgment | Falsifiable question, leakage controls, chronological folds, baselines, uncertainty, and failed runs | Protocol and simulator work are present; the historical event model still needs a broader cohort and licensed prices |
 | Financial measurement | Net compounded returns, benchmark-relative results, drawdown, turnover, and cost sensitivity | Metrics are implemented; no empirical result is published yet |
+| Portfolio construction and risk | Multi-asset weights, issuer/sector limits, risk budgets, turnover, and capacity-aware costs | Not yet demonstrated: the current simulator makes one issuer-level long-or-cash decision. The next strategy stage will compare transparent allocation rules before adding RL |
 | ML and RL research | Reproducible experiments, matched-seed policy comparisons with uncertainty, and an honest transition from synthetic to historical replay | Crossed-seed bootstrap includes training and evaluation seed variation under one synthetic generator; return intervals span zero, the Q policy mostly chooses cash, and the 10-policy sample is exploratory |
 | Data engineering | Versioned trial records, source hashes, timestamps, security mapping, and price-vendor lineage | Registry/article ingestion, pinned external-cohort audit, and panel builder exist; archived point-in-time versions and licensed market prices remain gaps |
 | Research engineering | Forkable components, bounded execution, deterministic configuration, and usable documentation | Core package, book, and cell Worker are in the repository; public deployment and broader runtime review remain pending |
@@ -36,6 +37,8 @@ The portfolio is organized around evidence for the work, not a claim of readines
 ## Metric choices
 
 For a prediction claim, evaluate downside probabilities with Brier score and log loss against a chronological training-window base rate; use ROC AUC only as a secondary ranking measure when both classes occur. For a strategy or RL policy, lead with net compounded return and benchmark-relative compounded return together with maximum drawdown. Publish volatility, Sharpe/Sortino, tail loss, turnover, and cost stress beside them. The RL reward is log net wealth, while decisions are judged across matched seeds and lower-tail outcomes. The [evidence review](research/evidence-review.md) records how published clinical-transition and market-response studies inform the simulator without conflating their targets.
+
+This scorecard covers the research pipeline expected in current quantitative-research roles, including data processing, feature design, model training, portfolio construction, backtesting, and performance analysis ([Point72 quantitative researcher role](https://careers.point72.com/CSJobDetail?jobCode=CSS-0012688&jobName=quantitative-researcher&locale=English&location=Hong+Kong&retURL=%2FCSCareerSearch)). The project has not yet demonstrated the portfolio-construction stage. Before asking RL to allocate capital, compare equal-weight and inverse-volatility baselines, impose explicit issuer and sector exposure limits, and include turnover and execution costs. Keep probability calibration as the model-selection criterion; judge any resulting allocation separately by net portfolio returns and risk.
 
 ## How the work will be judged
 
@@ -55,9 +58,10 @@ There is no validated historical model, brokerage integration, or claim of a rep
 2. Add event-source verification and archived point-in-time trial versions, then freeze source timestamps and ticker/issuer mappings.
 3. Import an appropriate licensed daily and intraday market-data history, including sector and broad-market comparators.
 4. Establish raw-return, market-model CAR, event-downside, and calibration baselines; keep the final chronological period untouched.
-5. Use clinical-outcome labels only in a separately defined progression/approval benchmark; do not transfer the selected CTO label fraction into the simulator.
-6. Calibrate empirical replay and RL reward distributions from training-window market outcomes only; preserve event-level and issuer-level dependence in the gym.
-7. Train RL only within training windows; tune on validation windows; preserve the final period untouched.
-8. Publish permissible source identifiers, code revision, configuration, cohort selection, data checksums, event windows, objections, and failed runs.
+5. Build a multi-asset portfolio layer with equal-weight and inverse-volatility baselines, issuer/sector caps, a cash option, and cost-aware rebalancing; publish exposure, turnover, drawdown, and benchmark-relative returns.
+6. Use clinical-outcome labels only in a separately defined progression/approval benchmark; do not transfer the selected CTO label fraction into the simulator.
+7. Calibrate empirical replay and RL reward distributions from training-window market outcomes only; preserve event-level and issuer-level dependence in the gym.
+8. Extend RL from the one-issuer mechanics gym only after transparent multi-asset rules are established. Train inside chronological training windows, tune on validation windows, enforce the same portfolio/risk constraints, and preserve the final period untouched.
+9. Publish permissible source identifiers, code revision, configuration, cohort selection, data checksums, event windows, objections, and failed runs.
 
 This roadmap is the intended portfolio standard, not a claim that each stage is complete.

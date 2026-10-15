@@ -77,8 +77,9 @@ The research ladder is:
 
 1. **Mechanics gym (current):** verify state/action timing, costs, reward, and deterministic reporting with explicitly synthetic outcomes.
 2. **Calibrated simulator:** estimate distributions from historical, point-in-time event panels; preserve uncertainty and allow stress scenarios outside the fitted range. Fit simulator parameters on training dates only.
-3. **Historical replay:** train policies on past data and evaluate walk-forward on later event clusters/issuers. Keep a final chronological holdout untouched, compare rule-based baselines, and report results by issuer, phase, and regime.
-4. **Paper execution:** only after replay survives cost, timestamp, and risk review; use a broker sandbox with kill switches and no live capital.
+3. **Portfolio construction baselines:** before RL allocation, compare cash, equal-weight, and inverse-volatility portfolios across the eligible issuer universe. Add issuer/sector caps, a declared rebalance clock, and execution costs; report net CAGR, benchmark-relative wealth, maximum drawdown, turnover, exposure, and tail loss.
+4. **Historical replay:** train policies on past data and evaluate walk-forward on later event clusters/issuers. Keep a final chronological holdout untouched, compare rule-based baselines, and report results by issuer, phase, and regime. Any future multi-asset RL action must obey the same exposure and turnover limits as its baselines.
+5. **Paper execution:** only after replay survives cost, timestamp, and risk review; use a broker sandbox with kill switches and no live capital.
 
 The next empirical step is the [biopharma source and event panel](../data-sources.md). The first public-event cohort is clustered in the 2020–2021 COVID-19 vaccine program and is too small for model training. Expand the cohort, acquire point-in-time trial versions and licensed prices, and estimate descriptive event risk first. Then use empirical replay in a gym, with disjoint chronological train/validation/test data and an untouched final period. Never random-split event rows: multiple readouts from one issuer, trial program, or market episode are dependent.
 
