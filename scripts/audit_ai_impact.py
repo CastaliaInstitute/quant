@@ -6,6 +6,7 @@ import argparse
 import csv
 import hashlib
 import json
+import re
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
@@ -55,6 +56,32 @@ def present(row: dict[str, str], *fields: str) -> bool:
     return all((row.get(field) or "").strip() for field in fields)
 
 
+def validate_ledger(rows: list[dict[str, str]], *, path: Path, id_field: str, hash_fields: tuple[str, ...]) -> None:
+    seen: set[str] = set()
+    for line, row in enumerate(rows, start=2):
+        identifier = (row.get(id_field) or "").strip()
+        if not identifier:
+            raise SystemExit(f"{path}:{line}: {id_field} must not be empty")
+        if identifier in seen:
+            raise SystemExit(f"{path}:{line}: duplicate {id_field} {identifier!r}")
+        seen.add(identifier)
+        for field in hash_fields:
+            value = (row.get(field) or "").strip()
+            if value and not re.fullmatch(r"[0-9a-fA-F]{64}", value):
+                raise SystemExit(f"{path}:{line}: {field} must be a 64-character SHA-256 hex digest")
+        for field in ("public_available_at_utc",):
+            value = (row.get(field) or "").strip()
+            if value:
+                try:
+                    datetime.fromisoformat(value.replace("Z", "+00:00"))
+                except ValueError as exc:
+                    raise SystemExit(f"{path}:{line}: invalid ISO-8601 {field}: {value!r}") from exc
+
+
+def direct_contrast(row: dict[str, str]) -> bool:
+    return row.get("ai_exposure_contrast", "").strip().lower() == "yes"
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--evidence", type=Path, default=EVIDENCE)
@@ -66,6 +93,9 @@ def main() -> None:
     evidence, evidence_hash = read_ledger(args.evidence, EVIDENCE_REQUIRED)
     outcomes, outcomes_hash = read_ledger(args.outcomes, OUTCOME_REQUIRED)
     literature, literature_hash = read_ledger(args.literature, LITERATURE_REQUIRED)
+    validate_ledger(evidence, path=args.evidence, id_field="record_id", hash_fields=("record_sha256",))
+    validate_ledger(outcomes, path=args.outcomes, id_field="outcome_id", hash_fields=("source_sha256",))
+    validate_ledger(literature, path=args.literature, id_field="study_id", hash_fields=())
     reviewed_evidence = [r for r in evidence if r.get("review_status", "").lower() == "reviewed"]
     dated_evidence = [
         r for r in reviewed_evidence
@@ -108,6 +138,9 @@ def main() -> None:
             "direct_ai_exposure_contrasts": len(direct_ai_contrasts),
             "estimate_available": False,
         }
+    all_reviewed_outcomes = [row for row in outcomes if row.get("review_status", "").lower() == "reviewed"]
+    reviewed_direct_contrasts = [row for row in all_reviewed_outcomes if direct_contrast(row)]
+    outcome_values = Counter((row.get("ai_exposure_contrast") or "unspecified").strip().lower() for row in all_reviewed_outcomes)
     report = {
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "status": "coverage_only",
@@ -131,6 +164,8 @@ def main() -> None:
             "records": len(outcomes),
             "domains": dict(sorted(Counter((r.get("outcome_domain") or "unspecified") for r in outcomes).items())),
             "reviewed_with_comparator_and_design": len(comparison_ready),
+            "ai_exposure_contrast_status": dict(sorted(outcome_values.items())),
+            "reviewed_direct_ai_exposure_contrasts": len(reviewed_direct_contrasts),
             "impact_lanes": impact_coverage,
         },
         "literature_watch": {
@@ -147,11 +182,11 @@ def main() -> None:
         },
         "causal_effect_estimate_available": False,
         "current_case_note": "Rentosertib is one AI-attributed candidate with a randomized molecule-versus-placebo outcome; that trial comparison does not isolate AI's contribution.",
-        "direct_ai_exposure_comparison_available": any(row.get("ai_exposure_contrast", "").strip().lower() == "yes" for row in comparison_ready),
+        "direct_ai_exposure_comparison_available": any(direct_contrast(row) for row in comparison_ready),
         "gates": {
             "molecule_or_trial_level_exposure": len(dated_evidence) > 0,
             "reviewed_comparator_outcomes": len(comparison_ready) > 0,
-            "direct_ai_exposure_comparison": any(row.get("ai_exposure_contrast", "").strip().lower() == "yes" for row in comparison_ready),
+            "direct_ai_exposure_comparison": any(direct_contrast(row) for row in comparison_ready),
             "matched_cohort_and_sensitivity_analysis": False,
             "sufficient_historical_market_data": False,
         },

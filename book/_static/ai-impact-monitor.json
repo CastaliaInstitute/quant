@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-10-15T03:22:50.680126+00:00",
+  "generated_at_utc": "2026-10-15T16:10:33.962142+00:00",
   "status": "coverage_only",
   "interpretation": "This audit measures curated evidence coverage. It does not estimate the causal effect of AI; observational comparisons remain vulnerable to selection, confounding, and publication bias.",
   "exposure_ledger": {
@@ -24,6 +24,10 @@
       "clinical_trial_measure": 1
     },
     "reviewed_with_comparator_and_design": 1,
+    "ai_exposure_contrast_status": {
+      "no": 1
+    },
+    "reviewed_direct_ai_exposure_contrasts": 0,
     "impact_lanes": {
       "scientific": {
         "outcome_records": 1,

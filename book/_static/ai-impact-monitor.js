@@ -33,13 +33,14 @@
         const card = document.createElement('article');
         card.className = 'ai-monitor-card';
         const heading = document.createElement('h4'); heading.textContent = title;
-        const value = document.createElement('strong'); value.textContent = `${lane.direct_ai_exposure_contrasts ?? 0} AI contrasts`;
+        const value = document.createElement('strong'); value.textContent = lane.estimate_available ? 'Estimate available' : `${lane.direct_ai_exposure_contrasts ?? 0} direct AI contrasts`;
         const detail = document.createElement('p'); detail.textContent = `${lane.reviewed_records ?? 0} reviewed outcomes · ${lane.reviewed_comparator_records ?? 0} with a comparator · ${description}`;
-        const tag = document.createElement('span'); tag.className = 'ai-monitor-pill'; tag.textContent = 'No AI effect estimate';
+        const tag = document.createElement('span'); tag.className = 'ai-monitor-pill'; tag.textContent = lane.estimate_available ? 'Reviewed estimate' : 'No AI effect estimate';
         card.append(heading, value, detail, tag); grid.append(card);
       }
       const exposure = data.exposure_ledger ?? {};
-      status.textContent = `${exposure.reviewed_records ?? 0} reviewed AI exposure record(s); ${data.outcome_ledger?.records ?? 0} outcome record(s). This is evidence coverage, not an AI score.`;
+      const outcomes = data.outcome_ledger ?? {};
+      status.textContent = `${exposure.reviewed_records ?? 0} reviewed AI exposure record(s) · ${outcomes.reviewed_records ?? 0} reviewed outcome(s) · ${outcomes.reviewed_direct_ai_exposure_contrasts ?? 0} direct AI-vs-conventional comparisons. Coverage is not an AI score.`;
       note.textContent = data.current_case_note ?? data.interpretation ?? '';
     })
     .catch(() => { status.textContent = 'Monitor data could not be loaded. See the linked evidence ledger and audit JSON.'; });

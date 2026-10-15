@@ -22,6 +22,8 @@ jobs:
           python-version: "3.11"
       - name: Install Jupyter Book
         run: python -m pip install -e ".[dev]" -r requirements-book.txt
+      - name: Generate AI-impact evidence monitor
+        run: python scripts/audit_ai_impact.py
       - name: Run project checks
         run: PYTHONPATH=worker/src pytest -q tests
       - name: Build the research book
