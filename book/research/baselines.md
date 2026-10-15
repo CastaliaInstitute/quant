@@ -79,7 +79,7 @@ for issuer, equal_weight, raw_weight, capped_weight in zip(
 print("Residual cash after issuer caps:", round(cash_weight, 3))
 ```
 
-The cap is applied without reallocating excess to the other names, so the remainder stays in cash. An investable version must estimate volatility and covariance from training-window returns only, define how missing and newly listed issuers enter, add sector and total-risk limits, and charge for turnover and execution. Compare every rule using the same time-aligned net returns and XBI/SPY benchmarks; a plausible weight vector is not evidence of a profitable portfolio.
+The cap is applied without reallocating excess to the other names, so the remainder stays in cash. The reusable Python baseline in [`quantlab.portfolio.allocate_portfolio`](https://github.com/CastaliaInstitute/quant/blob/main/src/quantlab/portfolio.py) implements equal-weight and inverse-volatility weights with issuer and optional sector caps, and reports excluded assets and residual cash. It does not estimate volatility, covariance, or returns. An empirical application must estimate risk from training-window returns only, define how missing and newly listed issuers enter, add total-risk limits, and charge for turnover and execution. Compare every rule using the same time-aligned net returns and XBI/SPY benchmarks; a plausible weight vector is not evidence of a profitable portfolio.
 
 ## Sensitivity is part of the result
 

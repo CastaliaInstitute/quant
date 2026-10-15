@@ -28,7 +28,7 @@ The starter keeps these choices visible in code and experiment records. A user f
 - A Castalian Jupyter Book in `book/` that serves as the public research and career portfolio, including current artifacts, limitations, metric choices, and next evidence gates.
 - A fork guide and simulation/RL gym research guide that define the extension points and validation discipline for simulator-based research and the planned MagAI (Quant) program.
 - Page-local Python cells that run on the Cloudflare Python Worker in `worker/`. The Worker is stateless: the browser sends the page's cells in order to reconstruct variables for each run.
-- A small Python backtesting engine with one-period signal lag, proportional transaction costs, net return metrics, benchmark alignment, and 1×/2×/4× cost sensitivity.
+- A small Python research package with one-period signal lag, proportional transaction costs, net return metrics, benchmark alignment, 1×/2×/4× cost sensitivity, and equal-weight / inverse-volatility allocation baselines with issuer and sector caps.
 - A seeded Gymnasium-compatible synthetic biotech catalyst environment, with separately sampled Phase II/III program advancement and market reactions. Advancement priors use published 2011–2020 aggregate transition rates; market reactions remain synthetic. Tabular Q-learning is compared with cash, buy-and-hold, a trend rule, and a pre-catalyst risk rule.
 - A historical event-data pipeline for ClinicalTrials.gov, biomedical publication metadata, SEC issuer filings, and a user-supplied licensed stock-price file, with SPY and XBI context; point-in-time features exclude records unavailable at the decision cutoff, and source hashes are recorded in a local panel manifest. It estimates a pre-event two-factor market model and keeps abnormal-return outputs separate from pre-event model features. Fetched and processed datasets remain local and are excluded from Git.
 - A pinned audit of the MIT-licensed Clinical Trial Outcome human-label benchmark. Its [leakage review](book/research/cto-audit.md) quantifies a forbidden 97.05%-accurate current-status rule and explains why zero current registry fields are yet verified as point-in-time predictors; no labels feed the RL priors or market-return model.
@@ -76,6 +76,33 @@ The CTO benchmark audit downloads a pinned 2020–2024 human-labeled subset (abo
 ## Return scorecard
 
 For eventual trading evaluation, primary metrics are net CAGR, annualized volatility, Sharpe ratio, maximum drawdown, annualized turnover, and sensitivity to 1×/2×/4× transaction costs. For the initial biotech event-risk question, report calibration and tail-risk metrics: 5% historical VaR/expected shortfall, worst event move, event counts, and phase/issuer distributions. Include biotech-index and broad-market context on matched dates. Definitions and limits are set out in [book/research/metrics.md](book/research/metrics.md).
+
+The portfolio construction baselines are weight generators, not backtests. They cap exposures by retaining the excess as cash rather than silently spreading it across other names:
+
+```python
+import pandas as pd
+from quantlab import allocate_portfolio
+
+volatility = pd.Series({
+    "ISSUER_A": 0.60, "ISSUER_B": 0.45, "ISSUER_C": 0.30, "ISSUER_D": 0.20,
+})
+sectors = pd.Series({
+    "ISSUER_A": "Oncology", "ISSUER_B": "Oncology",
+    "ISSUER_C": "Immunology", "ISSUER_D": "Immunology",
+})
+allocation = allocate_portfolio(
+    list(volatility.index),
+    method="inverse_volatility",
+    annualized_volatility=volatility,
+    max_asset_weight=0.40,
+    sectors=sectors,
+    max_sector_weight=0.60,
+)
+print(allocation.weights)
+print("Cash weight:", allocation.cash_weight)
+```
+
+Volatility estimates must be computed from information available at each decision date. The allocator does not estimate covariance, rebalance through time, model fills, or produce return metrics; those are separate research stages.
 
 ## Research principles
 
