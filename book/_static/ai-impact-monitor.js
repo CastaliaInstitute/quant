@@ -45,8 +45,13 @@
       }
       const exposure = data.exposure_ledger ?? {};
       const outcomes = data.outcome_ledger ?? {};
+      const marketWatch = data.pipeline_to_market_watch ?? {};
       status.textContent = `${exposure.reviewed_records ?? 0} reviewed AI exposure record(s) · ${outcomes.reviewed_records ?? 0} reviewed outcome(s) · ${outcomes.reviewed_direct_ai_exposure_contrasts ?? 0} direct AI-exposure comparisons. Coverage is not an AI score.`;
-      note.textContent = data.current_case_note ?? data.interpretation ?? '';
+      const market = document.createElement('p');
+      market.textContent = `Pipeline → market: ${marketWatch.dated_candidate_or_trial_exposures ?? 0} dated candidate/trial exposure(s) · ${marketWatch.economic_outcome_records ?? 0} company/market outcome(s) · ${marketWatch.historical_price_panel_available ? 'price panel present; event study still requires validation' : 'no historical price panel'} · no event-return estimate published.`;
+      const limits = document.createElement('p');
+      limits.textContent = `${data.current_case_note ?? ''} ${marketWatch.interpretation ?? data.interpretation ?? ''}`.trim();
+      note.replaceChildren(market, limits);
     })
     .catch(() => { status.textContent = 'Monitor data could not be loaded. See the linked evidence ledger and audit JSON.'; });
 })();

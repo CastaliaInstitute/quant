@@ -132,6 +132,31 @@ def main() -> None:
         "workforce_and_society": {"labor_market", "workforce_conditions", "scientific_workforce"},
         "environmental": {"environmental_impact", "energy_use", "compute_emissions"},
     }
+    economic_rows = [row for row in outcomes if row.get("outcome_domain", "").strip() == "economic"]
+    pipeline_exposures = [
+        row for row in dated_evidence
+        if row.get("entity_type", "").strip().lower() in {"candidate", "molecule", "program", "trial"}
+    ]
+    pipeline_market = {
+        "status": "coverage_only",
+        "dated_candidate_or_trial_exposures": len(pipeline_exposures),
+        "economic_outcome_records": len(economic_rows),
+        "economic_outcomes_with_comparator": sum(
+            present(row, "comparison_group", "comparison_value", "comparison_unit", "study_design")
+            for row in economic_rows
+        ),
+        "direct_ai_exposure_comparisons": sum(
+            direct_contrast(row) and present(row, "comparison_group", "comparison_value", "comparison_unit", "study_design")
+            for row in economic_rows
+        ),
+        "historical_price_panel_available": (ROOT / "data/raw/market_prices.csv").exists(),
+        "event_return_estimate_available": False,
+        "interpretation": (
+            "Tracks candidate/trial AI disclosures alongside company and market outcomes. "
+            "Price reactions need timestamped, point-in-time disclosures, licensed prices, "
+            "and market/biotech controls; they are not clinical impact or causal AI effects."
+        ),
+    }
     impact_coverage = {}
     for impact, known_domains in impact_domains.items():
         matching = [row for domain in known_domains for row in domain_rows.get(domain, [])]
@@ -177,6 +202,7 @@ def main() -> None:
             "reviewed_direct_ai_exposure_contrasts": len(reviewed_direct_contrasts),
             "impact_lanes": impact_coverage,
         },
+        "pipeline_to_market_watch": pipeline_market,
         "literature_watch": {
             "path": str(args.literature.relative_to(ROOT)) if args.literature.is_relative_to(ROOT) else str(args.literature),
             "sha256": literature_hash,

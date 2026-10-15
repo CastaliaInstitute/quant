@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-10-15T16:48:34.152143+00:00",
+  "generated_at_utc": "2026-10-15T17:47:19.344472+00:00",
   "status": "coverage_only",
   "interpretation": "This audit measures curated evidence coverage. It does not estimate the causal effect of AI; observational comparisons remain vulnerable to selection, confounding, and publication bias.",
   "exposure_ledger": {
@@ -88,6 +88,16 @@
         "estimate_available": false
       }
     }
+  },
+  "pipeline_to_market_watch": {
+    "status": "coverage_only",
+    "dated_candidate_or_trial_exposures": 0,
+    "economic_outcome_records": 0,
+    "economic_outcomes_with_comparator": 0,
+    "direct_ai_exposure_comparisons": 0,
+    "historical_price_panel_available": false,
+    "event_return_estimate_available": false,
+    "interpretation": "Tracks candidate/trial AI disclosures alongside company and market outcomes. Price reactions need timestamped, point-in-time disclosures, licensed prices, and market/biotech controls; they are not clinical impact or causal AI effects."
   },
   "literature_watch": {
     "path": "data/biopharma/ai_literature.csv",
