@@ -18,6 +18,20 @@ kernelspec:
 
 Quant. will monitor AI's impact across drug discovery, clinical development, and biopharma companies. The watch is designed around dated evidence and comparison groups. A company describing itself as “AI-powered” is an exposure claim; it is not evidence that a candidate is safer, more effective, faster to develop, or more valuable.
 
+## Live evidence monitor
+
+```{raw} html
+<section class="ai-impact-monitor" aria-live="polite" aria-labelledby="ai-monitor-title">
+  <h3 id="ai-monitor-title">What can we measure today?</h3>
+  <p class="ai-monitor-status">Loading the versioned evidence ledger…</p>
+  <div class="ai-monitor-grid"></div>
+  <p class="ai-monitor-note"></p>
+</section>
+<script src="../_static/ai-impact-monitor.js" defer></script>
+```
+
+The monitor is deliberately a coverage instrument. Its three lanes are scientific outcomes (molecule or trial results), operational outcomes (time, cost, or trial execution), and economic outcomes (issuer value, revenue, or market response). The large number is the count of reviewed outcomes that directly contrast AI exposure; comparator coverage is shown separately. A populated clinical comparator is not an estimate of AI's effect: the rentosertib comparison is drug versus placebo, not AI-assisted versus conventional discovery.
+
 ## What current evidence says—and doesn't say
 
 - A 2024 analysis of clinical pipelines at AI-native biotech companies reported 80–90% Phase I success and about 40% Phase II success for AI-discovered molecules. The authors described the Phase II sample as limited. This is an early, selected pipeline cohort, not a randomized comparison or a mature Phase III estimate. It motivates a replication with explicit molecule-level inclusion rules; Quant. does not use these percentages as simulator priors. [Jayatunga et al., *Drug Discovery Today* (2024)](https://www.sciencedirect.com/science/article/pii/S135964462400134X).
@@ -52,7 +66,7 @@ The tracked unit is a **company, candidate/program, trial, or disclosure**, with
 | AI application | target discovery; molecule design/optimization; biomarker or patient stratification; trial design/recruitment; clinical data analysis; manufacturing/quality; regulatory/postmarket; general productivity | Generative molecule design and LLM-written regulatory summaries answer different scientific and economic questions |
 | Evidence strength | public claim; specific workflow disclosed; candidate-level attribution; independently supported use; measured comparative result | A press release saying “AI-powered platform” is weaker evidence than a named molecule with a peer-reviewed or regulatory-verified AI role |
 
-Every record needs a public-availability date and its precision (date-only or exact timestamp), source URL and hash, entity mapping, curator status, and taxonomy version. Keep AI exposure records separate from transition outcomes and stock returns so future evidence cannot leak into a historical feature. The exposure ledger is [`data/biopharma/ai_evidence.csv`](../../data/biopharma/ai_evidence.csv), with fields defined in [`ai_evidence.schema.csv`](../../data/biopharma/ai_evidence.schema.csv). Outcome observations live separately in [`ai_outcomes.csv`](../../data/biopharma/ai_outcomes.csv), defined by [`ai_outcomes.schema.csv`](../../data/biopharma/ai_outcomes.schema.csv).
+Every record needs a public-availability date and its precision (date-only or exact timestamp), source URL and hash, entity mapping, curator status, and taxonomy version. Outcome rows explicitly indicate whether their comparator contrasts AI exposure (`ai_exposure_contrast=yes/no/unclear`). Keep AI exposure records separate from transition outcomes and stock returns so future evidence cannot leak into a historical feature. The exposure ledger is [`data/biopharma/ai_evidence.csv`](../../data/biopharma/ai_evidence.csv), with fields defined in [`ai_evidence.schema.csv`](../../data/biopharma/ai_evidence.schema.csv). Outcome observations live separately in [`ai_outcomes.csv`](../../data/biopharma/ai_outcomes.csv), defined by [`ai_outcomes.schema.csv`](../../data/biopharma/ai_outcomes.schema.csv).
 
 The new [`scripts/monitor_ai_trials.py`](../../scripts/monitor_ai_trials.py) creates a versioned ClinicalTrials.gov AI/ML-keyword discovery snapshot. It does **not** label the studies as AI drug discovery: keyword results can concern medical AI interventions, imaging, decision support, or incidental mentions. The raw records and manifest stay under ignored `data/raw/`; a curator must screen them against the application taxonomy. The ClinicalTrials.gov API serves current study records, so retrieve historical versions and original public disclosures before using any registry attribute as a past feature.
 

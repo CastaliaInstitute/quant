@@ -30,6 +30,35 @@ def _distribution(values: pd.Series) -> dict[str, float | None]:
     }
 
 
+def _paired_bootstrap_difference(
+    results: pd.DataFrame,
+    policy: str,
+    comparator: str,
+    metric: str,
+    seed: int,
+    replicates: int = 10_000,
+) -> dict[str, float | int]:
+    """Bootstrap paired episode-seed differences for one synthetic generator."""
+    paired = results.pivot(index="seed", columns="policy", values=metric)
+    if policy not in paired or comparator not in paired:
+        raise ValueError(f"missing policy comparison: {policy} vs {comparator}")
+    differences = (paired[policy] - paired[comparator]).dropna().to_numpy(dtype=float)
+    if differences.size == 0:
+        raise ValueError(f"no paired observations for {policy} vs {comparator}")
+    rng = np.random.default_rng(seed)
+    samples = rng.choice(differences, size=(replicates, differences.size), replace=True).mean(axis=1)
+    lower, upper = np.quantile(samples, [0.025, 0.975])
+    return {
+        "paired_episode_seeds": int(differences.size),
+        "mean_difference": float(differences.mean()),
+        "median_difference": float(np.median(differences)),
+        "bootstrap_95pct_interval_low": float(lower),
+        "bootstrap_95pct_interval_high": float(upper),
+        "bootstrap_replicates": int(replicates),
+        "bootstrap_seed": int(seed),
+    }
+
+
 def train_q_table(
     episodes: int = 300,
     episode_length: int = 252,
@@ -323,6 +352,23 @@ def run_rl_study(
             "visit_counts_include": "all epsilon-greedy training actions; evaluation paths are not included",
         },
         "evaluation_summary": summary,
+        "paired_q_policy_comparisons": {
+            comparator: {
+                "annualized_return_difference": _paired_bootstrap_difference(
+                    episode_results, "q_learner", comparator, "annualized_return",
+                    evaluation_seed + index,
+                ),
+                "benchmark_relative_compounded_return_difference": _paired_bootstrap_difference(
+                    episode_results, "q_learner", comparator, "benchmark_relative_compounded_return",
+                    evaluation_seed + 100 + index,
+                ),
+            }
+            for index, comparator in enumerate(("cash", "buy_and_hold", "trend_rule", "pre_catalyst_exit"))
+        },
+        "paired_comparison_interpretation": (
+            "Intervals resample matched synthetic evaluation episode seeds and describe uncertainty under this one fixed generator and trained policy. "
+            "They are not historical-market confidence intervals, do not include policy-training uncertainty, and do not establish statistical significance or a trading edge."
+        ),
     }
     paths = episode_results.drop_duplicates("seed")
     event_count = int(paths.catalyst_trial_outcome_count.sum())

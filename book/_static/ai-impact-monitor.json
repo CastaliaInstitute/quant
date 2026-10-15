@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-10-15T02:39:33.711570+00:00",
+  "generated_at_utc": "2026-10-15T02:58:39.702632+00:00",
   "status": "coverage_only",
   "interpretation": "This audit measures curated evidence coverage. It does not estimate the causal effect of AI; observational comparisons remain vulnerable to selection, confounding, and publication bias.",
   "exposure_ledger": {
@@ -18,17 +18,43 @@
   },
   "outcome_ledger": {
     "path": "data/biopharma/ai_outcomes.csv",
-    "sha256": "4bc451caeb5b42aae0931751acd6fc5e41b856efeb4e93526989ea9cb23564d8",
+    "sha256": "50aaa66eb9ffd0e1d3d5241a4ecd728b7fbc2e3ef0f3ebf20e3223e75e2bdcaf",
     "records": 1,
     "domains": {
       "clinical_trial_measure": 1
     },
-    "reviewed_with_comparator_and_design": 1
+    "reviewed_with_comparator_and_design": 1,
+    "impact_lanes": {
+      "scientific": {
+        "outcome_records": 1,
+        "reviewed_records": 1,
+        "reviewed_comparator_records": 1,
+        "direct_ai_exposure_contrasts": 0,
+        "estimate_available": false
+      },
+      "operational": {
+        "outcome_records": 0,
+        "reviewed_records": 0,
+        "reviewed_comparator_records": 0,
+        "direct_ai_exposure_contrasts": 0,
+        "estimate_available": false
+      },
+      "economic": {
+        "outcome_records": 0,
+        "reviewed_records": 0,
+        "reviewed_comparator_records": 0,
+        "direct_ai_exposure_contrasts": 0,
+        "estimate_available": false
+      }
+    }
   },
   "causal_effect_estimate_available": false,
+  "current_case_note": "Rentosertib is one AI-attributed candidate with a randomized molecule-versus-placebo outcome; that trial comparison does not isolate AI's contribution.",
+  "direct_ai_exposure_comparison_available": false,
   "gates": {
     "molecule_or_trial_level_exposure": true,
     "reviewed_comparator_outcomes": true,
+    "direct_ai_exposure_comparison": false,
     "matched_cohort_and_sensitivity_analysis": false,
     "sufficient_historical_market_data": false
   }

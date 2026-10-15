@@ -42,6 +42,12 @@ This log preserves both superseded policy experiments and the current biotech ca
 - Semantics: advancement to the next development stage is not equivalent to an individual trial meeting its prespecified primary endpoint. The selected CTO human-label subset is not used as a population prior.
 - Result: across 60 synthetic paths, the median Q policy CAGR is −2.28%, benchmark-relative compounded return is −11.07%, and max drawdown is −10.99%. It holds exposure on 11.1% of sessions and 0% of catalyst sessions. Market-reaction probabilities, return-gap sizes, and ordinary daily returns remain synthetic and uncalibrated; this study does not estimate market returns.
 
+## RL-008 · Paired policy uncertainty under the synthetic generator
+
+- Method: regenerated RL-007 with 10,000 paired bootstrap resamples of the 60 shared evaluation episode seeds. The frozen Q policy is compared with cash, buy-and-hold, trend, and pre-catalyst exit using annualized return and benchmark-relative compounded-wealth differences.
+- Result: mean Q-minus-baseline relative-wealth differences are +3.6 percentage points vs buy-and-hold (95% interval −11.6 to +16.8), +7.5 points vs trend (−3.5 to +17.6), and −3.3 points vs pre-catalyst exit (−12.2 to +5.2). All intervals include zero.
+- Interpretation: this quantifies finite-seed variability conditional on one fixed synthetic generator and one trained policy. It excludes training-policy uncertainty and cannot establish a historical-market advantage. The paired values and deterministic bootstrap seeds are in <a href="../_static/rl-simulation.json">the versioned report</a>.
+
 ## Next study: historical event-risk panel
 
 The current historical data artifact is a nine-disclosure source-lineage fixture spanning vaccines, Alzheimer's, asthma, and oncology. It remains tiny and clustered, with several date-only catalyst times, so it cannot support fitting or a stable return estimate. The next research record should be opened only after adding a wider trial/disclosure cohort, point-in-time event features, a licensed OHLCV file, inactive/delisted issuers, and a preregistered chronological evaluation plan. Preserve every inclusion rule and data-source revision.

@@ -24,6 +24,7 @@ OUTCOME_REQUIRED = {
     "outcome_id", "entity_type", "entity_id", "outcome_domain", "metric",
     "observed_value", "unit", "comparison_group", "comparison_value",
     "comparison_unit", "observation_start", "observation_end",
+    "ai_exposure_contrast",
     "public_available_at_utc", "public_time_precision", "source_url", "source_sha256", "study_design",
     "review_status",
 }
@@ -67,6 +68,27 @@ def main() -> None:
         if r.get("review_status", "").lower() == "reviewed"
         and present(r, "comparison_group", "comparison_value", "comparison_unit", "study_design")
     ]
+    domain_rows: dict[str, list[dict[str, str]]] = {}
+    for row in outcomes:
+        domain_rows.setdefault((row.get("outcome_domain") or "unspecified").strip(), []).append(row)
+    impact_domains = {
+        "scientific": {"clinical_trial_measure", "clinical_progression", "drug_discovery"},
+        "operational": {"trial_operations", "development_timeline", "development_cost"},
+        "economic": {"company_value", "market_response", "revenue"},
+    }
+    impact_coverage = {}
+    for impact, known_domains in impact_domains.items():
+        matching = [row for domain in known_domains for row in domain_rows.get(domain, [])]
+        reviewed = [row for row in matching if row.get("review_status", "").lower() == "reviewed"]
+        comparable = [row for row in reviewed if present(row, "comparison_group", "comparison_value", "comparison_unit", "study_design")]
+        direct_ai_contrasts = [row for row in comparable if row.get("ai_exposure_contrast", "").strip().lower() == "yes"]
+        impact_coverage[impact] = {
+            "outcome_records": len(matching),
+            "reviewed_records": len(reviewed),
+            "reviewed_comparator_records": len(comparable),
+            "direct_ai_exposure_contrasts": len(direct_ai_contrasts),
+            "estimate_available": False,
+        }
     report = {
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "status": "coverage_only",
@@ -90,11 +112,15 @@ def main() -> None:
             "records": len(outcomes),
             "domains": dict(sorted(Counter((r.get("outcome_domain") or "unspecified") for r in outcomes).items())),
             "reviewed_with_comparator_and_design": len(comparison_ready),
+            "impact_lanes": impact_coverage,
         },
         "causal_effect_estimate_available": False,
+        "current_case_note": "Rentosertib is one AI-attributed candidate with a randomized molecule-versus-placebo outcome; that trial comparison does not isolate AI's contribution.",
+        "direct_ai_exposure_comparison_available": any(row.get("ai_exposure_contrast", "").strip().lower() == "yes" for row in comparison_ready),
         "gates": {
             "molecule_or_trial_level_exposure": len(dated_evidence) > 0,
             "reviewed_comparator_outcomes": len(comparison_ready) > 0,
+            "direct_ai_exposure_comparison": any(row.get("ai_exposure_contrast", "").strip().lower() == "yes" for row in comparison_ready),
             "matched_cohort_and_sensitivity_analysis": False,
             "sufficient_historical_market_data": False,
         },

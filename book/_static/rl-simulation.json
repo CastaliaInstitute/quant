@@ -1540,6 +1540,89 @@
       }
     }
   },
+  "paired_q_policy_comparisons": {
+    "cash": {
+      "annualized_return_difference": {
+        "paired_episode_seeds": 60,
+        "mean_difference": -0.00873757017034325,
+        "median_difference": -0.02283580386210393,
+        "bootstrap_95pct_interval_low": -0.03731688191436821,
+        "bootstrap_95pct_interval_high": 0.02059998626382729,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 10000
+      },
+      "benchmark_relative_compounded_return_difference": {
+        "paired_episode_seeds": 60,
+        "mean_difference": -0.007437606674546417,
+        "median_difference": -0.021458360284813904,
+        "bootstrap_95pct_interval_low": -0.034491489913962496,
+        "bootstrap_95pct_interval_high": 0.02063203823280695,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 10100
+      }
+    },
+    "buy_and_hold": {
+      "annualized_return_difference": {
+        "paired_episode_seeds": 60,
+        "mean_difference": -0.0016783108644868039,
+        "median_difference": 0.14548913289926751,
+        "bootstrap_95pct_interval_low": -0.2050445620936253,
+        "bootstrap_95pct_interval_high": 0.15680740118999006,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 10001
+      },
+      "benchmark_relative_compounded_return_difference": {
+        "paired_episode_seeds": 60,
+        "mean_difference": 0.03646898720937338,
+        "median_difference": 0.11977001869231446,
+        "bootstrap_95pct_interval_low": -0.11618865010017485,
+        "bootstrap_95pct_interval_high": 0.1680448060548313,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 10101
+      }
+    },
+    "trend_rule": {
+      "annualized_return_difference": {
+        "paired_episode_seeds": 60,
+        "mean_difference": 0.05961126872634684,
+        "median_difference": 0.11744413761645528,
+        "bootstrap_95pct_interval_low": -0.05949881082164456,
+        "bootstrap_95pct_interval_high": 0.1687457337175072,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 10002
+      },
+      "benchmark_relative_compounded_return_difference": {
+        "paired_episode_seeds": 60,
+        "mean_difference": 0.07506038751708045,
+        "median_difference": 0.12426469517953664,
+        "bootstrap_95pct_interval_low": -0.03460411735090774,
+        "bootstrap_95pct_interval_high": 0.17611967987793786,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 10102
+      }
+    },
+    "pre_catalyst_exit": {
+      "annualized_return_difference": {
+        "paired_episode_seeds": 60,
+        "mean_difference": -0.05311257789683164,
+        "median_difference": 0.044550168088915876,
+        "bootstrap_95pct_interval_low": -0.15879787313696736,
+        "bootstrap_95pct_interval_high": 0.04024939231091841,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 10003
+      },
+      "benchmark_relative_compounded_return_difference": {
+        "paired_episode_seeds": 60,
+        "mean_difference": -0.03335163173659977,
+        "median_difference": 0.03216433876960367,
+        "bootstrap_95pct_interval_low": -0.1223466328317101,
+        "bootstrap_95pct_interval_high": 0.05202570057224388,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 10103
+      }
+    }
+  },
+  "paired_comparison_interpretation": "Intervals resample matched synthetic evaluation episode seeds and describe uncertainty under this one fixed generator and trained policy. They are not historical-market confidence intervals, do not include policy-training uncertainty, and do not establish statistical significance or a trading edge.",
   "evaluation_event_process_summary": {
     "independent_episode_seeds": 60,
     "catalyst_count": 180,
