@@ -2,6 +2,7 @@
   const root = document.querySelector('.ai-impact-monitor');
   if (!root) return;
   const status = root.querySelector('.ai-monitor-status');
+  const literature = root.querySelector('.ai-monitor-literature');
   const grid = root.querySelector('.ai-monitor-grid');
   const note = root.querySelector('.ai-monitor-note');
   const lanes = [
@@ -12,6 +13,21 @@
   fetch('../_static/ai-impact-monitor.json', { cache: 'no-store' })
     .then(response => { if (!response.ok) throw new Error(`HTTP ${response.status}`); return response.json(); })
     .then(data => {
+      const cohort = data.literature_watch?.latest_abstract_reviewed_study;
+      if (cohort) {
+        const heading = document.createElement('strong');
+        heading.textContent = `Latest published cohort · ${cohort.publication_date}`;
+        const summary = document.createElement('p');
+        summary.textContent = `${cohort.asset_count} assets across ${cohort.company_count} companies through ${cohort.cohort_cutoff}; reported Phase I / II success rates ${cohort.phase_1_success_rate} / ${cohort.phase_2_success_rate}. No direct AI comparator; descriptive context only.`;
+        const source = document.createElement('a');
+        source.href = cohort.source_url;
+        source.textContent = 'Open source';
+        source.rel = 'noopener noreferrer';
+        source.target = '_blank';
+        literature.replaceChildren(heading, summary, source);
+      } else {
+        literature.textContent = 'No reviewed published cohort summary is available.';
+      }
       for (const [key, title, description] of lanes) {
         const lane = data.outcome_ledger?.impact_lanes?.[key] ?? {};
         const card = document.createElement('article');

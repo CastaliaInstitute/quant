@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-10-15T02:58:39.702632+00:00",
+  "generated_at_utc": "2026-10-15T03:22:50.680126+00:00",
   "status": "coverage_only",
   "interpretation": "This audit measures curated evidence coverage. It does not estimate the causal effect of AI; observational comparisons remain vulnerable to selection, confounding, and publication bias.",
   "exposure_ledger": {
@@ -47,6 +47,32 @@
         "estimate_available": false
       }
     }
+  },
+  "literature_watch": {
+    "path": "data/biopharma/ai_literature.csv",
+    "sha256": "44c02bb802fdf1b007808b71890d28487285fda96364e2c4be66e80fccb7d6b5",
+    "studies": 1,
+    "abstract_reviewed_studies": 1,
+    "studies_with_direct_ai_comparator": 0,
+    "latest_abstract_reviewed_study": {
+      "study_id": "ai-clinical-pipeline-2026",
+      "title": "Artificial intelligence\u2013enabled drug discovery: A growing but largely early-stage clinical pipeline",
+      "publication_date": "2026-10-08",
+      "cohort_cutoff": "2026-03-01",
+      "cohort_design": "cross-sectional descriptive cohort",
+      "asset_count": "129",
+      "company_count": "69",
+      "phase_1_completed_assets": "72",
+      "phase_2_completed_assets": "24",
+      "phase_3_entered_or_completed_assets": "5",
+      "phase_1_success_rate": "77.8%",
+      "phase_2_success_rate": "19.5%",
+      "direct_ai_comparator": "no",
+      "source_url": "https://doi.org/10.1016/j.ctrv.2026.103223",
+      "review_status": "abstract_reviewed",
+      "limitations": "Publisher abstract reviewed; AI enablement relies on public reporting, definitions may vary, and no matched conventional comparator is reported. Full methods and supplement not reviewed; do not use as a causal estimate or simulator prior."
+    },
+    "interpretation": "Published cohort summaries are context, not causal AI-effect estimates; study definitions and follow-up may differ."
   },
   "causal_effect_estimate_available": false,
   "current_case_note": "Rentosertib is one AI-attributed candidate with a randomized molecule-versus-placebo outcome; that trial comparison does not isolate AI's contribution.",

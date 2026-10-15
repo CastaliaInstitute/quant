@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE = ROOT / "data/biopharma/ai_evidence.csv"
 OUTCOMES = ROOT / "data/biopharma/ai_outcomes.csv"
 OUTPUT = ROOT / "book/_static/ai-impact-monitor.json"
+LITERATURE = ROOT / "data/biopharma/ai_literature.csv"
 EVIDENCE_REQUIRED = {
     "record_id", "entity_type", "entity_id", "ai_application_class",
     "ai_involvement_level", "evidence_type", "public_available_at_utc",
@@ -27,6 +28,12 @@ OUTCOME_REQUIRED = {
     "ai_exposure_contrast",
     "public_available_at_utc", "public_time_precision", "source_url", "source_sha256", "study_design",
     "review_status",
+}
+LITERATURE_REQUIRED = {
+    "study_id", "title", "publication_date", "cohort_cutoff", "cohort_design",
+    "asset_count", "company_count", "phase_1_completed_assets", "phase_2_completed_assets",
+    "phase_3_entered_or_completed_assets", "phase_1_success_rate", "phase_2_success_rate",
+    "direct_ai_comparator", "source_url", "review_status", "limitations",
 }
 
 
@@ -52,11 +59,13 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--evidence", type=Path, default=EVIDENCE)
     parser.add_argument("--outcomes", type=Path, default=OUTCOMES)
+    parser.add_argument("--literature", type=Path, default=LITERATURE)
     parser.add_argument("--output", type=Path, default=OUTPUT)
     args = parser.parse_args()
 
     evidence, evidence_hash = read_ledger(args.evidence, EVIDENCE_REQUIRED)
     outcomes, outcomes_hash = read_ledger(args.outcomes, OUTCOME_REQUIRED)
+    literature, literature_hash = read_ledger(args.literature, LITERATURE_REQUIRED)
     reviewed_evidence = [r for r in evidence if r.get("review_status", "").lower() == "reviewed"]
     dated_evidence = [
         r for r in reviewed_evidence
@@ -68,6 +77,16 @@ def main() -> None:
         if r.get("review_status", "").lower() == "reviewed"
         and present(r, "comparison_group", "comparison_value", "comparison_unit", "study_design")
     ]
+    abstract_reviewed_literature = [
+        row for row in literature
+        if row.get("review_status", "").lower() == "abstract_reviewed"
+        and present(row, "publication_date", "cohort_cutoff", "source_url")
+    ]
+    latest_literature = max(
+        abstract_reviewed_literature,
+        key=lambda row: row["publication_date"],
+        default=None,
+    )
     domain_rows: dict[str, list[dict[str, str]]] = {}
     for row in outcomes:
         domain_rows.setdefault((row.get("outcome_domain") or "unspecified").strip(), []).append(row)
@@ -113,6 +132,18 @@ def main() -> None:
             "domains": dict(sorted(Counter((r.get("outcome_domain") or "unspecified") for r in outcomes).items())),
             "reviewed_with_comparator_and_design": len(comparison_ready),
             "impact_lanes": impact_coverage,
+        },
+        "literature_watch": {
+            "path": str(args.literature.relative_to(ROOT)) if args.literature.is_relative_to(ROOT) else str(args.literature),
+            "sha256": literature_hash,
+            "studies": len(literature),
+            "abstract_reviewed_studies": len(abstract_reviewed_literature),
+            "studies_with_direct_ai_comparator": sum(
+                row.get("direct_ai_comparator", "").strip().lower() == "yes"
+                for row in abstract_reviewed_literature
+            ),
+            "latest_abstract_reviewed_study": latest_literature,
+            "interpretation": "Published cohort summaries are context, not causal AI-effect estimates; study definitions and follow-up may differ.",
         },
         "causal_effect_estimate_available": False,
         "current_case_note": "Rentosertib is one AI-attributed candidate with a randomized molecule-versus-placebo outcome; that trial comparison does not isolate AI's contribution.",
