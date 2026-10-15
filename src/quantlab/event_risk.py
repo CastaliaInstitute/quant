@@ -103,45 +103,75 @@ def _shrunk_group_probability(
     return values.fillna(prior).to_numpy(dtype=float)
 
 
-def _issuer_cluster_skill_intervals(
+def _issuer_quarter_skill_intervals(
     predictions: pd.DataFrame,
     baseline_column: str,
     repetitions: int = 1000,
     seed: int = 2026,
 ) -> dict[str, object]:
-    """Paired issuer-cluster bootstrap for baseline-minus-model score skill."""
-    issuers = predictions.ticker.dropna().astype(str).unique()
-    if len(issuers) < 5:
-        return {
-            "issuer_clusters": int(len(issuers)),
-            "status": "withheld_fewer_than_5_issuer_clusters",
-            "brier_improvement_95_interval": None,
-            "log_loss_improvement_95_interval": None,
-        }
-    clusters = {
-        issuer: predictions.index[predictions.ticker.astype(str) == issuer].to_numpy()
-        for issuer in issuers
+    """Paired issuer × calendar-quarter pigeonhole bootstrap of OOS score skill."""
+    frame = predictions.copy()
+    frame["ticker"] = frame.ticker.astype("string")
+    frame["quarter"] = pd.to_datetime(frame.event_date, errors="coerce").dt.to_period("Q").astype("string")
+    score_columns = ["observed", baseline_column, "logit_probability"]
+    for column in score_columns:
+        frame[column] = pd.to_numeric(frame[column], errors="coerce")
+    frame = frame.dropna(subset=["ticker", "quarter", *score_columns])
+    issuers = frame.ticker.unique()
+    quarters = frame.quarter.unique()
+    base = {
+        "issuer_clusters": int(len(issuers)),
+        "calendar_quarter_clusters": int(len(quarters)),
+        "bootstrap_repetitions_requested": int(repetitions),
+        "seed": int(seed),
+        "brier_improvement_95_interval": None,
+        "log_loss_improvement_95_interval": None,
     }
+    if len(issuers) < 10 or len(quarters) < 10:
+        return {
+            **base,
+            "status": "withheld_fewer_than_10_issuer_or_calendar_quarter_clusters",
+        }
+
+    issuer_codes, _ = pd.factorize(frame.ticker, sort=True)
+    quarter_codes, _ = pd.factorize(frame.quarter, sort=True)
+    observed = frame.observed.to_numpy(dtype=int)
+    baseline = np.clip(frame[baseline_column].to_numpy(dtype=float), 1e-6, 1.0 - 1e-6)
+    model = np.clip(frame.logit_probability.to_numpy(dtype=float), 1e-6, 1.0 - 1e-6)
     rng = np.random.default_rng(seed)
     brier_improvements: list[float] = []
     log_loss_improvements: list[float] = []
-    issuer_list = list(issuers)
-    for _ in range(repetitions):
-        sampled = rng.choice(issuer_list, size=len(issuer_list), replace=True)
-        row_ids = np.concatenate([clusters[issuer] for issuer in sampled])
-        sample = predictions.loc[row_ids]
-        observed = sample.observed.astype(int)
-        baseline = np.clip(sample[baseline_column].to_numpy(dtype=float), 1e-6, 1.0 - 1e-6)
-        model = np.clip(sample.logit_probability.to_numpy(dtype=float), 1e-6, 1.0 - 1e-6)
-        brier_improvements.append(float(brier_score_loss(observed, baseline) - brier_score_loss(observed, model)))
-        log_loss_improvements.append(float(
-            log_loss(observed, baseline, labels=[0, 1]) - log_loss(observed, model, labels=[0, 1])
+    attempts = 0
+    max_attempts = repetitions * 20
+    while len(brier_improvements) < repetitions and attempts < max_attempts:
+        attempts += 1
+        sampled_issuers = rng.integers(0, len(issuers), size=len(issuers))
+        sampled_quarters = rng.integers(0, len(quarters), size=len(quarters))
+        issuer_multiplicity = np.bincount(sampled_issuers, minlength=len(issuers))
+        quarter_multiplicity = np.bincount(sampled_quarters, minlength=len(quarters))
+        weights = issuer_multiplicity[issuer_codes] * quarter_multiplicity[quarter_codes]
+        if weights.sum() == 0:
+            continue
+        brier_improvements.append(float(
+            brier_score_loss(observed, baseline, sample_weight=weights)
+            - brier_score_loss(observed, model, sample_weight=weights)
         ))
+        log_loss_improvements.append(float(
+            log_loss(observed, baseline, labels=[0, 1], sample_weight=weights)
+            - log_loss(observed, model, labels=[0, 1], sample_weight=weights)
+        ))
+    if len(brier_improvements) < repetitions * 0.8:
+        return {
+            **base,
+            "bootstrap_attempts": attempts,
+            "bootstrap_repetitions_valid": len(brier_improvements),
+            "status": "withheld_sparse_issuer_quarter_crossings",
+        }
     return {
-        "issuer_clusters": int(len(issuers)),
-        "bootstrap_repetitions": repetitions,
-        "seed": seed,
-        "status": "issuer_cluster_bootstrap_descriptive",
+        **base,
+        "bootstrap_attempts": attempts,
+        "bootstrap_repetitions_valid": len(brier_improvements),
+        "status": "issuer_calendar_quarter_pigeonhole_bootstrap_descriptive",
         "brier_improvement_95_interval": [
             float(np.quantile(brier_improvements, 0.025)),
             float(np.quantile(brier_improvements, 0.975)),
@@ -285,9 +315,9 @@ def walk_forward_event_risk(
     calibration = _calibration_table(prediction_frame)
     pooled_y = prediction_frame["observed"].astype(int)
     skill_intervals = {
-        "training_fold_base_rate": _issuer_cluster_skill_intervals(prediction_frame, "baseline_probability"),
-        "volatility_conditioned": _issuer_cluster_skill_intervals(prediction_frame, "volatility_conditioned_probability"),
-        "phase_conditioned": _issuer_cluster_skill_intervals(prediction_frame, "phase_conditioned_probability"),
+        "training_fold_base_rate": _issuer_quarter_skill_intervals(prediction_frame, "baseline_probability"),
+        "volatility_conditioned": _issuer_quarter_skill_intervals(prediction_frame, "volatility_conditioned_probability"),
+        "phase_conditioned": _issuer_quarter_skill_intervals(prediction_frame, "phase_conditioned_probability"),
     }
     summary = {
         "evidence_status": "historical_walk_forward_development_only_final_holdout_untouched",
@@ -312,12 +342,12 @@ def walk_forward_event_risk(
         "pooled_phase_conditioned_baseline": _score(pooled_y, prediction_frame["phase_conditioned_probability"].to_numpy()),
         "pooled_regularized_logit": _score(pooled_y, prediction_frame["logit_probability"].to_numpy()),
         "calibration_protocol": "fixed_width_5_bins_on_development_walk_forward_predictions_only; final_holdout_not_included",
-        "issuer_cluster_bootstrap_skill_intervals": skill_intervals,
+        "issuer_calendar_quarter_bootstrap_skill_intervals": skill_intervals,
         "limitations": [
             "Walk-forward metrics are development evidence; the final chronological holdout remains unused.",
             "ROC AUC is undefined in a test fold containing only one outcome class.",
             "Events from one issuer or market episode can be dependent; issuer/event counts and per-fold results must accompany pooled metrics.",
-            "Issuer-cluster bootstrap intervals are withheld below five issuers and do not account for shared market-date dependence.",
+            "Paired issuer × calendar-quarter pigeonhole bootstrap intervals are withheld below ten clusters on either dimension; they are conditional on fixed out-of-sample predictions and do not model serial dependence across quarters.",
             "The five-event COVID-19 seed cohort cannot satisfy these sample gates and must not be fit.",
         ],
     }

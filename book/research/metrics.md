@@ -13,8 +13,9 @@ The primary metric depends on the research claim; do not collapse model skill an
 | Claim being evaluated | Primary evidence | Secondary diagnostics |
 | --- | --- | --- |
 | Catalyst-downside probability model | Out-of-sample Brier score and log loss versus a training-fold base-rate forecast | Calibration by probability bin, event rate, ROC AUC when defined, issuer/phase/regime slices |
-| Historical catalyst event study | Market-model cumulative abnormal return over declared event windows, with issuer, event, and calendar coverage | Raw return, SPY/XBI controls, pre-event estimation count, window sensitivity, event-time precision, and issuer-cluster uncertainty |
+| Historical catalyst event study | Market-model cumulative abnormal return over declared event windows, with issuer, event, and calendar coverage | Raw return, SPY/XBI controls, pre-event estimation count, window sensitivity, and event-time precision |
 | Downside-risk target sensitivity | Compare the raw issuer −10% event-window label with the −10% market-model CAR label using identical chronological folds | Label prevalence, missing factor-model coverage, calibration, event/issuer counts, and fold-by-fold scores |
+| Event-risk model skill | Paired OOS Brier/log-loss improvement over training-only baselines | Issuer × calendar-quarter pigeonhole bootstrap intervals, withheld when either dimension has fewer than ten clusters |
 | Investable strategy or RL policy | Net compounded return and benchmark-relative compounded return, reported with maximum drawdown | Volatility, Sharpe/Sortino, expected shortfall, turnover, exposure, cost stress, seed/fold dispersion |
 | Simulator or RL mechanics | Reproducibility, state/action timing, reward arithmetic, constraint adherence, and performance against simple policies over matched seeds | Median and lower-tail net CAGR, drawdown, expected shortfall, turnover, sensitivity to simulator parameters |
 
