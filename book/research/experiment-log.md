@@ -54,6 +54,12 @@ This log preserves both superseded policy experiments and the current biotech ca
 - Result: at 4× costs, median Q-policy CAGR is −11.85% and benchmark-relative compounded wealth is −16.43%, versus −5.61% and −10.49% at base costs; median annual turnover is 18× and event-session exposure remains 0%. Buy-and-hold median CAGR is −8.97% at 4× costs.
 - Interpretation: cost drag materially worsens this policy's synthetic result, and its 4× relative-wealth median is numerically close to buy-and-hold's (−16.39%). No paired uncertainty interval is estimated for this cross-scenario stress. This is a cost-mechanics diagnostic in an uncalibrated generator, not historical execution evidence. Results and scenario hashes are in <a href="../_static/rl-stress.json">rl-stress.json</a>.
 
+## RL-010 · Crossed training/evaluation seed robustness
+
+- Method: independently train 10 Q tables (seeds 17 through 9,017 at stride 1,000), evaluate each on the same 60 episode seeds starting at 30,000, and bootstrap the training-seed rows and evaluation-seed columns as crossed clusters.
+- Result: Q-minus-trend benchmark-relative wealth has a +2.8 percentage-point mean difference with 95% two-way bootstrap interval −6.9 to +12.0 points; the Q-minus-buy-and-hold interval is −17.3 to +13.5 points. Both include zero. Across the 10 learned tables, greedy long actions occur in a median of 1/36 states (range 0–3); median evaluation exposure is 0.4%, with zero catalyst-session exposure.
+- Interpretation: the learner mostly collapses to cash in this generator. Its modest drawdown is not evidence of alpha, and its interval includes both training and evaluation-seed variation but is exploratory with only 10 training policies. See <a href="../_static/rl-training-robustness.json">the full report</a>.
+
 ## Next study: historical event-risk panel
 
 The current historical data artifact is a nine-disclosure source-lineage fixture spanning vaccines, Alzheimer's, asthma, and oncology. It remains tiny and clustered, with several date-only catalyst times, so it cannot support fitting or a stable return estimate. The next research record should be opened only after adding a wider trial/disclosure cohort, point-in-time event features, a licensed OHLCV file, inactive/delisted issuers, and a preregistered chronological evaluation plan. Preserve every inclusion rule and data-source revision.

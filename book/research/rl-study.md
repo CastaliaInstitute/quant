@@ -36,6 +36,12 @@ The Q learner's median catalyst exposure is 0%, with median overall exposure of 
 
 The report also computes **paired bootstrap intervals** for the Q learner's per-seed annualized-return and benchmark-relative-wealth differences against each baseline. Across the 60 matched seeds, the mean relative-wealth difference was +3.6 percentage points versus buy-and-hold (95% paired-bootstrap interval −11.6 to +16.8 points), +7.5 points versus trend (−3.5 to +17.6), and −3.3 points versus the pre-catalyst exit rule (−12.2 to +5.2). Each interval spans zero. These intervals quantify seed variation under this fixed synthetic generator and frozen trained policy; they do not include training-seed uncertainty and are not inference about historical market returns. Full comparisons and bootstrap seeds are stored in the report JSON.
 
+### Training-seed robustness
+
+Because the single-policy intervals above condition on one Q table, a second diagnostic independently trains 10 Q tables (training seeds 17, 1,017, …, 9,017) and evaluates every table on the same 60 episode seeds. A two-way bootstrap resamples training-seed rows and shared evaluation-seed columns, so it includes both sources of variation under the fixed simulator. The <a href="../_static/rl-training-robustness.json">crossed-seed report</a> gives the Q-minus-trend benchmark-relative-wealth difference as +2.8 percentage points, with a 95% interval of −6.9 to +12.0 points; the Q-minus-buy-and-hold interval is −17.3 to +13.5 points. Both include zero.
+
+The greedy Q policy chose long in a median of only 1 of 36 states across training runs (range 0–3); median evaluation exposure was 0.4%, and catalyst exposure was 0%. Its small drawdowns therefore reflect an almost-cash policy, not a demonstrated return advantage. The bootstrap has only 10 training-seed clusters and is an exploratory simulator diagnostic, not a market confidence interval.
+
 The default run visited all 36 states across 75,600 training decisions. Its greedy action is cash in 34 states and long in 2; the Q learner's median out-of-sample exposure on catalyst sessions is 0%. The JSON's `learned_policy_by_state` decodes each greedy action into momentum, volatility, catalyst proximity, and phase, and gives separate cash/long training visit counts. A Q preference with few visits is weakly informed even inside this simulator; a well-visited preference is still only a result under the synthetic generator.
 
 ## Reproduce
@@ -45,6 +51,7 @@ From the repository root:
 ```bash
 python -m pip install -e '.[rl]'
 python scripts/run_rl_study.py
+python scripts/run_rl_training_robustness.py
 # To tune a fork, copy and edit config/biopharma_rl_synthetic.json:
 python scripts/run_rl_study.py --assumptions path/to/your-assumptions.json
 # Learner hyperparameters are also explicit:
@@ -55,7 +62,7 @@ Source: [`simulation.py`](https://github.com/CastaliaInstitute/quant/blob/main/s
 
 ## Limits and next experiments
 
-Episodes are independent draws from the same synthetic generator family used in training, not new market regimes or historical out-of-sample data. The environment's scheduled catalyst frequency, clinical outcome probabilities, conditional stock-reaction probabilities, gap returns, broad-market correlation, and cost assumptions are not calibrated. The small tabular agent's result is sensitive to how those assumptions are encoded. The pre-catalyst state bin adapts to the configured catalyst interval.
+Episodes are independent draws from the same synthetic generator family used in training, not new market regimes or historical out-of-sample data. The environment's scheduled catalyst frequency, clinical outcome probabilities, conditional stock-reaction probabilities, gap returns, broad-market correlation, and cost assumptions are not calibrated. The small tabular agent's result is sensitive to how those assumptions are encoded. The pre-catalyst state bin adapts to the configured catalyst interval. The multi-training-seed bootstrap currently uses only 10 trained policies, so its interval is exploratory and should not be interpreted as a precise estimate of algorithm variability.
 
 The research ladder is:
 

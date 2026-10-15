@@ -49,6 +49,7 @@ PYTHONPATH=worker/src pytest
 python -m quantlab.demo
 python scripts/run_rl_study.py
 python scripts/run_rl_stress.py
+python scripts/run_rl_training_robustness.py
 python scripts/ingest_biopharma.py --with-sec-filings
 python scripts/monitor_ai_trials.py
 python scripts/audit_ai_impact.py
