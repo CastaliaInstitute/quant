@@ -48,6 +48,39 @@ print("Illustrative Sharpe ratio:", round(sharpe, 3))
 print("Maximum drawdown:", round(max_drawdown, 4))
 ```
 
+## Turn issuer risk estimates into inspectable weights
+
+Before a learned policy allocates across companies, compare simple portfolios under the same universe and constraints. Equal weight is a transparent reference; inverse-volatility weights reduce the allocation to higher-volatility issuers. A per-issuer cap can leave part of the portfolio in cash. This tiny example uses invented volatility estimates and labels only the resulting weights; it does not calculate or imply portfolio returns.
+
+```{code-cell} ipython3
+issuer_names = ["Issuer A", "Issuer B", "Issuer C", "Issuer D"]
+estimated_annual_volatility = [0.60, 0.45, 0.30, 0.20]
+inverse_volatility = [
+    1 / estimated_annual_volatility[0],
+    1 / estimated_annual_volatility[1],
+    1 / estimated_annual_volatility[2],
+    1 / estimated_annual_volatility[3],
+]
+inverse_volatility_total = sum(inverse_volatility)
+inverse_volatility_weights = [
+    inverse_volatility[0] / inverse_volatility_total,
+    inverse_volatility[1] / inverse_volatility_total,
+    inverse_volatility[2] / inverse_volatility_total,
+    inverse_volatility[3] / inverse_volatility_total,
+]
+issuer_weight_cap = 0.40
+capped_weights = [min(weight, issuer_weight_cap) for weight in inverse_volatility_weights]
+cash_weight = 1.0 - sum(capped_weights)
+
+for issuer, equal_weight, raw_weight, capped_weight in zip(
+    issuer_names, [0.25, 0.25, 0.25, 0.25], inverse_volatility_weights, capped_weights
+):
+    print(issuer, "equal-weight:", round(equal_weight, 3), "inverse-vol:", round(raw_weight, 3), "capped:", round(capped_weight, 3))
+print("Residual cash after issuer caps:", round(cash_weight, 3))
+```
+
+The cap is applied without reallocating excess to the other names, so the remainder stays in cash. An investable version must estimate volatility and covariance from training-window returns only, define how missing and newly listed issuers enter, add sector and total-risk limits, and charge for turnover and execution. Compare every rule using the same time-aligned net returns and XBI/SPY benchmarks; a plausible weight vector is not evidence of a profitable portfolio.
+
 ## Sensitivity is part of the result
 
 For event-risk forecasting, report calibration, Brier score or log loss for declared event-loss classes, discrimination with confidence intervals, tail-event precision/recall, and performance by phase, indication, issuer, and period. Compare against the historical training-fold base rate. For any trading rule, vary costs, execution lag, event timestamp convention, and feature windows. Show the full range; a single favorable setting is evidence of fragility, not a reason to hide alternatives.
