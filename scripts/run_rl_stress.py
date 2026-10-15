@@ -53,7 +53,7 @@ def main() -> None:
     parser.add_argument("--training-seed", type=int, default=17)
     parser.add_argument("--evaluation-seed", type=int, default=20_000)
     parser.add_argument("--learning-rate", type=float, default=0.12)
-    parser.add_argument("--discount", type=float, default=0.98)
+    parser.add_argument("--discount", type=float, default=1.0)
     parser.add_argument("--assumptions", type=Path, default=ROOT / "config/biopharma_rl_synthetic.json")
     parser.add_argument("--output", type=Path, default=ROOT / "book/_static/rl-stress.json")
     args = parser.parse_args()

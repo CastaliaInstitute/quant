@@ -1,0 +1,1645 @@
+{
+  "study": "synthetic_biotech_catalyst_gym",
+  "evidence_status": "synthetic_simulator_diagnostic_only",
+  "not_a_claim": "No point-in-time trial-event panel or historical security data is fitted; no evidence of a trading edge is represented.",
+  "biological_and_market_outcomes": {
+    "clinical_success": "Legacy metric label for program advancement: Phase II to Phase III or Phase III to NDA/BLA; it does not mean an individual trial met its primary endpoint.",
+    "stock_reaction": "Sampled separately from phase- and clinical-outcome-conditional probabilities of a positive reaction, with independent positive/negative gap sizes and market noise.",
+    "interpretation": "Program advancement is not equivalent to positive stock return; positive reactions can follow suspension and negative reactions can follow advancement.",
+    "parameter_status": "Phase advancement priors are anchored to published 2011-2020 all-indication transition rates; event-level outcomes are not fitted. Market-reaction probabilities, gaps, and daily price parameters remain illustrative and uncalibrated."
+  },
+  "configuration": {
+    "training_episodes": 300,
+    "evaluation_runs": 60,
+    "episode_length_sessions": 252,
+    "training_seed": 17,
+    "learning_rate": 0.12,
+    "discount_factor": 0.98,
+    "exploration_schedule": "epsilon=max(0.04, 0.35 * (1 - episode / training_episodes)); linear decay with 0.04 floor",
+    "evaluation_seed_start": 10000,
+    "simulator_assumptions": {
+      "catalyst_interval_sessions": 63,
+      "broad_market_daily_mean": 0.00025,
+      "broad_market_daily_volatility": 0.01,
+      "issuer_market_beta": 0.35,
+      "issuer_daily_mean": 0.00015,
+      "issuer_idiosyncratic_daily_volatility": 0.025,
+      "event_residual_volatility": 0.025,
+      "phase_sampling_probabilities": [
+        0.5,
+        0.5
+      ],
+      "phase_success_probabilities": [
+        0.289,
+        0.578
+      ],
+      "phase_success_market_positive_probabilities": [
+        0.72,
+        0.65
+      ],
+      "phase_failure_market_positive_probabilities": [
+        0.22,
+        0.28
+      ],
+      "phase_positive_market_gaps": [
+        0.13,
+        0.24
+      ],
+      "phase_negative_market_gaps": [
+        -0.16,
+        -0.32
+      ],
+      "transaction_cost_bps_per_unit_turnover": 10.0
+    },
+    "policies": [
+      "cash",
+      "buy_and_hold",
+      "trend_rule",
+      "pre_catalyst_exit",
+      "q_learner"
+    ]
+  },
+  "assumption_provenance": {
+    "status": "published_aggregate_advancement_prior_plus_synthetic_market_parameters",
+    "clinical_transition_source": {
+      "citation": "BIO, Informa Pharma Intelligence, and QLS Advisors, Clinical Development Success Rates and Contributing Factors 2011-2020 (2021)",
+      "url": "https://go.bio.org/rs/490-EHZ-999/images/ClinicalDevelopmentSuccessRates2011_2020.pdf",
+      "phase_ii_to_iii": {
+        "probability": 0.289,
+        "transitions": 4933
+      },
+      "phase_iii_to_nda_bla": {
+        "probability": 0.578,
+        "transitions": 1928
+      },
+      "scope_note": "Published aggregates from proprietary Biomedtracker and Pharmapremia program-transition data; advancement vs suspension, not per-trial endpoint success."
+    },
+    "market_parameter_status": "synthetic_uncalibrated_no_historical_security_price_panel",
+    "sha256": "b24cd15110ad409325e3000e6875abd6b603c588f015ce964cd97b5b7fea00b6",
+    "interpretation": "Hash identifies the exact JSON config file when run through scripts/run_rl_study.py; direct API runs hash canonicalized parameter values."
+  },
+  "evaluation_protocol": {
+    "episodes": "matched independent random seeds sampled from the same synthetic generator family used in training",
+    "market_holdout": false,
+    "evaluation_seed_block_used_for_post_hoc_search": false,
+    "interpretation": "Checks simulator behavior and seed variation only; it does not test historical or new-regime generalization."
+  },
+  "metric_definitions": {
+    "learning_reward": "Q-learning maximizes discounted session log returns: sum(gamma**k * log(1 + net_return_k)). Because gamma is below one, this is not the same objective as undiscounted terminal log wealth or net CAGR.",
+    "discount_factor": 0.98,
+    "reward_discount_half_life_sessions": 34.309618491520645,
+    "catalyst_unconditional_expected_shortfall_95": "Mean underlying issuer return in the worst ceil(5% of event observations); independent of policy exposure.",
+    "catalyst_policy_net_expected_shortfall_95": "Mean strategy net return on event sessions in its worst ceil(5%); includes zero-return cash exposure and transaction costs.",
+    "annual_turnover": "Sum of absolute daily exposure changes multiplied by 252 / episode length.",
+    "episode_sample_size": "Each evaluation seed contributes one episode per policy; catalyst-tail denominators are also reported per episode."
+  },
+  "learned_q_values": [
+    [
+      0.0038404697347371847,
+      0.020289230943308145
+    ],
+    [
+      0.004937718498351675,
+      0.0019132436342621953
+    ],
+    [
+      0.007718064954730627,
+      0.006766190033601998
+    ],
+    [
+      0.008352527170694565,
+      0.0076491343636075175
+    ],
+    [
+      0.006221725812434159,
+      -0.04347129803751002
+    ],
+    [
+      0.005755472694998085,
+      -0.1475653115036872
+    ],
+    [
+      0.00619147766441274,
+      -0.004481215877278419
+    ],
+    [
+      0.004781450358427465,
+      0.0001552442969563301
+    ],
+    [
+      0.0070053761476761,
+      0.006785014174486197
+    ],
+    [
+      0.00723352173018338,
+      0.0015000301234752958
+    ],
+    [
+      0.004973012177495509,
+      -0.05184967204157846
+    ],
+    [
+      0.0050041223226678,
+      -0.12251054033513184
+    ],
+    [
+      0.010281080110379174,
+      -0.0037726337661036736
+    ],
+    [
+      0.00540957479189687,
+      0.005453057132625928
+    ],
+    [
+      0.009179123618865111,
+      0.005194597534464104
+    ],
+    [
+      0.009099834586552787,
+      0.00782974885301243
+    ],
+    [
+      0.006595489049403491,
+      0.0
+    ],
+    [
+      0.01017004538211078,
+      0.0
+    ],
+    [
+      0.004759412919419853,
+      -0.0009201803681307567
+    ],
+    [
+      0.00476953096200522,
+      -0.0030486464850701693
+    ],
+    [
+      0.008964028350847334,
+      -0.004717671062276633
+    ],
+    [
+      0.009250158910736814,
+      0.006754068040548733
+    ],
+    [
+      0.0090887638308982,
+      -0.0105408600758787
+    ],
+    [
+      0.010344435992472433,
+      0.0
+    ],
+    [
+      0.008167325506227082,
+      -0.00040489839442502926
+    ],
+    [
+      0.005263716498986377,
+      -0.006657729595106594
+    ],
+    [
+      0.007486481996561759,
+      0.005377952070822549
+    ],
+    [
+      0.007783241437912414,
+      0.00552609425794457
+    ],
+    [
+      0.0056261492657059915,
+      -0.03128848494349695
+    ],
+    [
+      0.005870629293476906,
+      -0.12347692362628017
+    ],
+    [
+      0.004390337369226727,
+      0.0013265119522875004
+    ],
+    [
+      0.00469045950142133,
+      0.002986656400457308
+    ],
+    [
+      0.00744812699676618,
+      0.004045513479519555
+    ],
+    [
+      0.007593331801690815,
+      0.0065846793592004085
+    ],
+    [
+      0.005527066417942826,
+      -0.02778953036608499
+    ],
+    [
+      0.00583237806304727,
+      -0.0736827907439917
+    ]
+  ],
+  "learned_policy_by_state": [
+    {
+      "state": 0,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "training_cash_visits": 5092,
+      "training_long_visits": 1490,
+      "q_cash": 0.0038404697347371847,
+      "q_long": 0.020289230943308145,
+      "greedy_action": "long",
+      "q_long_minus_cash": 0.016448761208570962
+    },
+    {
+      "state": 1,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "training_cash_visits": 3592,
+      "training_long_visits": 761,
+      "q_cash": 0.004937718498351675,
+      "q_long": 0.0019132436342621953,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0030244748640894797
+    },
+    {
+      "state": 2,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "training_cash_visits": 337,
+      "training_long_visits": 64,
+      "q_cash": 0.007718064954730627,
+      "q_long": 0.006766190033601998,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0009518749211286292
+    },
+    {
+      "state": 3,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "training_cash_visits": 394,
+      "training_long_visits": 58,
+      "q_cash": 0.008352527170694565,
+      "q_long": 0.0076491343636075175,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0007033928070870471
+    },
+    {
+      "state": 4,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "training_cash_visits": 72,
+      "training_long_visits": 5,
+      "q_cash": 0.006221725812434159,
+      "q_long": -0.04347129803751002,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.04969302384994418
+    },
+    {
+      "state": 5,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "training_cash_visits": 88,
+      "training_long_visits": 14,
+      "q_cash": 0.005755472694998085,
+      "q_long": -0.1475653115036872,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.1533207841986853
+    },
+    {
+      "state": 6,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "training_cash_visits": 11662,
+      "training_long_visits": 2620,
+      "q_cash": 0.00619147766441274,
+      "q_long": -0.004481215877278419,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.01067269354169116
+    },
+    {
+      "state": 7,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "training_cash_visits": 6219,
+      "training_long_visits": 1639,
+      "q_cash": 0.004781450358427465,
+      "q_long": 0.0001552442969563301,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.004626206061471135
+    },
+    {
+      "state": 8,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "training_cash_visits": 453,
+      "training_long_visits": 115,
+      "q_cash": 0.0070053761476761,
+      "q_long": 0.006785014174486197,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0002203619731899033
+    },
+    {
+      "state": 9,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "training_cash_visits": 545,
+      "training_long_visits": 105,
+      "q_cash": 0.00723352173018338,
+      "q_long": 0.0015000301234752958,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.005733491606708083
+    },
+    {
+      "state": 10,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "training_cash_visits": 90,
+      "training_long_visits": 26,
+      "q_cash": 0.004973012177495509,
+      "q_long": -0.05184967204157846,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.05682268421907397
+    },
+    {
+      "state": 11,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "training_cash_visits": 103,
+      "training_long_visits": 29,
+      "q_cash": 0.0050041223226678,
+      "q_long": -0.12251054033513184,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.12751466265779965
+    },
+    {
+      "state": 12,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "training_cash_visits": 841,
+      "training_long_visits": 217,
+      "q_cash": 0.010281080110379174,
+      "q_long": -0.0037726337661036736,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.014053713876482847
+    },
+    {
+      "state": 13,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "training_cash_visits": 610,
+      "training_long_visits": 187,
+      "q_cash": 0.00540957479189687,
+      "q_long": 0.005453057132625928,
+      "greedy_action": "long",
+      "q_long_minus_cash": 4.348234072905875e-05
+    },
+    {
+      "state": 14,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "training_cash_visits": 77,
+      "training_long_visits": 13,
+      "q_cash": 0.009179123618865111,
+      "q_long": 0.005194597534464104,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.003984526084401007
+    },
+    {
+      "state": 15,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "training_cash_visits": 70,
+      "training_long_visits": 18,
+      "q_cash": 0.009099834586552787,
+      "q_long": 0.00782974885301243,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0012700857335403559
+    },
+    {
+      "state": 16,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "training_cash_visits": 13,
+      "training_long_visits": 0,
+      "q_cash": 0.006595489049403491,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.006595489049403491
+    },
+    {
+      "state": 17,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "training_cash_visits": 10,
+      "training_long_visits": 0,
+      "q_cash": 0.01017004538211078,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.01017004538211078
+    },
+    {
+      "state": 18,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "training_cash_visits": 1409,
+      "training_long_visits": 315,
+      "q_cash": 0.004759412919419853,
+      "q_long": -0.0009201803681307567,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.005679593287550609
+    },
+    {
+      "state": 19,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "training_cash_visits": 807,
+      "training_long_visits": 210,
+      "q_cash": 0.00476953096200522,
+      "q_long": -0.0030486464850701693,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.00781817744707539
+    },
+    {
+      "state": 20,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "training_cash_visits": 66,
+      "training_long_visits": 7,
+      "q_cash": 0.008964028350847334,
+      "q_long": -0.004717671062276633,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.013681699413123968
+    },
+    {
+      "state": 21,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "training_cash_visits": 67,
+      "training_long_visits": 11,
+      "q_cash": 0.009250158910736814,
+      "q_long": 0.006754068040548733,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0024960908701880807
+    },
+    {
+      "state": 22,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "training_cash_visits": 11,
+      "training_long_visits": 1,
+      "q_cash": 0.0090887638308982,
+      "q_long": -0.0105408600758787,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.019629623906776902
+    },
+    {
+      "state": 23,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "training_cash_visits": 17,
+      "training_long_visits": 0,
+      "q_cash": 0.010344435992472433,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.010344435992472433
+    },
+    {
+      "state": 24,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "training_cash_visits": 5255,
+      "training_long_visits": 1513,
+      "q_cash": 0.008167325506227082,
+      "q_long": -0.00040489839442502926,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.008572223900652112
+    },
+    {
+      "state": 25,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "training_cash_visits": 3436,
+      "training_long_visits": 830,
+      "q_cash": 0.005263716498986377,
+      "q_long": -0.006657729595106594,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.011921446094092972
+    },
+    {
+      "state": 26,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "training_cash_visits": 352,
+      "training_long_visits": 97,
+      "q_cash": 0.007486481996561759,
+      "q_long": 0.005377952070822549,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0021085299257392097
+    },
+    {
+      "state": 27,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "training_cash_visits": 371,
+      "training_long_visits": 88,
+      "q_cash": 0.007783241437912414,
+      "q_long": 0.00552609425794457,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0022571471799678437
+    },
+    {
+      "state": 28,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "training_cash_visits": 90,
+      "training_long_visits": 10,
+      "q_cash": 0.0056261492657059915,
+      "q_long": -0.03128848494349695,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.03691463420920294
+    },
+    {
+      "state": 29,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "training_cash_visits": 78,
+      "training_long_visits": 9,
+      "q_cash": 0.005870629293476906,
+      "q_long": -0.12347692362628017,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.12934755291975708
+    },
+    {
+      "state": 30,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "training_cash_visits": 10528,
+      "training_long_visits": 2999,
+      "q_cash": 0.004390337369226727,
+      "q_long": 0.0013265119522875004,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0030638254169392263
+    },
+    {
+      "state": 31,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "training_cash_visits": 6113,
+      "training_long_visits": 1855,
+      "q_cash": 0.00469045950142133,
+      "q_long": 0.002986656400457308,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0017038031009640221
+    },
+    {
+      "state": 32,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "training_cash_visits": 539,
+      "training_long_visits": 90,
+      "q_cash": 0.00744812699676618,
+      "q_long": 0.004045513479519555,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0034026135172466254
+    },
+    {
+      "state": 33,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "training_cash_visits": 424,
+      "training_long_visits": 139,
+      "q_cash": 0.007593331801690815,
+      "q_long": 0.0065846793592004085,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0010086524424904068
+    },
+    {
+      "state": 34,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "training_cash_visits": 113,
+      "training_long_visits": 11,
+      "q_cash": 0.005527066417942826,
+      "q_long": -0.02778953036608499,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.03331659678402781
+    },
+    {
+      "state": 35,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "training_cash_visits": 90,
+      "training_long_visits": 20,
+      "q_cash": 0.00583237806304727,
+      "q_long": -0.0736827907439917,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.07951516880703897
+    }
+  ],
+  "state_encoding": {
+    "state_formula": "(((momentum_bin * 2 + volatility_bin) * 3 + catalyst_proximity_bin) * 2) + upcoming_phase_bin",
+    "momentum_bins": [
+      "negative",
+      "neutral",
+      "positive"
+    ],
+    "volatility_bins": [
+      "lower",
+      "upper"
+    ],
+    "catalyst_proximity_bins": [
+      "more_than_5_sessions",
+      "within_5_sessions",
+      "event_session"
+    ],
+    "upcoming_phase_bins": [
+      "phase_II",
+      "phase_III"
+    ],
+    "visit_counts_include": "all epsilon-greedy training actions; evaluation paths are not included"
+  },
+  "evaluation_summary": {
+    "cash": {
+      "observation_count": {
+        "median": 252.0,
+        "p10": 252.0,
+        "p90": 252.0
+      },
+      "annualized_return": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "annualized_volatility": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "sharpe": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "sortino": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "max_drawdown": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "calmar": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "value_at_risk_95": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "expected_shortfall_95": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "benchmark_total_return": {
+        "median": 0.0808686426652987,
+        "p10": -0.09385047214401081,
+        "p90": 0.3295017612206589
+      },
+      "benchmark_relative_compounded_return": {
+        "median": -0.07481588469838968,
+        "p10": -0.24783203034705703,
+        "p90": 0.10357227575945567
+      },
+      "information_ratio": {
+        "median": -0.5585617728266798,
+        "p10": -1.9131862592709943,
+        "p90": 0.5800558411178434
+      },
+      "annual_turnover": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "total_cost": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "exposure_fraction": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "catalyst_exposure_fraction": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "catalyst_sessions_per_episode": {
+        "median": 3.0,
+        "p10": 3.0,
+        "p90": 3.0
+      },
+      "catalyst_trial_outcome_count": {
+        "median": 3.0,
+        "p10": 3.0,
+        "p90": 3.0
+      },
+      "catalyst_trial_success_fraction": {
+        "median": 0.3333333333333333,
+        "p10": 0.0,
+        "p90": 0.6666666666666666
+      },
+      "phase_ii_trial_success_fraction": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 1.0
+      },
+      "phase_iii_trial_success_fraction": {
+        "median": 0.5,
+        "p10": 0.0,
+        "p90": 1.0
+      },
+      "catalyst_market_return_given_success_mean": {
+        "median": 0.16504347882794967,
+        "p10": -0.12448113255500597,
+        "p90": 0.24587790431210674
+      },
+      "catalyst_market_return_given_failure_mean": {
+        "median": -0.15392532619036314,
+        "p10": -0.3207917247246023,
+        "p90": 0.13584936752883545
+      },
+      "catalyst_positive_market_reaction_fraction_given_success": {
+        "median": 1.0,
+        "p10": 0.0,
+        "p90": 1.0
+      },
+      "catalyst_positive_market_reaction_fraction_given_failure": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 1.0
+      },
+      "catalyst_underlying_return_mean": {
+        "median": -0.04032631980343578,
+        "p10": -0.16309492297528214,
+        "p90": 0.10454724478392557
+      },
+      "catalyst_underlying_return_worst": {
+        "median": -0.19794377280980055,
+        "p10": -0.3466609695776586,
+        "p90": -0.0989832381039569
+      },
+      "catalyst_unconditional_expected_shortfall_95": {
+        "median": -0.19794377280980055,
+        "p10": -0.3466609695776586,
+        "p90": -0.0989832381039569
+      },
+      "catalyst_policy_net_expected_shortfall_95": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "catalyst_policy_net_mean": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "catalyst_policy_net_worst": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "catalyst_event_transaction_cost": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      }
+    },
+    "buy_and_hold": {
+      "observation_count": {
+        "median": 252.0,
+        "p10": 252.0,
+        "p90": 252.0
+      },
+      "annualized_return": {
+        "median": -0.17707100351622362,
+        "p10": -0.5732833701604251,
+        "p90": 0.560727438910411
+      },
+      "annualized_volatility": {
+        "median": 0.535080664783788,
+        "p10": 0.45956978985830116,
+        "p90": 0.6185800506362855
+      },
+      "sharpe": {
+        "median": 0.03743370535643108,
+        "p10": -1.4267393757187892,
+        "p90": 1.1142478311421085
+      },
+      "sortino": {
+        "median": 0.050961366154933706,
+        "p10": -1.6508038077576515,
+        "p90": 1.736842446610063
+      },
+      "max_drawdown": {
+        "median": -0.46040250305520636,
+        "p10": -0.6845965929258712,
+        "p90": -0.2541173031559141
+      },
+      "calmar": {
+        "median": -0.32948084907782416,
+        "p10": -0.8888370496498071,
+        "p90": 1.904798338816382
+      },
+      "value_at_risk_95": {
+        "median": -0.041735111308958545,
+        "p10": -0.045883593248220556,
+        "p90": -0.03832013532800073
+      },
+      "expected_shortfall_95": {
+        "median": -0.07137625381041365,
+        "p10": -0.08678220294080796,
+        "p90": -0.05323354064246467
+      },
+      "benchmark_total_return": {
+        "median": 0.0808686426652987,
+        "p10": -0.09385047214401081,
+        "p90": 0.3295017612206589
+      },
+      "benchmark_relative_compounded_return": {
+        "median": -0.2338695644551535,
+        "p10": -0.6023220091091207,
+        "p90": 0.504181745962164
+      },
+      "information_ratio": {
+        "median": -0.1657736603519847,
+        "p10": -1.3212001461633014,
+        "p90": 1.075158283141668
+      },
+      "annual_turnover": {
+        "median": 1.0,
+        "p10": 1.0,
+        "p90": 1.0
+      },
+      "total_cost": {
+        "median": 0.001,
+        "p10": 0.001,
+        "p90": 0.001
+      },
+      "exposure_fraction": {
+        "median": 1.0,
+        "p10": 1.0,
+        "p90": 1.0
+      },
+      "catalyst_exposure_fraction": {
+        "median": 1.0,
+        "p10": 1.0,
+        "p90": 1.0
+      },
+      "catalyst_sessions_per_episode": {
+        "median": 3.0,
+        "p10": 3.0,
+        "p90": 3.0
+      },
+      "catalyst_trial_outcome_count": {
+        "median": 3.0,
+        "p10": 3.0,
+        "p90": 3.0
+      },
+      "catalyst_trial_success_fraction": {
+        "median": 0.3333333333333333,
+        "p10": 0.0,
+        "p90": 0.6666666666666666
+      },
+      "phase_ii_trial_success_fraction": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 1.0
+      },
+      "phase_iii_trial_success_fraction": {
+        "median": 0.5,
+        "p10": 0.0,
+        "p90": 1.0
+      },
+      "catalyst_market_return_given_success_mean": {
+        "median": 0.16504347882794967,
+        "p10": -0.12448113255500597,
+        "p90": 0.24587790431210674
+      },
+      "catalyst_market_return_given_failure_mean": {
+        "median": -0.15392532619036314,
+        "p10": -0.3207917247246023,
+        "p90": 0.13584936752883545
+      },
+      "catalyst_positive_market_reaction_fraction_given_success": {
+        "median": 1.0,
+        "p10": 0.0,
+        "p90": 1.0
+      },
+      "catalyst_positive_market_reaction_fraction_given_failure": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 1.0
+      },
+      "catalyst_underlying_return_mean": {
+        "median": -0.04032631980343578,
+        "p10": -0.16309492297528214,
+        "p90": 0.10454724478392557
+      },
+      "catalyst_underlying_return_worst": {
+        "median": -0.19794377280980055,
+        "p10": -0.3466609695776586,
+        "p90": -0.0989832381039569
+      },
+      "catalyst_unconditional_expected_shortfall_95": {
+        "median": -0.19794377280980055,
+        "p10": -0.3466609695776586,
+        "p90": -0.0989832381039569
+      },
+      "catalyst_policy_net_expected_shortfall_95": {
+        "median": -0.19794377280980055,
+        "p10": -0.3466609695776586,
+        "p90": -0.0989832381039569
+      },
+      "catalyst_policy_net_mean": {
+        "median": -0.04032631980343578,
+        "p10": -0.16309492297528214,
+        "p90": 0.10454724478392557
+      },
+      "catalyst_policy_net_worst": {
+        "median": -0.19794377280980055,
+        "p10": -0.3466609695776586,
+        "p90": -0.0989832381039569
+      },
+      "catalyst_event_transaction_cost": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      }
+    },
+    "trend_rule": {
+      "observation_count": {
+        "median": 252.0,
+        "p10": 252.0,
+        "p90": 252.0
+      },
+      "annualized_return": {
+        "median": -0.14607557346039735,
+        "p10": -0.45583527135193314,
+        "p90": 0.4401391282403866
+      },
+      "annualized_volatility": {
+        "median": 0.35704265213414055,
+        "p10": 0.282015550572387,
+        "p90": 0.48510734024606844
+      },
+      "sharpe": {
+        "median": -0.3580438385338691,
+        "p10": -1.567337228152999,
+        "p90": 1.2382534894194734
+      },
+      "sortino": {
+        "median": -0.474527519155046,
+        "p10": -1.924993534959967,
+        "p90": 2.364629667539589
+      },
+      "max_drawdown": {
+        "median": -0.3713042603690711,
+        "p10": -0.5703668791176083,
+        "p90": -0.20564992912089083
+      },
+      "calmar": {
+        "median": -0.46488272374238976,
+        "p10": -0.9206440416080768,
+        "p90": 2.417663865449639
+      },
+      "value_at_risk_95": {
+        "median": -0.0326958499603187,
+        "p10": -0.03653540090210989,
+        "p90": -0.029148851843368257
+      },
+      "expected_shortfall_95": {
+        "median": -0.0505385371835605,
+        "p10": -0.07103669746148589,
+        "p90": -0.040028078429332536
+      },
+      "benchmark_total_return": {
+        "median": 0.0808686426652987,
+        "p10": -0.09385047214401081,
+        "p90": 0.3295017612206589
+      },
+      "benchmark_relative_compounded_return": {
+        "median": -0.20967735034739748,
+        "p10": -0.5245148235223153,
+        "p90": 0.2959643786790603
+      },
+      "information_ratio": {
+        "median": -0.4980426644310073,
+        "p10": -1.645529345746117,
+        "p90": 0.7884837831223874
+      },
+      "annual_turnover": {
+        "median": 53.0,
+        "p10": 42.0,
+        "p90": 63.0
+      },
+      "total_cost": {
+        "median": 0.053000000000000005,
+        "p10": 0.042,
+        "p90": 0.063
+      },
+      "exposure_fraction": {
+        "median": 0.49206349206349204,
+        "p10": 0.42777777777777776,
+        "p90": 0.5722222222222222
+      },
+      "catalyst_exposure_fraction": {
+        "median": 0.3333333333333333,
+        "p10": 0.0,
+        "p90": 1.0
+      },
+      "catalyst_sessions_per_episode": {
+        "median": 3.0,
+        "p10": 3.0,
+        "p90": 3.0
+      },
+      "catalyst_trial_outcome_count": {
+        "median": 3.0,
+        "p10": 3.0,
+        "p90": 3.0
+      },
+      "catalyst_trial_success_fraction": {
+        "median": 0.3333333333333333,
+        "p10": 0.0,
+        "p90": 0.6666666666666666
+      },
+      "phase_ii_trial_success_fraction": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 1.0
+      },
+      "phase_iii_trial_success_fraction": {
+        "median": 0.5,
+        "p10": 0.0,
+        "p90": 1.0
+      },
+      "catalyst_market_return_given_success_mean": {
+        "median": 0.16504347882794967,
+        "p10": -0.12448113255500597,
+        "p90": 0.24587790431210674
+      },
+      "catalyst_market_return_given_failure_mean": {
+        "median": -0.15392532619036314,
+        "p10": -0.3207917247246023,
+        "p90": 0.13584936752883545
+      },
+      "catalyst_positive_market_reaction_fraction_given_success": {
+        "median": 1.0,
+        "p10": 0.0,
+        "p90": 1.0
+      },
+      "catalyst_positive_market_reaction_fraction_given_failure": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 1.0
+      },
+      "catalyst_underlying_return_mean": {
+        "median": -0.04032631980343578,
+        "p10": -0.16309492297528214,
+        "p90": 0.10454724478392557
+      },
+      "catalyst_underlying_return_worst": {
+        "median": -0.19794377280980055,
+        "p10": -0.3466609695776586,
+        "p90": -0.0989832381039569
+      },
+      "catalyst_unconditional_expected_shortfall_95": {
+        "median": -0.19794377280980055,
+        "p10": -0.3466609695776586,
+        "p90": -0.0989832381039569
+      },
+      "catalyst_policy_net_expected_shortfall_95": {
+        "median": -0.06253887963715407,
+        "p10": -0.3403376109488537,
+        "p90": 0.0
+      },
+      "catalyst_policy_net_mean": {
+        "median": -0.0005,
+        "p10": -0.14083288272835826,
+        "p90": 0.09991147894535454
+      },
+      "catalyst_policy_net_worst": {
+        "median": -0.06253887963715407,
+        "p10": -0.3403376109488537,
+        "p90": 0.0
+      },
+      "catalyst_event_transaction_cost": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.001
+      }
+    },
+    "pre_catalyst_exit": {
+      "observation_count": {
+        "median": 252.0,
+        "p10": 252.0,
+        "p90": 252.0
+      },
+      "annualized_return": {
+        "median": -0.09570546753970427,
+        "p10": -0.3526408558517819,
+        "p90": 0.5208108628366052
+      },
+      "annualized_volatility": {
+        "median": 0.38093522978126926,
+        "p10": 0.35978381933101367,
+        "p90": 0.39946252434762003
+      },
+      "sharpe": {
+        "median": -0.07743663047504419,
+        "p10": -1.0096351101586025,
+        "p90": 1.2648093038746566
+      },
+      "sortino": {
+        "median": -0.10876024478617752,
+        "p10": -1.387494156335881,
+        "p90": 1.8734767413653124
+      },
+      "max_drawdown": {
+        "median": -0.3570922744279408,
+        "p10": -0.479623890247563,
+        "p90": -0.22099108777473275
+      },
+      "calmar": {
+        "median": -0.30584234164548507,
+        "p10": -0.8061790517534947,
+        "p90": 1.605838558834825
+      },
+      "value_at_risk_95": {
+        "median": -0.03920921621176674,
+        "p10": -0.042175522471654486,
+        "p90": -0.03601340470748237
+      },
+      "expected_shortfall_95": {
+        "median": -0.04883296791015919,
+        "p10": -0.05435018294419318,
+        "p90": -0.044420484259578154
+      },
+      "benchmark_total_return": {
+        "median": 0.0808686426652987,
+        "p10": -0.09385047214401081,
+        "p90": 0.3295017612206589
+      },
+      "benchmark_relative_compounded_return": {
+        "median": -0.11707098200880245,
+        "p10": -0.41394466933944857,
+        "p90": 0.3898227724006023
+      },
+      "information_ratio": {
+        "median": -0.17262219795623798,
+        "p10": -1.2187473646733,
+        "p90": 1.0013879397998728
+      },
+      "annual_turnover": {
+        "median": 7.0,
+        "p10": 7.0,
+        "p90": 7.0
+      },
+      "total_cost": {
+        "median": 0.007,
+        "p10": 0.007,
+        "p90": 0.007
+      },
+      "exposure_fraction": {
+        "median": 0.9285714285714286,
+        "p10": 0.9285714285714286,
+        "p90": 0.9285714285714286
+      },
+      "catalyst_exposure_fraction": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "catalyst_sessions_per_episode": {
+        "median": 3.0,
+        "p10": 3.0,
+        "p90": 3.0
+      },
+      "catalyst_trial_outcome_count": {
+        "median": 3.0,
+        "p10": 3.0,
+        "p90": 3.0
+      },
+      "catalyst_trial_success_fraction": {
+        "median": 0.3333333333333333,
+        "p10": 0.0,
+        "p90": 0.6666666666666666
+      },
+      "phase_ii_trial_success_fraction": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 1.0
+      },
+      "phase_iii_trial_success_fraction": {
+        "median": 0.5,
+        "p10": 0.0,
+        "p90": 1.0
+      },
+      "catalyst_market_return_given_success_mean": {
+        "median": 0.16504347882794967,
+        "p10": -0.12448113255500597,
+        "p90": 0.24587790431210674
+      },
+      "catalyst_market_return_given_failure_mean": {
+        "median": -0.15392532619036314,
+        "p10": -0.3207917247246023,
+        "p90": 0.13584936752883545
+      },
+      "catalyst_positive_market_reaction_fraction_given_success": {
+        "median": 1.0,
+        "p10": 0.0,
+        "p90": 1.0
+      },
+      "catalyst_positive_market_reaction_fraction_given_failure": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 1.0
+      },
+      "catalyst_underlying_return_mean": {
+        "median": -0.04032631980343578,
+        "p10": -0.16309492297528214,
+        "p90": 0.10454724478392557
+      },
+      "catalyst_underlying_return_worst": {
+        "median": -0.19794377280980055,
+        "p10": -0.3466609695776586,
+        "p90": -0.0989832381039569
+      },
+      "catalyst_unconditional_expected_shortfall_95": {
+        "median": -0.19794377280980055,
+        "p10": -0.3466609695776586,
+        "p90": -0.0989832381039569
+      },
+      "catalyst_policy_net_expected_shortfall_95": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "catalyst_policy_net_mean": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "catalyst_policy_net_worst": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "catalyst_event_transaction_cost": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      }
+    },
+    "q_learner": {
+      "observation_count": {
+        "median": 252.0,
+        "p10": 252.0,
+        "p90": 252.0
+      },
+      "annualized_return": {
+        "median": -0.02283580386210393,
+        "p10": -0.12976853837135904,
+        "p90": 0.12383796043804497
+      },
+      "annualized_volatility": {
+        "median": 0.11992657543743473,
+        "p10": 0.07947274164101077,
+        "p90": 0.1619943717835059
+      },
+      "sharpe": {
+        "median": -0.13957148102212963,
+        "p10": -1.1323757077983747,
+        "p90": 1.2460253645005215
+      },
+      "sortino": {
+        "median": -0.20482365858535956,
+        "p10": -1.4888487995362047,
+        "p90": 2.564334467477557
+      },
+      "max_drawdown": {
+        "median": -0.10987481406347704,
+        "p10": -0.2190976990009885,
+        "p90": -0.045209319470414365
+      },
+      "calmar": {
+        "median": -0.2457125056963445,
+        "p10": -0.7394553287496282,
+        "p90": 3.5105250309874902
+      },
+      "value_at_risk_95": {
+        "median": -0.0018263084028030446,
+        "p10": -0.013492204494661597,
+        "p90": 0.0
+      },
+      "expected_shortfall_95": {
+        "median": -0.01878622930927397,
+        "p10": -0.029683346474805233,
+        "p90": -0.008096535542803745
+      },
+      "benchmark_total_return": {
+        "median": 0.0808686426652987,
+        "p10": -0.09385047214401081,
+        "p90": 0.3295017612206589
+      },
+      "benchmark_relative_compounded_return": {
+        "median": -0.11071088419952108,
+        "p10": -0.31807977973247586,
+        "p90": 0.26031991658107484
+      },
+      "information_ratio": {
+        "median": -0.6530211359182645,
+        "p10": -1.717672183279211,
+        "p90": 1.1581609164475197
+      },
+      "annual_turnover": {
+        "median": 20.0,
+        "p10": 11.9,
+        "p90": 29.0
+      },
+      "total_cost": {
+        "median": 0.020000000000000004,
+        "p10": 0.0119,
+        "p90": 0.029
+      },
+      "exposure_fraction": {
+        "median": 0.1111111111111111,
+        "p10": 0.03571428571428571,
+        "p90": 0.17896825396825397
+      },
+      "catalyst_exposure_fraction": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "catalyst_sessions_per_episode": {
+        "median": 3.0,
+        "p10": 3.0,
+        "p90": 3.0
+      },
+      "catalyst_trial_outcome_count": {
+        "median": 3.0,
+        "p10": 3.0,
+        "p90": 3.0
+      },
+      "catalyst_trial_success_fraction": {
+        "median": 0.3333333333333333,
+        "p10": 0.0,
+        "p90": 0.6666666666666666
+      },
+      "phase_ii_trial_success_fraction": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 1.0
+      },
+      "phase_iii_trial_success_fraction": {
+        "median": 0.5,
+        "p10": 0.0,
+        "p90": 1.0
+      },
+      "catalyst_market_return_given_success_mean": {
+        "median": 0.16504347882794967,
+        "p10": -0.12448113255500597,
+        "p90": 0.24587790431210674
+      },
+      "catalyst_market_return_given_failure_mean": {
+        "median": -0.15392532619036314,
+        "p10": -0.3207917247246023,
+        "p90": 0.13584936752883545
+      },
+      "catalyst_positive_market_reaction_fraction_given_success": {
+        "median": 1.0,
+        "p10": 0.0,
+        "p90": 1.0
+      },
+      "catalyst_positive_market_reaction_fraction_given_failure": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 1.0
+      },
+      "catalyst_underlying_return_mean": {
+        "median": -0.04032631980343578,
+        "p10": -0.16309492297528214,
+        "p90": 0.10454724478392557
+      },
+      "catalyst_underlying_return_worst": {
+        "median": -0.19794377280980055,
+        "p10": -0.3466609695776586,
+        "p90": -0.0989832381039569
+      },
+      "catalyst_unconditional_expected_shortfall_95": {
+        "median": -0.19794377280980055,
+        "p10": -0.3466609695776586,
+        "p90": -0.0989832381039569
+      },
+      "catalyst_policy_net_expected_shortfall_95": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "catalyst_policy_net_mean": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "catalyst_policy_net_worst": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "catalyst_event_transaction_cost": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      }
+    }
+  },
+  "paired_q_policy_comparisons": {
+    "cash": {
+      "annualized_return_difference": {
+        "paired_episode_seeds": 60,
+        "mean_difference": -0.00873757017034325,
+        "median_difference": -0.02283580386210393,
+        "bootstrap_95pct_interval_low": -0.03731688191436821,
+        "bootstrap_95pct_interval_high": 0.02059998626382729,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 10000
+      },
+      "benchmark_relative_compounded_return_difference": {
+        "paired_episode_seeds": 60,
+        "mean_difference": -0.007437606674546417,
+        "median_difference": -0.021458360284813904,
+        "bootstrap_95pct_interval_low": -0.034491489913962496,
+        "bootstrap_95pct_interval_high": 0.02063203823280695,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 10100
+      }
+    },
+    "buy_and_hold": {
+      "annualized_return_difference": {
+        "paired_episode_seeds": 60,
+        "mean_difference": -0.0016783108644868039,
+        "median_difference": 0.14548913289926751,
+        "bootstrap_95pct_interval_low": -0.2050445620936253,
+        "bootstrap_95pct_interval_high": 0.15680740118999006,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 10001
+      },
+      "benchmark_relative_compounded_return_difference": {
+        "paired_episode_seeds": 60,
+        "mean_difference": 0.03646898720937338,
+        "median_difference": 0.11977001869231446,
+        "bootstrap_95pct_interval_low": -0.11618865010017485,
+        "bootstrap_95pct_interval_high": 0.1680448060548313,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 10101
+      }
+    },
+    "trend_rule": {
+      "annualized_return_difference": {
+        "paired_episode_seeds": 60,
+        "mean_difference": 0.05961126872634684,
+        "median_difference": 0.11744413761645528,
+        "bootstrap_95pct_interval_low": -0.05949881082164456,
+        "bootstrap_95pct_interval_high": 0.1687457337175072,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 10002
+      },
+      "benchmark_relative_compounded_return_difference": {
+        "paired_episode_seeds": 60,
+        "mean_difference": 0.07506038751708045,
+        "median_difference": 0.12426469517953664,
+        "bootstrap_95pct_interval_low": -0.03460411735090774,
+        "bootstrap_95pct_interval_high": 0.17611967987793786,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 10102
+      }
+    },
+    "pre_catalyst_exit": {
+      "annualized_return_difference": {
+        "paired_episode_seeds": 60,
+        "mean_difference": -0.05311257789683164,
+        "median_difference": 0.044550168088915876,
+        "bootstrap_95pct_interval_low": -0.15879787313696736,
+        "bootstrap_95pct_interval_high": 0.04024939231091841,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 10003
+      },
+      "benchmark_relative_compounded_return_difference": {
+        "paired_episode_seeds": 60,
+        "mean_difference": -0.03335163173659977,
+        "median_difference": 0.03216433876960367,
+        "bootstrap_95pct_interval_low": -0.1223466328317101,
+        "bootstrap_95pct_interval_high": 0.05202570057224388,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 10103
+      }
+    }
+  },
+  "paired_comparison_interpretation": "Intervals resample matched synthetic evaluation episode seeds and describe uncertainty under this one fixed generator and trained policy. They are not historical-market confidence intervals, do not include policy-training uncertainty, and do not establish statistical significance or a trading edge.",
+  "evaluation_event_process_summary": {
+    "independent_episode_seeds": 60,
+    "catalyst_count": 180,
+    "clinical_success_count": 71,
+    "clinical_failure_count": 109,
+    "clinical_success_fraction": 0.39444444444444443,
+    "phase_ii_count": 101,
+    "phase_ii_clinical_success_fraction": 0.3069306930693069,
+    "phase_iii_count": 79,
+    "phase_iii_clinical_success_fraction": 0.5063291139240507,
+    "positive_market_reaction_fraction_given_clinical_success": 0.8169014084507042,
+    "positive_market_reaction_fraction_given_clinical_failure": 0.22935779816513763,
+    "mean_issuer_event_return_given_clinical_success": 0.11262808570344215,
+    "mean_issuer_event_return_given_clinical_failure": -0.12102127850274545,
+    "interpretation": "Synthetic generator diagnostics across unique matched evaluation paths; advancement and stock reaction are separate draws. Advancement priors use published aggregate transitions; these counts are not empirical event-panel estimates."
+  }
+}

@@ -199,8 +199,8 @@ class BiotechCatalystGym(gym.Env):
         self.render_mode = render_mode
         self.action_space = spaces.Discrete(2)
         self.observation_space = spaces.Box(
-            low=np.array([-5.0, 0.0, 0.0, 0.0], dtype=np.float32),
-            high=np.array([5.0, 5.0, 1.0, 1.0], dtype=np.float32),
+            low=np.array([-5.0, 0.0, 0.0, 0.0, 0.0, 0.0], dtype=np.float32),
+            high=np.array([5.0, 5.0, 1.0, 1.0, 1.0, 1.0], dtype=np.float32),
             dtype=np.float32,
         )
         self._returns = np.zeros(self.lookback + self.episode_length, dtype=np.float64)
@@ -360,6 +360,8 @@ class BiotechCatalystGym(gym.Env):
             np.clip(volatility / 0.02, 0.0, 5.0),
             min(distance / self.catalyst_interval, 1.0),
             event_class,
+            max(0.0, (self.episode_length - (self._cursor - self.lookback)) / self.episode_length),
+            float(self._position),
         ], dtype=np.float32)
 
 
@@ -368,12 +370,17 @@ TradingGym = BiotechCatalystGym
 
 
 def discretize_observation(observation: Sequence[float], catalyst_interval: int = 63) -> int:
-    """Map momentum, volatility, catalyst proximity, and phase to 36 states."""
+    """Map market, catalyst, remaining-horizon, and position inputs to 288 states."""
     if catalyst_interval <= 1:
         raise ValueError("catalyst_interval must exceed 1")
-    momentum, volatility, distance, phase = observation
+    if len(observation) != 6:
+        raise ValueError("observation must contain momentum, volatility, catalyst distance/phase, remaining time, and position")
+    momentum, volatility, distance, phase, remaining, position = observation
     momentum_bin = 0 if momentum < -0.1 else 1 if momentum <= 0.1 else 2
     volatility_bin = 0 if volatility < 1.2 else 1
     event_bin = 0 if distance > 5 / catalyst_interval else 1 if distance > 0 else 2
     phase_bin = int(round(float(phase)))
-    return (((momentum_bin * 2 + volatility_bin) * 3 + event_bin) * 2) + phase_bin
+    market_state = (((momentum_bin * 2 + volatility_bin) * 3 + event_bin) * 2) + phase_bin
+    horizon_bin = min(int((1.0 - float(np.clip(remaining, 0.0, 1.0))) * 4), 3)
+    position_bin = int(round(float(position)))
+    return (market_state * 4 + horizon_bin) * 2 + position_bin

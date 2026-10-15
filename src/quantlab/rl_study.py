@@ -11,6 +11,8 @@ import pandas as pd
 from quantlab.backtest import performance_metrics
 from quantlab.simulation import CatalystAssumptions, BiotechCatalystGym, discretize_observation
 
+RL_STATE_COUNT = 288
+
 
 @dataclass(frozen=True)
 class RLStudy:
@@ -64,23 +66,23 @@ def train_q_table(
     episode_length: int = 252,
     seed: int = 17,
     learning_rate: float = 0.12,
-    discount: float = 0.98,
+    discount: float = 1.0,
     assumptions: CatalystAssumptions | None = None,
     visit_counts: np.ndarray | None = None,
 ) -> np.ndarray:
-    """Train a 36-state learner on independent, generated catalyst episodes."""
+    """Train a Markov-state learner on independent, generated catalyst episodes."""
     if episodes <= 0:
         raise ValueError("episodes must be positive")
     if not 0.0 < learning_rate <= 1.0:
         raise ValueError("learning_rate must be in (0, 1]")
     if not 0.0 <= discount <= 1.0:
         raise ValueError("discount must be in [0, 1]")
-    if visit_counts is not None and visit_counts.shape != (36, 2):
-        raise ValueError("visit_counts must have shape (36, 2)")
+    if visit_counts is not None and visit_counts.shape != (RL_STATE_COUNT, 2):
+        raise ValueError(f"visit_counts must have shape ({RL_STATE_COUNT}, 2)")
     rng = np.random.default_rng(seed)
     env = BiotechCatalystGym(episode_length=episode_length, assumptions=assumptions)
     catalyst_interval = env.catalyst_interval
-    q_values = np.zeros((36, 2), dtype=np.float64)
+    q_values = np.zeros((RL_STATE_COUNT, 2), dtype=np.float64)
     for episode in range(episodes):
         observation, _ = env.reset(seed=seed + episode)
         epsilon = max(0.04, 0.35 * (1.0 - episode / episodes))
@@ -231,12 +233,12 @@ def run_rl_study(
     training_seed: int = 17,
     evaluation_seed: int = 10_000,
     learning_rate: float = 0.12,
-    discount: float = 0.98,
+    discount: float = 1.0,
     assumptions: CatalystAssumptions | None = None,
     assumptions_sha256: str | None = None,
 ) -> RLStudy:
     config = assumptions or CatalystAssumptions()
-    training_visit_counts = np.zeros((36, 2), dtype=np.int64)
+    training_visit_counts = np.zeros((RL_STATE_COUNT, 2), dtype=np.int64)
     q_values = train_q_table(
         training_episodes,
         episode_length,
@@ -273,11 +275,15 @@ def run_rl_study(
     volatility_names = ("lower", "upper")
     proximity_names = ("more_than_5_sessions", "within_5_sessions", "event_session")
     state_policy = []
+    horizon_names = ("early", "mid_early", "mid_late", "late")
     for state, values in enumerate(q_values):
-        phase_bin = state % 2
-        event_bin = (state // 2) % 3
-        volatility_bin = (state // 6) % 2
-        momentum_bin = state // 12
+        position_bin = state % 2
+        horizon_bin = (state // 2) % 4
+        market_state = state // 8
+        phase_bin = market_state % 2
+        event_bin = (market_state // 2) % 3
+        volatility_bin = (market_state // 6) % 2
+        momentum_bin = market_state // 12
         cash_value, long_value = (float(values[0]), float(values[1]))
         state_policy.append({
             "state": state,
@@ -285,6 +291,8 @@ def run_rl_study(
             "volatility_regime": volatility_names[volatility_bin],
             "catalyst_proximity": proximity_names[event_bin],
             "upcoming_phase": "phase_III" if phase_bin else "phase_II",
+            "episode_horizon": horizon_names[horizon_bin],
+            "current_position": "long" if position_bin else "cash",
             "training_cash_visits": int(training_visit_counts[state, 0]),
             "training_long_visits": int(training_visit_counts[state, 1]),
             "q_cash": cash_value,
@@ -337,8 +345,9 @@ def run_rl_study(
         },
         "metric_definitions": {
             "learning_reward": (
-                "Q-learning maximizes discounted session log returns: sum(gamma**k * log(1 + net_return_k)). "
-                "Because gamma is below one, this is not the same objective as undiscounted terminal log wealth or net CAGR."
+                "Q-learning maximizes sum(gamma**k * log(1 + net_return_k)). "
+                "At gamma=1 in this finite-horizon environment, this equals log terminal wealth; "
+                "gamma below one is a time-preference sensitivity and no longer equals terminal log wealth."
             ),
             "discount_factor": float(discount),
             "reward_discount_half_life_sessions": (
@@ -352,11 +361,14 @@ def run_rl_study(
         "learned_q_values": q_values.tolist(),
         "learned_policy_by_state": state_policy,
         "state_encoding": {
-            "state_formula": "(((momentum_bin * 2 + volatility_bin) * 3 + catalyst_proximity_bin) * 2) + upcoming_phase_bin",
+            "state_formula": "(((((momentum_bin * 2 + volatility_bin) * 3 + catalyst_proximity_bin) * 2 + upcoming_phase_bin) * 4 + episode_horizon_bin) * 2) + current_position_bin",
             "momentum_bins": list(momentum_names),
             "volatility_bins": list(volatility_names),
             "catalyst_proximity_bins": list(proximity_names),
             "upcoming_phase_bins": ["phase_II", "phase_III"],
+            "episode_horizon_bins": list(horizon_names),
+            "current_position_bins": ["cash", "long"],
+            "available_states": RL_STATE_COUNT,
             "visit_counts_include": "all epsilon-greedy training actions; evaluation paths are not included",
         },
         "evaluation_summary": summary,

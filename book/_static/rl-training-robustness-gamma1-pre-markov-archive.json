@@ -1,0 +1,298 @@
+{
+  "study": "synthetic_q_learning_training_seed_robustness",
+  "evidence_status": "synthetic_simulator_diagnostic_only",
+  "not_a_claim": "No historical prices, point-in-time trial outcomes, or market generalization are represented.",
+  "protocol": {
+    "training": "Independently train one Q table per training seed on the same base generator; no policy is selected from evaluation results.",
+    "evaluation": "Every trained Q table and rule-based comparator uses the same held-out episode seed block, creating a crossed training-seed by evaluation-seed design.",
+    "bootstrap": "Two-way percentile bootstrap resamples training-seed rows and shared evaluation-seed columns independently.",
+    "limitations": "Intervals are conditional on one synthetic generator and one hyperparameter configuration. They do not represent historical-market uncertainty or correct for prior tuning of the study design."
+  },
+  "configuration": {
+    "training_replicates": 10,
+    "training_seed_start": 17,
+    "training_seed_stride": 1000,
+    "training_episodes_per_replicate": 300,
+    "evaluation_runs_per_training_replicate": 60,
+    "episode_length_sessions": 252,
+    "evaluation_seed_start": 30000,
+    "evaluation_seed_block_shared": true,
+    "bootstrap_replicates": 10000,
+    "bootstrap_seed": 20261015,
+    "learning_rate": 0.12,
+    "discount_factor": 1.0,
+    "assumptions_path": "config/biopharma_rl_synthetic.json",
+    "assumptions_sha256": "b24cd15110ad409325e3000e6875abd6b603c588f015ce964cd97b5b7fea00b6",
+    "policies": [
+      "cash",
+      "buy_and_hold",
+      "trend_rule",
+      "pre_catalyst_exit",
+      "q_learner"
+    ]
+  },
+  "q_policy_training_diagnostics": [
+    {
+      "training_seed": 17,
+      "greedy_long_state_count": 1,
+      "training_states_visited": 36,
+      "training_state_action_pairs_visited": 69,
+      "training_decisions": 75600
+    },
+    {
+      "training_seed": 1017,
+      "greedy_long_state_count": 0,
+      "training_states_visited": 36,
+      "training_state_action_pairs_visited": 72,
+      "training_decisions": 75600
+    },
+    {
+      "training_seed": 2017,
+      "greedy_long_state_count": 2,
+      "training_states_visited": 36,
+      "training_state_action_pairs_visited": 71,
+      "training_decisions": 75600
+    },
+    {
+      "training_seed": 3017,
+      "greedy_long_state_count": 1,
+      "training_states_visited": 36,
+      "training_state_action_pairs_visited": 71,
+      "training_decisions": 75600
+    },
+    {
+      "training_seed": 4017,
+      "greedy_long_state_count": 1,
+      "training_states_visited": 36,
+      "training_state_action_pairs_visited": 70,
+      "training_decisions": 75600
+    },
+    {
+      "training_seed": 5017,
+      "greedy_long_state_count": 0,
+      "training_states_visited": 36,
+      "training_state_action_pairs_visited": 71,
+      "training_decisions": 75600
+    },
+    {
+      "training_seed": 6017,
+      "greedy_long_state_count": 1,
+      "training_states_visited": 36,
+      "training_state_action_pairs_visited": 72,
+      "training_decisions": 75600
+    },
+    {
+      "training_seed": 7017,
+      "greedy_long_state_count": 2,
+      "training_states_visited": 36,
+      "training_state_action_pairs_visited": 71,
+      "training_decisions": 75600
+    },
+    {
+      "training_seed": 8017,
+      "greedy_long_state_count": 2,
+      "training_states_visited": 36,
+      "training_state_action_pairs_visited": 71,
+      "training_decisions": 75600
+    },
+    {
+      "training_seed": 9017,
+      "greedy_long_state_count": 6,
+      "training_states_visited": 36,
+      "training_state_action_pairs_visited": 70,
+      "training_decisions": 75600
+    }
+  ],
+  "greedy_long_state_count_distribution": {
+    "minimum": 0,
+    "median": 1.0,
+    "maximum": 6,
+    "available_states": 36
+  },
+  "q_policy_evaluation_distribution": {
+    "annualized_return": {
+      "median": 0.0,
+      "p10": -0.11512421031144938,
+      "p90": 0.056128390861477195
+    },
+    "benchmark_relative_compounded_return": {
+      "median": -0.021630833775140745,
+      "p10": -0.2732030171684792,
+      "p90": 0.23198654234587668
+    },
+    "max_drawdown": {
+      "median": -0.0010000000000000009,
+      "p10": -0.20958353612843447,
+      "p90": 0.0
+    },
+    "exposure_fraction": {
+      "median": 0.003968253968253968,
+      "p10": 0.0,
+      "p90": 0.2261904761904762
+    },
+    "catalyst_exposure_fraction": {
+      "median": 0.0,
+      "p10": 0.0,
+      "p90": 0.0
+    },
+    "annual_turnover": {
+      "median": 2.0,
+      "p10": 0.0,
+      "p90": 30.0
+    }
+  },
+  "paired_q_policy_comparisons": {
+    "cash": {
+      "annualized_return": {
+        "training_seed_count": 10,
+        "evaluation_seed_count": 60,
+        "paired_cells": 600,
+        "mean_difference": -0.007449033793451998,
+        "median_cell_difference": 0.0,
+        "bootstrap_95pct_interval_low": -0.02361326236183692,
+        "bootstrap_95pct_interval_high": 0.00450025763067565,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 20261015,
+        "bootstrap_unit": "crossed_training_seed_and_shared_evaluation_episode_seed"
+      },
+      "benchmark_relative_compounded_return": {
+        "training_seed_count": 10,
+        "evaluation_seed_count": 60,
+        "paired_cells": 600,
+        "mean_difference": -0.006856659134470828,
+        "median_cell_difference": 0.0,
+        "bootstrap_95pct_interval_low": -0.02190947742016054,
+        "bootstrap_95pct_interval_high": 0.0050693731332223085,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 20261016,
+        "bootstrap_unit": "crossed_training_seed_and_shared_evaluation_episode_seed"
+      },
+      "max_drawdown": {
+        "training_seed_count": 10,
+        "evaluation_seed_count": 60,
+        "paired_cells": 600,
+        "mean_difference": -0.05991004935867346,
+        "median_cell_difference": -0.0010000000000000009,
+        "bootstrap_95pct_interval_low": -0.11089669705892079,
+        "bootstrap_95pct_interval_high": -0.016536293816831256,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 20261017,
+        "bootstrap_unit": "crossed_training_seed_and_shared_evaluation_episode_seed"
+      }
+    },
+    "buy_and_hold": {
+      "annualized_return": {
+        "training_seed_count": 10,
+        "evaluation_seed_count": 60,
+        "paired_cells": 600,
+        "mean_difference": -0.03238283634108725,
+        "median_cell_difference": 0.07843332880896337,
+        "bootstrap_95pct_interval_low": -0.1947814911367701,
+        "bootstrap_95pct_interval_high": 0.11804846687430441,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 20261115,
+        "bootstrap_unit": "crossed_training_seed_and_shared_evaluation_episode_seed"
+      },
+      "benchmark_relative_compounded_return": {
+        "training_seed_count": 10,
+        "evaluation_seed_count": 60,
+        "paired_cells": 600,
+        "mean_difference": -0.019743329782884445,
+        "median_cell_difference": 0.08312825115820621,
+        "bootstrap_95pct_interval_low": -0.17764004773341704,
+        "bootstrap_95pct_interval_high": 0.12766524080122615,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 20261116,
+        "bootstrap_unit": "crossed_training_seed_and_shared_evaluation_episode_seed"
+      },
+      "max_drawdown": {
+        "training_seed_count": 10,
+        "evaluation_seed_count": 60,
+        "paired_cells": 600,
+        "mean_difference": 0.4463790148786653,
+        "median_cell_difference": 0.43206427317041735,
+        "bootstrap_95pct_interval_low": 0.383027636402308,
+        "bootstrap_95pct_interval_high": 0.5057545084347628,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 20261117,
+        "bootstrap_unit": "crossed_training_seed_and_shared_evaluation_episode_seed"
+      }
+    },
+    "trend_rule": {
+      "annualized_return": {
+        "training_seed_count": 10,
+        "evaluation_seed_count": 60,
+        "paired_cells": 600,
+        "mean_difference": 0.009003194839040513,
+        "median_cell_difference": 0.09519711987232415,
+        "bootstrap_95pct_interval_low": -0.09240602378244006,
+        "bootstrap_95pct_interval_high": 0.10266752985829644,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 20261215,
+        "bootstrap_unit": "crossed_training_seed_and_shared_evaluation_episode_seed"
+      },
+      "benchmark_relative_compounded_return": {
+        "training_seed_count": 10,
+        "evaluation_seed_count": 60,
+        "paired_cells": 600,
+        "mean_difference": 0.022263361792329763,
+        "median_cell_difference": 0.09999132600316313,
+        "bootstrap_95pct_interval_low": -0.07367226401746192,
+        "bootstrap_95pct_interval_high": 0.11501744346817387,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 20261216,
+        "bootstrap_unit": "crossed_training_seed_and_shared_evaluation_episode_seed"
+      },
+      "max_drawdown": {
+        "training_seed_count": 10,
+        "evaluation_seed_count": 60,
+        "paired_cells": 600,
+        "mean_difference": 0.29710515147853406,
+        "median_cell_difference": 0.29183276859839447,
+        "bootstrap_95pct_interval_low": 0.23737852274536658,
+        "bootstrap_95pct_interval_high": 0.351005316439671,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 20261217,
+        "bootstrap_unit": "crossed_training_seed_and_shared_evaluation_episode_seed"
+      }
+    },
+    "pre_catalyst_exit": {
+      "annualized_return": {
+        "training_seed_count": 10,
+        "evaluation_seed_count": 60,
+        "paired_cells": 600,
+        "mean_difference": -0.07867544581485927,
+        "median_cell_difference": 0.041576793861590855,
+        "bootstrap_95pct_interval_low": -0.1884817243754854,
+        "bootstrap_95pct_interval_high": 0.022629762601465674,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 20261315,
+        "bootstrap_unit": "crossed_training_seed_and_shared_evaluation_episode_seed"
+      },
+      "benchmark_relative_compounded_return": {
+        "training_seed_count": 10,
+        "evaluation_seed_count": 60,
+        "paired_cells": 600,
+        "mean_difference": -0.07394902282014906,
+        "median_cell_difference": 0.03647517017689195,
+        "bootstrap_95pct_interval_low": -0.1763030027717382,
+        "bootstrap_95pct_interval_high": 0.020979431937863974,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 20261316,
+        "bootstrap_unit": "crossed_training_seed_and_shared_evaluation_episode_seed"
+      },
+      "max_drawdown": {
+        "training_seed_count": 10,
+        "evaluation_seed_count": 60,
+        "paired_cells": 600,
+        "mean_difference": 0.3038765963289621,
+        "median_cell_difference": 0.3181245898353219,
+        "bootstrap_95pct_interval_low": 0.24861204429567701,
+        "bootstrap_95pct_interval_high": 0.35491673100009596,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 20261317,
+        "bootstrap_unit": "crossed_training_seed_and_shared_evaluation_episode_seed"
+      }
+    }
+  }
+}

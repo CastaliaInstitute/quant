@@ -1,0 +1,128 @@
+{
+  "study": "synthetic_rl_reward_incentive_audit",
+  "evidence_status": "assumption_arithmetic_diagnostic_only",
+  "not_a_claim": "This audit explains behavior under configured synthetic assumptions; it does not estimate historical biotech returns or a deployable optimum.",
+  "assumptions_sha256": "b24cd15110ad409325e3000e6875abd6b603c588f015ce964cd97b5b7fea00b6",
+  "configuration": {
+    "assumptions_path": "/Users/danielmcshan/GitHub/CastaliaInstitute/quant/config/biopharma_rl_synthetic.json",
+    "episode_length_sessions": 252,
+    "catalyst_interval_sessions": 63,
+    "catalyst_indices_zero_based": [
+      63,
+      126,
+      189
+    ],
+    "transaction_cost_bps_per_unit_turnover": 10.0,
+    "phase_sampling_probabilities": [
+      0.5,
+      0.5
+    ]
+  },
+  "ordinary_session": {
+    "arithmetic_mean_return": 0.00023749999999999997,
+    "return_volatility": 0.02524381112272868,
+    "expected_log_reward_long": -8.130683038913077e-05,
+    "expected_log_reward_after_initial_entry_cost": -0.0010822084589002133,
+    "break_even_arithmetic_mean_return_for_zero_log_reward": 0.00031877758036575384,
+    "mean_return_shortfall_to_log_break_even": 8.127758036575387e-05
+  },
+  "catalyst_sessions": {
+    "event_count_per_episode": 3,
+    "event_fraction": 0.011904761904761904,
+    "by_phase": {
+      "phase_ii": {
+        "program_advancement_probability": 0.289,
+        "branches": [
+          {
+            "clinical_outcome": "advancement",
+            "market_reaction": "positive",
+            "probability": 0.20808,
+            "mean_simple_return": 0.1300875,
+            "expected_log_reward": 0.12204538483290704
+          },
+          {
+            "clinical_outcome": "advancement",
+            "market_reaction": "negative",
+            "probability": 0.08092,
+            "mean_simple_return": -0.1599125,
+            "expected_log_reward": -0.17470131121467908
+          },
+          {
+            "clinical_outcome": "suspension",
+            "market_reaction": "positive",
+            "probability": 0.15642000000000003,
+            "mean_simple_return": 0.1300875,
+            "expected_log_reward": 0.12204538483290704
+          },
+          {
+            "clinical_outcome": "suspension",
+            "market_reaction": "negative",
+            "probability": 0.5545800000000001,
+            "mean_simple_return": -0.1599125,
+            "expected_log_reward": -0.17470131121467908
+          }
+        ],
+        "expected_simple_return": -0.05420750000000001,
+        "expected_log_reward": -0.06653714050533395
+      },
+      "phase_iii": {
+        "program_advancement_probability": 0.578,
+        "branches": [
+          {
+            "clinical_outcome": "advancement",
+            "market_reaction": "positive",
+            "probability": 0.3757,
+            "mean_simple_return": 0.24008749999999998,
+            "expected_log_reward": 0.21497461962585512
+          },
+          {
+            "clinical_outcome": "advancement",
+            "market_reaction": "negative",
+            "probability": 0.20229999999999998,
+            "mean_simple_return": -0.3199125,
+            "expected_log_reward": -0.38622413352376406
+          },
+          {
+            "clinical_outcome": "suspension",
+            "market_reaction": "positive",
+            "probability": 0.11816000000000003,
+            "mean_simple_return": 0.24008749999999998,
+            "expected_log_reward": 0.21497461962585512
+          },
+          {
+            "clinical_outcome": "suspension",
+            "market_reaction": "negative",
+            "probability": 0.30384,
+            "mean_simple_return": -0.3199125,
+            "expected_log_reward": -0.38622413352376406
+          }
+        ],
+        "expected_simple_return": -0.043350899999999984,
+        "expected_log_reward": -0.08931611729329313
+      }
+    },
+    "phase_mixture_expected_log_reward": -0.07792662889931354
+  },
+  "episode_long_only": {
+    "expected_log_wealth_change_no_cost": -0.25402528746483416,
+    "expected_geometric_wealth_return_no_cost": -0.2243278129846821,
+    "expected_log_wealth_change_with_initial_entry_cost": -0.25502618909334523,
+    "expected_geometric_wealth_return_with_initial_entry_cost": -0.22510379613367582,
+    "cash_expected_log_wealth_change": 0.0,
+    "interpretation": "Expected log rewards add over sessions; the geometric return is exp(expected log wealth change) minus one, not expected arithmetic compounded return."
+  },
+  "observed_training_coverage": {
+    "training_replicates": 10,
+    "state_count": 36,
+    "state_action_count": 72,
+    "training_states_visited_min": 36,
+    "training_states_visited_max": 36,
+    "state_action_pairs_visited_min": 69,
+    "state_action_pairs_visited_max": 72,
+    "greedy_long_state_count_min": 0,
+    "greedy_long_state_count_max": 3,
+    "interpretation": "State visits are high; cash-heavy behavior is not explained by gross state undercoverage in this training run."
+  },
+  "diagnosis": "The configured ordinary-session arithmetic drift is below the volatility-implied break-even drift for log growth, and configured catalyst gaps have negative expected log reward in both phases. Cash-heavy Q behavior is therefore aligned with this generator's reward incentives; this is not evidence that the learner found an investable edge.",
+  "research_implication": "Calibrate ordinary-return drift, volatility, and event-gap distributions from point-in-time historical data before using policy exposure as a research conclusion. Keep cash as a valid action; evaluate any risk budget or drawdown constraint as an explicit objective rather than forcing exposure."
+}

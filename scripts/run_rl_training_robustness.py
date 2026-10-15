@@ -10,7 +10,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from quantlab.rl_study import evaluate_policies, train_q_table
+from quantlab.rl_study import RL_STATE_COUNT, evaluate_policies, train_q_table
 from quantlab.simulation import CatalystAssumptions
 
 
@@ -81,7 +81,7 @@ def main() -> None:
     training_diagnostics: list[dict[str, int]] = []
     for replicate in range(args.training_replicates):
         training_seed = args.training_seed_start + replicate * args.training_seed_stride
-        visit_counts = np.zeros((36, 2), dtype=np.int64)
+        visit_counts = np.zeros((RL_STATE_COUNT, 2), dtype=np.int64)
         q_values = train_q_table(
             episodes=args.training_episodes,
             episode_length=args.episode_length,
@@ -108,7 +108,7 @@ def main() -> None:
         })
         print(
             f"Training replicate {replicate + 1}/{args.training_replicates}: seed={training_seed}, "
-            f"greedy long states={int(greedy_long.sum())}/36",
+            f"greedy long states={int(greedy_long.sum())}/{RL_STATE_COUNT}",
             flush=True,
         )
 
@@ -141,6 +141,7 @@ def main() -> None:
             "training_seed_start": args.training_seed_start,
             "training_seed_stride": args.training_seed_stride,
             "training_episodes_per_replicate": args.training_episodes,
+            "state_count": RL_STATE_COUNT,
             "evaluation_runs_per_training_replicate": args.evaluation_runs,
             "episode_length_sessions": args.episode_length,
             "evaluation_seed_start": args.evaluation_seed,
@@ -148,8 +149,8 @@ def main() -> None:
             "bootstrap_replicates": args.bootstrap_replicates,
             "bootstrap_seed": args.bootstrap_seed,
             "learning_rate": 0.12,
-            "discount_factor": 0.98,
-            "assumptions_path": str(args.assumptions),
+            "discount_factor": 1.0,
+            "assumptions_path": str(args.assumptions.relative_to(ROOT)) if args.assumptions.is_relative_to(ROOT) else str(args.assumptions),
             "assumptions_sha256": hashlib.sha256(raw_assumptions).hexdigest(),
             "policies": ["cash", "buy_and_hold", "trend_rule", "pre_catalyst_exit", "q_learner"],
         },
@@ -158,7 +159,7 @@ def main() -> None:
             "minimum": int(min(row["greedy_long_state_count"] for row in training_diagnostics)),
             "median": float(np.median([row["greedy_long_state_count"] for row in training_diagnostics])),
             "maximum": int(max(row["greedy_long_state_count"] for row in training_diagnostics)),
-            "available_states": 36,
+            "available_states": RL_STATE_COUNT,
         },
         "q_policy_evaluation_distribution": {
             metric: {

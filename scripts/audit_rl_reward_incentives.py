@@ -146,17 +146,25 @@ def main() -> None:
             )
         diagnostics = training_report.get("q_policy_training_diagnostics", [])
         if diagnostics:
+            state_count = int(training_report.get("configuration", {}).get("state_count", 36))
+            state_action_count = state_count * 2
+            min_states_visited = min(row["training_states_visited"] for row in diagnostics)
+            max_states_visited = max(row["training_states_visited"] for row in diagnostics)
+            min_pairs_visited = min(row["training_state_action_pairs_visited"] for row in diagnostics)
+            max_pairs_visited = max(row["training_state_action_pairs_visited"] for row in diagnostics)
             training_coverage = {
                 "training_replicates": len(diagnostics),
-                "state_count": 36,
-                "state_action_count": 72,
-                "training_states_visited_min": min(row["training_states_visited"] for row in diagnostics),
-                "training_states_visited_max": max(row["training_states_visited"] for row in diagnostics),
-                "state_action_pairs_visited_min": min(row["training_state_action_pairs_visited"] for row in diagnostics),
-                "state_action_pairs_visited_max": max(row["training_state_action_pairs_visited"] for row in diagnostics),
+                "state_count": state_count,
+                "state_action_count": state_action_count,
+                "training_states_visited_min": min_states_visited,
+                "training_states_visited_max": max_states_visited,
+                "state_coverage_fraction_min": min_states_visited / state_count,
+                "state_action_pairs_visited_min": min_pairs_visited,
+                "state_action_pairs_visited_max": max_pairs_visited,
+                "state_action_coverage_fraction_min": min_pairs_visited / state_action_count,
                 "greedy_long_state_count_min": min(row["greedy_long_state_count"] for row in diagnostics),
                 "greedy_long_state_count_max": max(row["greedy_long_state_count"] for row in diagnostics),
-                "interpretation": "State visits are high; cash-heavy behavior is not explained by gross state undercoverage in this training run.",
+                "interpretation": "Coverage fractions expose sparse state/action sampling; unseen actions default to tied Q values and the deterministic argmax selects cash.",
             }
 
     report = {

@@ -13,6 +13,7 @@
     "training_seed_start": 17,
     "training_seed_stride": 1000,
     "training_episodes_per_replicate": 300,
+    "state_count": 288,
     "evaluation_runs_per_training_replicate": 60,
     "episode_length_sessions": 252,
     "evaluation_seed_start": 30000,
@@ -20,8 +21,8 @@
     "bootstrap_replicates": 10000,
     "bootstrap_seed": 20261015,
     "learning_rate": 0.12,
-    "discount_factor": 0.98,
-    "assumptions_path": "/Users/danielmcshan/GitHub/CastaliaInstitute/quant/config/biopharma_rl_synthetic.json",
+    "discount_factor": 1.0,
+    "assumptions_path": "config/biopharma_rl_synthetic.json",
     "assumptions_sha256": "b24cd15110ad409325e3000e6875abd6b603c588f015ce964cd97b5b7fea00b6",
     "policies": [
       "cash",
@@ -34,101 +35,101 @@
   "q_policy_training_diagnostics": [
     {
       "training_seed": 17,
-      "greedy_long_state_count": 2,
-      "training_states_visited": 36,
-      "training_state_action_pairs_visited": 69,
+      "greedy_long_state_count": 16,
+      "training_states_visited": 223,
+      "training_state_action_pairs_visited": 413,
       "training_decisions": 75600
     },
     {
       "training_seed": 1017,
-      "greedy_long_state_count": 2,
-      "training_states_visited": 36,
-      "training_state_action_pairs_visited": 72,
+      "greedy_long_state_count": 7,
+      "training_states_visited": 223,
+      "training_state_action_pairs_visited": 414,
       "training_decisions": 75600
     },
     {
       "training_seed": 2017,
-      "greedy_long_state_count": 3,
-      "training_states_visited": 36,
-      "training_state_action_pairs_visited": 71,
+      "greedy_long_state_count": 14,
+      "training_states_visited": 222,
+      "training_state_action_pairs_visited": 412,
       "training_decisions": 75600
     },
     {
       "training_seed": 3017,
-      "greedy_long_state_count": 0,
-      "training_states_visited": 36,
-      "training_state_action_pairs_visited": 71,
+      "greedy_long_state_count": 14,
+      "training_states_visited": 224,
+      "training_state_action_pairs_visited": 414,
       "training_decisions": 75600
     },
     {
       "training_seed": 4017,
-      "greedy_long_state_count": 1,
-      "training_states_visited": 36,
-      "training_state_action_pairs_visited": 70,
+      "greedy_long_state_count": 13,
+      "training_states_visited": 226,
+      "training_state_action_pairs_visited": 415,
       "training_decisions": 75600
     },
     {
       "training_seed": 5017,
-      "greedy_long_state_count": 1,
-      "training_states_visited": 36,
-      "training_state_action_pairs_visited": 71,
+      "greedy_long_state_count": 16,
+      "training_states_visited": 224,
+      "training_state_action_pairs_visited": 419,
       "training_decisions": 75600
     },
     {
       "training_seed": 6017,
-      "greedy_long_state_count": 1,
-      "training_states_visited": 36,
-      "training_state_action_pairs_visited": 72,
+      "greedy_long_state_count": 11,
+      "training_states_visited": 220,
+      "training_state_action_pairs_visited": 409,
       "training_decisions": 75600
     },
     {
       "training_seed": 7017,
-      "greedy_long_state_count": 1,
-      "training_states_visited": 36,
-      "training_state_action_pairs_visited": 71,
+      "greedy_long_state_count": 20,
+      "training_states_visited": 225,
+      "training_state_action_pairs_visited": 412,
       "training_decisions": 75600
     },
     {
       "training_seed": 8017,
-      "greedy_long_state_count": 1,
-      "training_states_visited": 36,
-      "training_state_action_pairs_visited": 71,
+      "greedy_long_state_count": 17,
+      "training_states_visited": 221,
+      "training_state_action_pairs_visited": 411,
       "training_decisions": 75600
     },
     {
       "training_seed": 9017,
-      "greedy_long_state_count": 0,
-      "training_states_visited": 36,
-      "training_state_action_pairs_visited": 70,
+      "greedy_long_state_count": 18,
+      "training_states_visited": 224,
+      "training_state_action_pairs_visited": 413,
       "training_decisions": 75600
     }
   ],
   "greedy_long_state_count_distribution": {
-    "minimum": 0,
-    "median": 1.0,
-    "maximum": 3,
-    "available_states": 36
+    "minimum": 7,
+    "median": 15.0,
+    "maximum": 20,
+    "available_states": 288
   },
   "q_policy_evaluation_distribution": {
     "annualized_return": {
       "median": 0.0,
-      "p10": -0.06075293964881138,
-      "p90": 0.06070998051764869
+      "p10": -0.07468949605820031,
+      "p90": 0.07770614069326354
     },
     "benchmark_relative_compounded_return": {
-      "median": -0.018459400615703003,
-      "p10": -0.23391228730352973,
-      "p90": 0.23111761852800097
+      "median": -0.02130276257160668,
+      "p10": -0.24064553821053253,
+      "p90": 0.21356296564185276
     },
     "max_drawdown": {
-      "median": -0.0009999999999998899,
-      "p10": -0.11674097755272299,
+      "median": -0.010347645193458876,
+      "p10": -0.1187125648313641,
       "p90": 0.0
     },
     "exposure_fraction": {
-      "median": 0.003968253968253968,
+      "median": 0.007936507936507936,
       "p10": 0.0,
-      "p90": 0.10714285714285714
+      "p90": 0.07142857142857142
     },
     "catalyst_exposure_fraction": {
       "median": 0.0,
@@ -138,7 +139,7 @@
     "annual_turnover": {
       "median": 2.0,
       "p10": 0.0,
-      "p90": 18.0
+      "p90": 32.0
     }
   },
   "paired_q_policy_comparisons": {
@@ -147,10 +148,10 @@
         "training_seed_count": 10,
         "evaluation_seed_count": 60,
         "paired_cells": 600,
-        "mean_difference": -0.0008376081121446124,
+        "mean_difference": -0.002768910553888874,
         "median_cell_difference": 0.0,
-        "bootstrap_95pct_interval_low": -0.010126548684498941,
-        "bootstrap_95pct_interval_high": 0.00835167096937677,
+        "bootstrap_95pct_interval_low": -0.015434718234473593,
+        "bootstrap_95pct_interval_high": 0.008629828466185102,
         "bootstrap_replicates": 10000,
         "bootstrap_seed": 20261015,
         "bootstrap_unit": "crossed_training_seed_and_shared_evaluation_episode_seed"
@@ -159,10 +160,10 @@
         "training_seed_count": 10,
         "evaluation_seed_count": 60,
         "paired_cells": 600,
-        "mean_difference": -0.0011936671392273484,
+        "mean_difference": -0.003754069248629277,
         "median_cell_difference": 0.0,
-        "bootstrap_95pct_interval_low": -0.010307600242376539,
-        "bootstrap_95pct_interval_high": 0.00773695385248923,
+        "bootstrap_95pct_interval_low": -0.01615557381881477,
+        "bootstrap_95pct_interval_high": 0.007346369702656446,
         "bootstrap_replicates": 10000,
         "bootstrap_seed": 20261016,
         "bootstrap_unit": "crossed_training_seed_and_shared_evaluation_episode_seed"
@@ -171,10 +172,10 @@
         "training_seed_count": 10,
         "evaluation_seed_count": 60,
         "paired_cells": 600,
-        "mean_difference": -0.03883758651415509,
-        "median_cell_difference": -0.0009999999999998899,
-        "bootstrap_95pct_interval_low": -0.07264513550779322,
-        "bootstrap_95pct_interval_high": -0.010313944163081429,
+        "mean_difference": -0.04400631089992016,
+        "median_cell_difference": -0.010347645193458876,
+        "bootstrap_95pct_interval_low": -0.06680932603710596,
+        "bootstrap_95pct_interval_high": -0.02276225462144252,
         "bootstrap_replicates": 10000,
         "bootstrap_seed": 20261017,
         "bootstrap_unit": "crossed_training_seed_and_shared_evaluation_episode_seed"
@@ -185,10 +186,10 @@
         "training_seed_count": 10,
         "evaluation_seed_count": 60,
         "paired_cells": 600,
-        "mean_difference": -0.025771410659779854,
-        "median_cell_difference": 0.1319920520857833,
-        "bootstrap_95pct_interval_low": -0.18912758799548182,
-        "bootstrap_95pct_interval_high": 0.1264731058699982,
+        "mean_difference": -0.02770271310152412,
+        "median_cell_difference": 0.1522277386483758,
+        "bootstrap_95pct_interval_low": -0.19258439990190393,
+        "bootstrap_95pct_interval_high": 0.1258224387177926,
         "bootstrap_replicates": 10000,
         "bootstrap_seed": 20261115,
         "bootstrap_unit": "crossed_training_seed_and_shared_evaluation_episode_seed"
@@ -197,10 +198,10 @@
         "training_seed_count": 10,
         "evaluation_seed_count": 60,
         "paired_cells": 600,
-        "mean_difference": -0.014080337787640966,
-        "median_cell_difference": 0.13256361317931759,
-        "bootstrap_95pct_interval_low": -0.17252769703450643,
-        "bootstrap_95pct_interval_high": 0.1351950496977531,
+        "mean_difference": -0.016640739897042903,
+        "median_cell_difference": 0.14252923671090806,
+        "bootstrap_95pct_interval_low": -0.1759391266142295,
+        "bootstrap_95pct_interval_high": 0.13359732959880524,
         "bootstrap_replicates": 10000,
         "bootstrap_seed": 20261116,
         "bootstrap_unit": "crossed_training_seed_and_shared_evaluation_episode_seed"
@@ -209,10 +210,10 @@
         "training_seed_count": 10,
         "evaluation_seed_count": 60,
         "paired_cells": 600,
-        "mean_difference": 0.4674514777231837,
-        "median_cell_difference": 0.4767589325307188,
-        "bootstrap_95pct_interval_low": 0.4165847343764836,
-        "bootstrap_95pct_interval_high": 0.5166711207368567,
+        "mean_difference": 0.46228275333741864,
+        "median_cell_difference": 0.46313777939727235,
+        "bootstrap_95pct_interval_low": 0.4150973624730185,
+        "bootstrap_95pct_interval_high": 0.5073650543520404,
         "bootstrap_replicates": 10000,
         "bootstrap_seed": 20261117,
         "bootstrap_unit": "crossed_training_seed_and_shared_evaluation_episode_seed"
@@ -223,10 +224,10 @@
         "training_seed_count": 10,
         "evaluation_seed_count": 60,
         "paired_cells": 600,
-        "mean_difference": 0.015614620520347894,
-        "median_cell_difference": 0.10740809000064833,
-        "bootstrap_95pct_interval_low": -0.08614265460612004,
-        "bootstrap_95pct_interval_high": 0.11025955644919386,
+        "mean_difference": 0.013683318078603636,
+        "median_cell_difference": 0.11681601457977309,
+        "bootstrap_95pct_interval_low": -0.08779351387256909,
+        "bootstrap_95pct_interval_high": 0.10791353667960596,
         "bootstrap_replicates": 10000,
         "bootstrap_seed": 20261215,
         "bootstrap_unit": "crossed_training_seed_and_shared_evaluation_episode_seed"
@@ -235,10 +236,10 @@
         "training_seed_count": 10,
         "evaluation_seed_count": 60,
         "paired_cells": 600,
-        "mean_difference": 0.027926353787573237,
-        "median_cell_difference": 0.11726655800315655,
-        "bootstrap_95pct_interval_low": -0.0691297123025476,
-        "bootstrap_95pct_interval_high": 0.11985079637491967,
+        "mean_difference": 0.025365951678171315,
+        "median_cell_difference": 0.12027837881716885,
+        "bootstrap_95pct_interval_low": -0.07077797290575223,
+        "bootstrap_95pct_interval_high": 0.11863123624469124,
         "bootstrap_replicates": 10000,
         "bootstrap_seed": 20261216,
         "bootstrap_unit": "crossed_training_seed_and_shared_evaluation_episode_seed"
@@ -247,10 +248,10 @@
         "training_seed_count": 10,
         "evaluation_seed_count": 60,
         "paired_cells": 600,
-        "mean_difference": 0.3181776143230524,
-        "median_cell_difference": 0.29989697197417176,
-        "bootstrap_95pct_interval_low": 0.2733864326412538,
-        "bootstrap_95pct_interval_high": 0.36111428270362644,
+        "mean_difference": 0.3130088899372873,
+        "median_cell_difference": 0.29886746475757126,
+        "bootstrap_95pct_interval_low": 0.27460905041550454,
+        "bootstrap_95pct_interval_high": 0.352264834746376,
         "bootstrap_replicates": 10000,
         "bootstrap_seed": 20261217,
         "bootstrap_unit": "crossed_training_seed_and_shared_evaluation_episode_seed"
@@ -261,10 +262,10 @@
         "training_seed_count": 10,
         "evaluation_seed_count": 60,
         "paired_cells": 600,
-        "mean_difference": -0.0720640201335519,
-        "median_cell_difference": 0.05593729973241646,
-        "bootstrap_95pct_interval_low": -0.1841608720851295,
-        "bootstrap_95pct_interval_high": 0.031037547111338718,
+        "mean_difference": -0.07399532257529616,
+        "median_cell_difference": 0.04318060553775693,
+        "bootstrap_95pct_interval_low": -0.18813681669483945,
+        "bootstrap_95pct_interval_high": 0.030597443228771174,
         "bootstrap_replicates": 10000,
         "bootstrap_seed": 20261315,
         "bootstrap_unit": "crossed_training_seed_and_shared_evaluation_episode_seed"
@@ -273,10 +274,10 @@
         "training_seed_count": 10,
         "evaluation_seed_count": 60,
         "paired_cells": 600,
-        "mean_difference": -0.0682860308249056,
-        "median_cell_difference": 0.050347370978224615,
-        "bootstrap_95pct_interval_low": -0.17441015639811674,
-        "bootstrap_95pct_interval_high": 0.030173474140977184,
+        "mean_difference": -0.07084643293430752,
+        "median_cell_difference": 0.04460521305179993,
+        "bootstrap_95pct_interval_low": -0.17831817090403823,
+        "bootstrap_95pct_interval_high": 0.0282635209156054,
         "bootstrap_replicates": 10000,
         "bootstrap_seed": 20261316,
         "bootstrap_unit": "crossed_training_seed_and_shared_evaluation_episode_seed"
@@ -285,10 +286,10 @@
         "training_seed_count": 10,
         "evaluation_seed_count": 60,
         "paired_cells": 600,
-        "mean_difference": 0.32494905917348044,
-        "median_cell_difference": 0.3315265594753303,
-        "bootstrap_95pct_interval_low": 0.2853367431688472,
-        "bootstrap_95pct_interval_high": 0.36391085921179883,
+        "mean_difference": 0.3197803347877154,
+        "median_cell_difference": 0.32161818110895024,
+        "bootstrap_95pct_interval_low": 0.28646600328898136,
+        "bootstrap_95pct_interval_high": 0.35421557270479964,
         "bootstrap_replicates": 10000,
         "bootstrap_seed": 20261317,
         "bootstrap_unit": "crossed_training_seed_and_shared_evaluation_episode_seed"

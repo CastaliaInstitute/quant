@@ -18,14 +18,14 @@ For the frozen Q learner, the default 60-seed run produced these median outcomes
 
 | Evaluation scenario | Q net CAGR | Q relative wealth | Q max drawdown | Buy-and-hold net CAGR |
 | --- | ---: | ---: | ---: | ---: |
-| Base assumptions | −5.61% | −10.49% | −13.44% | −8.70% |
-| Program-advancement probabilities −10 percentage points | −5.61% | −10.49% | −13.44% | −14.91% |
-| Program-advancement probabilities +10 percentage points | −5.61% | −10.49% | −13.44% | −5.58% |
-| Negative market gaps 1.5× more severe | −5.61% | −10.49% | −13.44% | −33.37% |
-| Positive reaction after advancement −15 percentage points | −5.61% | −10.49% | −13.44% | −18.81% |
-| Event residual noise 2× | −5.61% | −10.49% | −12.89% | −9.21% |
-| Transaction costs 2× | −7.44% | −12.43% | −14.40% | −8.79% |
-| Transaction costs 4× | −11.85% | −16.43% | −16.61% | −8.97% |
+| Base assumptions | −0.25% | −7.33% | −7.73% | −8.70% |
+| Program-advancement probabilities −10 percentage points | −0.34% | −7.33% | −8.35% | −14.91% |
+| Program-advancement probabilities +10 percentage points | 0.00% | −7.33% | −7.73% | −5.58% |
+| Negative market gaps 1.5× more severe | −0.25% | −7.33% | −7.73% | −33.37% |
+| Positive reaction after advancement −15 percentage points | −0.25% | −7.33% | −7.73% | −18.81% |
+| Event residual noise 2× | 0.00% | −7.33% | −7.15% | −9.21% |
+| Transaction costs 2× | −1.77% | −8.48% | −9.21% | −8.79% |
+| Transaction costs 4× | −5.49% | −11.18% | −11.22% | −8.97% |
 
 Relative wealth is versus the matched broad-market path. Across these scenarios the Q learner's median catalyst-session exposure remains 0%; therefore the frozen policy barely responds to changes in advancement or market-reaction assumptions. The materially changing buy-and-hold results confirm that the stress paths do alter issuer returns. Zero event exposure is a simulator behavior diagnostic, not evidence that the policy found a real risk-adjusted edge. The full report includes cash and all rule-based comparators, percentiles, and tail-risk measures.
 

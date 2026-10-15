@@ -14,7 +14,7 @@
     "episode_length_sessions": 252,
     "training_seed": 17,
     "learning_rate": 0.12,
-    "discount_factor": 0.98,
+    "discount_factor": 1.0,
     "exploration_schedule": "epsilon=max(0.04, 0.35 * (1 - episode / training_episodes)); linear decay with 0.04 floor",
     "evaluation_seed_start": 10000,
     "simulator_assumptions": {
@@ -85,9 +85,9 @@
     "interpretation": "Checks simulator behavior and seed variation only; it does not test historical or new-regime generalization."
   },
   "metric_definitions": {
-    "learning_reward": "Q-learning maximizes discounted session log returns: sum(gamma**k * log(1 + net_return_k)). Because gamma is below one, this is not the same objective as undiscounted terminal log wealth or net CAGR.",
-    "discount_factor": 0.98,
-    "reward_discount_half_life_sessions": 34.309618491520645,
+    "learning_reward": "Q-learning maximizes sum(gamma**k * log(1 + net_return_k)). At gamma=1 in this finite-horizon environment, this equals log terminal wealth; gamma below one is a time-preference sensitivity and no longer equals terminal log wealth.",
+    "discount_factor": 1.0,
+    "reward_discount_half_life_sessions": null,
     "catalyst_unconditional_expected_shortfall_95": "Mean underlying issuer return in the worst ceil(5% of event observations); independent of policy exposure.",
     "catalyst_policy_net_expected_shortfall_95": "Mean strategy net return on event sessions in its worst ceil(5%); includes zero-return cash exposure and transaction costs.",
     "annual_turnover": "Sum of absolute daily exposure changes multiplied by 252 / episode length.",
@@ -95,148 +95,1156 @@
   },
   "learned_q_values": [
     [
-      0.0038404697347371847,
-      0.020289230943308145
+      0.008831920580314298,
+      0.01864465629279651
     ],
     [
-      0.004937718498351675,
-      0.0019132436342621953
+      0.007920867829232849,
+      -0.0005928902725272139
     ],
     [
-      0.007718064954730627,
-      0.006766190033601998
+      0.01175935201600072,
+      0.008256211902870804
     ],
     [
-      0.008352527170694565,
-      0.0076491343636075175
+      0.011370838333033017,
+      0.007511761782717042
     ],
     [
-      0.006221725812434159,
-      -0.04347129803751002
+      0.01134814571838126,
+      0.010971244109244575
     ],
     [
-      0.005755472694998085,
-      -0.1475653115036872
+      0.011648761028710439,
+      0.009609679111710623
     ],
     [
-      0.00619147766441274,
-      -0.004481215877278419
+      0.004613249303839368,
+      -0.0037251516431916192
     ],
     [
-      0.004781450358427465,
-      0.0001552442969563301
+      0.007221332343405743,
+      0.017457403477931444
     ],
     [
-      0.0070053761476761,
-      0.006785014174486197
+      0.009923778300200995,
+      0.0022404778725349447
     ],
     [
-      0.00723352173018338,
-      0.0015000301234752958
+      0.009043257526444054,
+      0.0023196409784315324
     ],
     [
-      0.004973012177495509,
-      -0.05184967204157846
+      0.014990883960419067,
+      0.014052310582694169
     ],
     [
-      0.0050041223226678,
-      -0.12251054033513184
+      0.012863731981009924,
+      0.011841781159858709
     ],
     [
-      0.010281080110379174,
-      -0.0037726337661036736
+      0.011355437975482613,
+      0.0013886653185195994
     ],
     [
-      0.00540957479189687,
-      0.005453057132625928
+      0.011846942463926707,
+      0.006872434873731121
     ],
     [
-      0.009179123618865111,
-      0.005194597534464104
-    ],
-    [
-      0.009099834586552787,
-      0.00782974885301243
-    ],
-    [
-      0.006595489049403491,
+      0.0,
       0.0
     ],
     [
-      0.01017004538211078,
+      0.0,
       0.0
     ],
     [
-      0.004759412919419853,
-      -0.0009201803681307567
+      0.009806920416714427,
+      -0.004880751537757015
     ],
     [
-      0.00476953096200522,
-      -0.0030486464850701693
+      0.002742187426123723,
+      -0.004868227121737486
     ],
     [
-      0.008964028350847334,
-      -0.004717671062276633
+      0.008194087936744893,
+      -0.003079587878764549
     ],
     [
-      0.009250158910736814,
-      0.006754068040548733
+      0.0030145149489557797,
+      -0.0015961449533393214
     ],
     [
-      0.0090887638308982,
-      -0.0105408600758787
+      0.007520350260042123,
+      -0.007108526625905402
     ],
     [
-      0.010344435992472433,
+      0.003828955577633315,
+      -0.005535246743037737
+    ],
+    [
+      0.0,
       0.0
     ],
     [
-      0.008167325506227082,
-      -0.00040489839442502926
+      0.0,
+      0.0
     ],
     [
-      0.005263716498986377,
-      -0.006657729595106594
+      0.008272250778477763,
+      -3.5959401226999445e-05
     ],
     [
-      0.007486481996561759,
-      0.005377952070822549
+      0.004195769245846281,
+      -0.001427712751008084
     ],
     [
-      0.007783241437912414,
-      0.00552609425794457
+      0.009135025165571638,
+      0.0012105943986893165
     ],
     [
-      0.0056261492657059915,
-      -0.03128848494349695
+      0.004937630661816847,
+      0.0008475676375629135
     ],
     [
-      0.005870629293476906,
-      -0.12347692362628017
+      0.008504684711760142,
+      -0.005943938281309505
     ],
     [
-      0.004390337369226727,
-      0.0013265119522875004
+      0.004654268888217765,
+      -0.0010817805297768167
     ],
     [
-      0.00469045950142133,
-      0.002986656400457308
+      0.0,
+      0.0
     ],
     [
-      0.00744812699676618,
-      0.004045513479519555
+      0.0,
+      0.0
     ],
     [
-      0.007593331801690815,
-      0.0065846793592004085
+      0.0,
+      0.0
     ],
     [
-      0.005527066417942826,
-      -0.02778953036608499
+      0.0,
+      0.0
     ],
     [
-      0.00583237806304727,
-      -0.0736827907439917
+      0.01347476314741557,
+      -0.05228835461778165
+    ],
+    [
+      0.00331514529900943,
+      0.0
+    ],
+    [
+      0.012078958899225625,
+      -0.004420037620334907
+    ],
+    [
+      0.0020739802636429547,
+      0.0
+    ],
+    [
+      0.01037287431953634,
+      0.0
+    ],
+    [
+      0.003422993418186633,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.014401931698369962,
+      -0.04896933063699606
+    ],
+    [
+      0.0019602399885147955,
+      -0.023072426919649756
+    ],
+    [
+      0.010694295054110209,
+      -0.007767332761134879
+    ],
+    [
+      0.006745036382263283,
+      -0.047183871031439076
+    ],
+    [
+      0.008323394419164314,
+      -0.0864824268553912
+    ],
+    [
+      0.0028332209453691437,
+      -0.040396959381658194
+    ],
+    [
+      0.008776824429007719,
+      0.0038013142657323455
+    ],
+    [
+      0.007789602357189016,
+      0.007346114860764167
+    ],
+    [
+      0.013244430993060422,
+      0.003188601765443203
+    ],
+    [
+      0.0122445732927871,
+      0.0014903165328365373
+    ],
+    [
+      0.01100987827328125,
+      0.005059751645249286
+    ],
+    [
+      0.010822968570382901,
+      0.0015698884642731479
+    ],
+    [
+      0.0049260377641996865,
+      -0.00227480082149882
+    ],
+    [
+      0.004479186245165184,
+      0.002031121381498942
+    ],
+    [
+      0.009892264512693786,
+      0.004793267567003212
+    ],
+    [
+      0.00941604937762975,
+      0.007739989278704359
+    ],
+    [
+      0.01435856583908492,
+      0.008103552034557763
+    ],
+    [
+      0.014882933951299578,
+      0.013313745715682921
+    ],
+    [
+      0.011157413514204436,
+      0.010536518237714985
+    ],
+    [
+      0.010810302737545213,
+      0.003694773463300983
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.008863530603043427,
+      0.006025047345983689
+    ],
+    [
+      0.004198897922499612,
+      0.0020787290810302898
+    ],
+    [
+      0.00882383884477353,
+      -0.007727252559654239
+    ],
+    [
+      0.005290401083014245,
+      -0.009349306239029444
+    ],
+    [
+      0.007718465026979654,
+      0.0010505895950284907
+    ],
+    [
+      0.007438110079931396,
+      0.004020174279178842
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.010597814730292103,
+      -0.00392069009167806
+    ],
+    [
+      0.00607478328741594,
+      -0.002093302814284369
+    ],
+    [
+      0.007735671985600375,
+      -0.004367613821443152
+    ],
+    [
+      0.005630633427395714,
+      -0.004589299696705151
+    ],
+    [
+      0.00870656605927937,
+      -0.0007636598001863394
+    ],
+    [
+      0.005990949120101004,
+      -0.00269980631600341
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.013105907058567423,
+      -0.02128252087266622
+    ],
+    [
+      0.0022229802879224444,
+      0.0
+    ],
+    [
+      0.011952022151185779,
+      -0.004814875077811292
+    ],
+    [
+      0.001118812110170139,
+      0.029409466433534082
+    ],
+    [
+      0.00714117780918348,
+      -0.038714932708112784
+    ],
+    [
+      0.009240856552619872,
+      -0.04750768067888909
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.014519514851631943,
+      -0.07342172104809061
+    ],
+    [
+      0.0049198627238669895,
+      0.0
+    ],
+    [
+      0.011147057947288175,
+      -0.027876554907415127
+    ],
+    [
+      0.006457678902846791,
+      -0.04301426767783937
+    ],
+    [
+      0.0075156669054010595,
+      -0.06195389866663645
+    ],
+    [
+      0.006003895284853623,
+      -0.0831276038261256
+    ],
+    [
+      0.009373630028013757,
+      0.003973085522989178
+    ],
+    [
+      0.007983831218465591,
+      0.004785412901770961
+    ],
+    [
+      0.011925347161484414,
+      -0.002307910667186007
+    ],
+    [
+      0.008722156082370477,
+      0.01407217306724738
+    ],
+    [
+      0.011210182252159728,
+      0.00182752778070158
+    ],
+    [
+      0.011702469567348916,
+      0.0041772823747247
+    ],
+    [
+      0.005135462280278943,
+      0.002343738418257927
+    ],
+    [
+      0.006352931010647789,
+      0.006459088983976472
+    ],
+    [
+      0.009945767811868383,
+      0.0047575783522597875
+    ],
+    [
+      0.008192389170368826,
+      0.005961337258703154
+    ],
+    [
+      0.014926032356989371,
+      0.008088164320507563
+    ],
+    [
+      0.01167893705765917,
+      -0.002163939305143578
+    ],
+    [
+      0.011770289809138816,
+      0.005999759258026539
+    ],
+    [
+      -5.8695098520476865e-05,
+      0.0010302611999848973
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.007883584993178807,
+      0.004055350072098139
+    ],
+    [
+      0.0007759113732082258,
+      0.0
+    ],
+    [
+      0.004572470319497009,
+      0.0008991686795847217
+    ],
+    [
+      -0.00011820792103010364,
+      0.0008141961171756365
+    ],
+    [
+      0.006540366935406849,
+      0.000844263716991933
+    ],
+    [
+      0.0018582215473547691,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.007909911180221317,
+      -0.004754221450436779
+    ],
+    [
+      0.0009825190094219826,
+      -0.0011230061394295375
+    ],
+    [
+      0.006741855442461341,
+      -0.002050273701890414
+    ],
+    [
+      0.008191751969073572,
+      0.0
+    ],
+    [
+      0.0018602396779176223,
+      0.010574429400838503
+    ],
+    [
+      0.0030106166208810907,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.006408007672187034,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.004739530611742598,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0043107945788362035,
+      0.0
+    ],
+    [
+      0.0006866032537977138,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0039064676635473874,
+      0.0
+    ],
+    [
+      0.0041279445227513575,
+      0.0
+    ],
+    [
+      0.0013542578243916977,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.004111060672440983,
+      0.0
+    ],
+    [
+      0.0002547901423443604,
+      0.0
+    ],
+    [
+      0.00864935045239163,
+      0.00481599555429342
+    ],
+    [
+      0.00691542537246932,
+      -0.0004469833318074995
+    ],
+    [
+      0.01197334214358926,
+      0.009672626497330791
+    ],
+    [
+      0.013185540892407293,
+      0.014178744753339988
+    ],
+    [
+      0.012839612229672531,
+      0.009269444631946521
+    ],
+    [
+      0.011065552655833158,
+      -0.004770687407240401
+    ],
+    [
+      0.0053253880248636185,
+      -0.0017128011649222177
+    ],
+    [
+      0.009374426684110952,
+      0.006154179140011614
+    ],
+    [
+      0.009910067008785437,
+      3.932538513367646e-05
+    ],
+    [
+      0.003097323067718174,
+      0.013546136956444566
+    ],
+    [
+      0.01607561778172664,
+      -0.005643725800232553
+    ],
+    [
+      0.015196767724103728,
+      0.004990534482971014
+    ],
+    [
+      0.011433133938728584,
+      0.007693868217746548
+    ],
+    [
+      0.0071265845910794745,
+      0.01899223884887915
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.006804978007038613,
+      -0.003283928904572002
+    ],
+    [
+      0.00045109191022508056,
+      0.0
+    ],
+    [
+      0.004711894389106901,
+      -0.0010886053045182755
+    ],
+    [
+      0.0009824108360457513,
+      0.0
+    ],
+    [
+      0.006246589939734394,
+      -0.005037083720126954
+    ],
+    [
+      0.0008642510323243497,
+      0.01179343097761502
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0053399505885200135,
+      -0.007110175474522152
+    ],
+    [
+      -1.9419581942593108e-05,
+      -0.0007475580537183839
+    ],
+    [
+      0.0032534129918749257,
+      -0.00017670191680556552
+    ],
+    [
+      0.008426523939016802,
+      -0.00026254918925120406
+    ],
+    [
+      0.006675346263852078,
+      0.0005053972239966054
+    ],
+    [
+      -0.00015952503951843157,
+      -0.005433545657113136
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.00549058035509333,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.00404981117818959,
+      -0.010669711041155288
+    ],
+    [
+      0.0008791590926285747,
+      0.0
+    ],
+    [
+      8.621228003471012e-05,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.002883756819420028,
+      0.0
+    ],
+    [
+      0.0013253371479215591,
+      0.0
+    ],
+    [
+      0.0026740418339060096,
+      0.0
+    ],
+    [
+      0.003549014662197054,
+      0.0
+    ],
+    [
+      0.006490711868331364,
+      0.0
+    ],
+    [
+      0.0017895390763250155,
+      0.0
+    ],
+    [
+      0.008991036205713678,
+      0.0063018572215707905
+    ],
+    [
+      0.008686739343541357,
+      0.006377903893769044
+    ],
+    [
+      0.01113346065606493,
+      0.005378571050917667
+    ],
+    [
+      0.01150341376883888,
+      0.0033672817323527706
+    ],
+    [
+      0.011241820000720994,
+      0.006199095330507756
+    ],
+    [
+      0.011577788746822608,
+      0.008115863310278866
+    ],
+    [
+      0.004964285180887575,
+      -0.00223004584198536
+    ],
+    [
+      0.005088935985070436,
+      0.0035273921593725254
+    ],
+    [
+      0.00983049400897598,
+      -7.23996683168783e-05
+    ],
+    [
+      0.009028812498748257,
+      0.00865748676912975
+    ],
+    [
+      0.01639229641129862,
+      0.0022995566997044336
+    ],
+    [
+      0.01405316103341628,
+      0.002906215340774748
+    ],
+    [
+      0.011252918225229683,
+      0.007452070040986607
+    ],
+    [
+      0.011384316549173629,
+      -0.0005429950795008366
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.009503569716802024,
+      -0.003943202233193917
+    ],
+    [
+      0.004581889495913673,
+      -0.005582792026079809
+    ],
+    [
+      0.007466037781978602,
+      -0.010868329771021206
+    ],
+    [
+      0.0008617089930675913,
+      -0.004584224684952641
+    ],
+    [
+      0.00825985350764205,
+      0.005159057376110441
+    ],
+    [
+      0.0034845900263823625,
+      -0.0005723625309967905
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.009370832049712109,
+      -0.006958047452807713
+    ],
+    [
+      0.0005663943067330802,
+      -0.0007355018522884637
+    ],
+    [
+      0.008144707405006597,
+      0.006513859583694743
+    ],
+    [
+      0.015366891771744355,
+      -0.004135685391555323
+    ],
+    [
+      0.008623293649666753,
+      -0.0029585375405247047
+    ],
+    [
+      0.004889638220664672,
+      0.0005856461934058603
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.014172443305284676,
+      -0.04062398975683871
+    ],
+    [
+      0.004684848182642741,
+      -0.013966928111225315
+    ],
+    [
+      0.011320522859726501,
+      -0.01584456588086581
+    ],
+    [
+      0.0016884439780708257,
+      -0.0186395950204853
+    ],
+    [
+      0.008346348092358243,
+      -0.016600529968602798
+    ],
+    [
+      0.008426111775350744,
+      0.019287829373569737
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.011458279073988251,
+      -0.07758787960519764
+    ],
+    [
+      0.0012693617850608814,
+      -0.0384903869524406
+    ],
+    [
+      0.01005903569279712,
+      -0.09192753573556618
+    ],
+    [
+      0.008678708175284437,
+      0.00512034780985695
+    ],
+    [
+      0.007801365483851833,
+      -0.002955132192712831
+    ],
+    [
+      0.0015245716923549522,
+      0.0
+    ],
+    [
+      0.008816935288256087,
+      0.0039613484277956764
+    ],
+    [
+      0.008598909886242605,
+      0.0040485107857629755
+    ],
+    [
+      0.011843615062210336,
+      0.016137674974206498
+    ],
+    [
+      0.01303207305967901,
+      0.004408518716466803
+    ],
+    [
+      0.011347652486760196,
+      0.005839155843680208
+    ],
+    [
+      0.01320631446934762,
+      0.008686942359703284
+    ],
+    [
+      0.004069977505346434,
+      -0.0012363589886890966
+    ],
+    [
+      0.008062666971229477,
+      -0.00015312771823194183
+    ],
+    [
+      0.009895452650078062,
+      0.0022440904190073933
+    ],
+    [
+      0.01040361548420844,
+      -0.005203947772067393
+    ],
+    [
+      0.014201501826544716,
+      0.013710045095778937
+    ],
+    [
+      0.01675063940046184,
+      0.009072546017853107
+    ],
+    [
+      0.011419809909492524,
+      -0.0017779217535486406
+    ],
+    [
+      0.011405761122731652,
+      0.010416299731784012
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.009332582691759794,
+      0.006570487457082094
+    ],
+    [
+      0.003336073682304568,
+      -0.0021561199146763136
+    ],
+    [
+      0.009088997374691462,
+      -0.014007363401916557
+    ],
+    [
+      0.003781748268445407,
+      -0.0006407832297979344
+    ],
+    [
+      0.008014427377847206,
+      0.0015278075367162053
+    ],
+    [
+      0.009203946731026607,
+      0.001457343945273049
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.010629971969453185,
+      -0.009750245041610487
+    ],
+    [
+      0.0004036155283935863,
+      0.005113523951239247
+    ],
+    [
+      0.008422518123690442,
+      0.001215267947382218
+    ],
+    [
+      0.01009491409941746,
+      0.00884268570361154
+    ],
+    [
+      0.008667410447882622,
+      0.0018792993424425598
+    ],
+    [
+      0.00648663235328926,
+      -0.005571742695552279
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.012839925610177981,
+      -0.01890434251817928
+    ],
+    [
+      0.006134462279229903,
+      0.0
+    ],
+    [
+      0.011962351064403057,
+      -0.015939756278706904
+    ],
+    [
+      0.005135423394102357,
+      0.0
+    ],
+    [
+      0.0069510115106571815,
+      -0.006324007077609214
+    ],
+    [
+      0.010594978502960777,
+      -0.01100207065123557
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.013329641425840907,
+      -0.039713764684520786
+    ],
+    [
+      0.0033581442898321873,
+      -0.044425931099053455
+    ],
+    [
+      0.010848639766185915,
+      -0.06525918159336393
+    ],
+    [
+      0.008569274724721389,
+      -0.039420512363838096
+    ],
+    [
+      0.0071408782625811285,
+      -0.03485978347503378
+    ],
+    [
+      0.00043031673022865356,
+      0.045487080810683804
     ]
   ],
   "learned_policy_by_state": [
@@ -246,471 +1254,4323 @@
       "volatility_regime": "lower",
       "catalyst_proximity": "more_than_5_sessions",
       "upcoming_phase": "phase_II",
-      "training_cash_visits": 5092,
-      "training_long_visits": 1490,
-      "q_cash": 0.0038404697347371847,
-      "q_long": 0.020289230943308145,
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 1402,
+      "training_long_visits": 254,
+      "q_cash": 0.008831920580314298,
+      "q_long": 0.01864465629279651,
       "greedy_action": "long",
-      "q_long_minus_cash": 0.016448761208570962
+      "q_long_minus_cash": 0.00981273571248221
     },
     {
       "state": 1,
       "momentum_regime": "negative",
       "volatility_regime": "lower",
       "catalyst_proximity": "more_than_5_sessions",
-      "upcoming_phase": "phase_III",
-      "training_cash_visits": 3592,
-      "training_long_visits": 761,
-      "q_cash": 0.004937718498351675,
-      "q_long": 0.0019132436342621953,
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 235,
+      "training_long_visits": 43,
+      "q_cash": 0.007920867829232849,
+      "q_long": -0.0005928902725272139,
       "greedy_action": "cash",
-      "q_long_minus_cash": -0.0030244748640894797
+      "q_long_minus_cash": -0.008513758101760062
     },
     {
       "state": 2,
       "momentum_regime": "negative",
       "volatility_regime": "lower",
-      "catalyst_proximity": "within_5_sessions",
+      "catalyst_proximity": "more_than_5_sessions",
       "upcoming_phase": "phase_II",
-      "training_cash_visits": 337,
-      "training_long_visits": 64,
-      "q_cash": 0.007718064954730627,
-      "q_long": 0.006766190033601998,
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 608,
+      "training_long_visits": 151,
+      "q_cash": 0.01175935201600072,
+      "q_long": 0.008256211902870804,
       "greedy_action": "cash",
-      "q_long_minus_cash": -0.0009518749211286292
+      "q_long_minus_cash": -0.003503140113129917
     },
     {
       "state": 3,
       "momentum_regime": "negative",
       "volatility_regime": "lower",
-      "catalyst_proximity": "within_5_sessions",
-      "upcoming_phase": "phase_III",
-      "training_cash_visits": 394,
-      "training_long_visits": 58,
-      "q_cash": 0.008352527170694565,
-      "q_long": 0.0076491343636075175,
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 124,
+      "training_long_visits": 109,
+      "q_cash": 0.011370838333033017,
+      "q_long": 0.007511761782717042,
       "greedy_action": "cash",
-      "q_long_minus_cash": -0.0007033928070870471
+      "q_long_minus_cash": -0.0038590765503159754
     },
     {
       "state": 4,
       "momentum_regime": "negative",
       "volatility_regime": "lower",
-      "catalyst_proximity": "event_session",
+      "catalyst_proximity": "more_than_5_sessions",
       "upcoming_phase": "phase_II",
-      "training_cash_visits": 72,
-      "training_long_visits": 5,
-      "q_cash": 0.006221725812434159,
-      "q_long": -0.04347129803751002,
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 784,
+      "training_long_visits": 139,
+      "q_cash": 0.01134814571838126,
+      "q_long": 0.010971244109244575,
       "greedy_action": "cash",
-      "q_long_minus_cash": -0.04969302384994418
+      "q_long_minus_cash": -0.00037690160913668447
     },
     {
       "state": 5,
       "momentum_regime": "negative",
       "volatility_regime": "lower",
-      "catalyst_proximity": "event_session",
-      "upcoming_phase": "phase_III",
-      "training_cash_visits": 88,
-      "training_long_visits": 14,
-      "q_cash": 0.005755472694998085,
-      "q_long": -0.1475653115036872,
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 122,
+      "training_long_visits": 103,
+      "q_cash": 0.011648761028710439,
+      "q_long": 0.009609679111710623,
       "greedy_action": "cash",
-      "q_long_minus_cash": -0.1533207841986853
+      "q_long_minus_cash": -0.0020390819169998162
     },
     {
       "state": 6,
       "momentum_regime": "negative",
-      "volatility_regime": "upper",
+      "volatility_regime": "lower",
       "catalyst_proximity": "more_than_5_sessions",
       "upcoming_phase": "phase_II",
-      "training_cash_visits": 11662,
-      "training_long_visits": 2620,
-      "q_cash": 0.00619147766441274,
-      "q_long": -0.004481215877278419,
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 1761,
+      "training_long_visits": 336,
+      "q_cash": 0.004613249303839368,
+      "q_long": -0.0037251516431916192,
       "greedy_action": "cash",
-      "q_long_minus_cash": -0.01067269354169116
+      "q_long_minus_cash": -0.008338400947030988
     },
     {
       "state": 7,
       "momentum_regime": "negative",
-      "volatility_regime": "upper",
+      "volatility_regime": "lower",
       "catalyst_proximity": "more_than_5_sessions",
-      "upcoming_phase": "phase_III",
-      "training_cash_visits": 6219,
-      "training_long_visits": 1639,
-      "q_cash": 0.004781450358427465,
-      "q_long": 0.0001552442969563301,
-      "greedy_action": "cash",
-      "q_long_minus_cash": -0.004626206061471135
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 339,
+      "training_long_visits": 72,
+      "q_cash": 0.007221332343405743,
+      "q_long": 0.017457403477931444,
+      "greedy_action": "long",
+      "q_long_minus_cash": 0.010236071134525702
     },
     {
       "state": 8,
       "momentum_regime": "negative",
-      "volatility_regime": "upper",
-      "catalyst_proximity": "within_5_sessions",
-      "upcoming_phase": "phase_II",
-      "training_cash_visits": 453,
-      "training_long_visits": 115,
-      "q_cash": 0.0070053761476761,
-      "q_long": 0.006785014174486197,
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 1508,
+      "training_long_visits": 265,
+      "q_cash": 0.009923778300200995,
+      "q_long": 0.0022404778725349447,
       "greedy_action": "cash",
-      "q_long_minus_cash": -0.0002203619731899033
+      "q_long_minus_cash": -0.007683300427666051
     },
     {
       "state": 9,
       "momentum_regime": "negative",
-      "volatility_regime": "upper",
-      "catalyst_proximity": "within_5_sessions",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
       "upcoming_phase": "phase_III",
-      "training_cash_visits": 545,
-      "training_long_visits": 105,
-      "q_cash": 0.00723352173018338,
-      "q_long": 0.0015000301234752958,
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 250,
+      "training_long_visits": 76,
+      "q_cash": 0.009043257526444054,
+      "q_long": 0.0023196409784315324,
       "greedy_action": "cash",
-      "q_long_minus_cash": -0.005733491606708083
+      "q_long_minus_cash": -0.006723616548012522
     },
     {
       "state": 10,
       "momentum_regime": "negative",
-      "volatility_regime": "upper",
-      "catalyst_proximity": "event_session",
-      "upcoming_phase": "phase_II",
-      "training_cash_visits": 90,
-      "training_long_visits": 26,
-      "q_cash": 0.004973012177495509,
-      "q_long": -0.05184967204157846,
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 887,
+      "training_long_visits": 126,
+      "q_cash": 0.014990883960419067,
+      "q_long": 0.014052310582694169,
       "greedy_action": "cash",
-      "q_long_minus_cash": -0.05682268421907397
+      "q_long_minus_cash": -0.0009385733777248981
     },
     {
       "state": 11,
       "momentum_regime": "negative",
-      "volatility_regime": "upper",
-      "catalyst_proximity": "event_session",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
       "upcoming_phase": "phase_III",
-      "training_cash_visits": 103,
-      "training_long_visits": 29,
-      "q_cash": 0.0050041223226678,
-      "q_long": -0.12251054033513184,
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 141,
+      "training_long_visits": 51,
+      "q_cash": 0.012863731981009924,
+      "q_long": 0.011841781159858709,
       "greedy_action": "cash",
-      "q_long_minus_cash": -0.12751466265779965
+      "q_long_minus_cash": -0.0010219508211512154
     },
     {
       "state": 12,
-      "momentum_regime": "neutral",
+      "momentum_regime": "negative",
       "volatility_regime": "lower",
       "catalyst_proximity": "more_than_5_sessions",
-      "upcoming_phase": "phase_II",
-      "training_cash_visits": 841,
-      "training_long_visits": 217,
-      "q_cash": 0.010281080110379174,
-      "q_long": -0.0037726337661036736,
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 833,
+      "training_long_visits": 77,
+      "q_cash": 0.011355437975482613,
+      "q_long": 0.0013886653185195994,
       "greedy_action": "cash",
-      "q_long_minus_cash": -0.014053713876482847
+      "q_long_minus_cash": -0.009966772656963014
     },
     {
       "state": 13,
-      "momentum_regime": "neutral",
+      "momentum_regime": "negative",
       "volatility_regime": "lower",
       "catalyst_proximity": "more_than_5_sessions",
       "upcoming_phase": "phase_III",
-      "training_cash_visits": 610,
-      "training_long_visits": 187,
-      "q_cash": 0.00540957479189687,
-      "q_long": 0.005453057132625928,
-      "greedy_action": "long",
-      "q_long_minus_cash": 4.348234072905875e-05
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 99,
+      "training_long_visits": 40,
+      "q_cash": 0.011846942463926707,
+      "q_long": 0.006872434873731121,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.004974507590195586
     },
     {
       "state": 14,
-      "momentum_regime": "neutral",
+      "momentum_regime": "negative",
       "volatility_regime": "lower",
-      "catalyst_proximity": "within_5_sessions",
-      "upcoming_phase": "phase_II",
-      "training_cash_visits": 77,
-      "training_long_visits": 13,
-      "q_cash": 0.009179123618865111,
-      "q_long": 0.005194597534464104,
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
       "greedy_action": "cash",
-      "q_long_minus_cash": -0.003984526084401007
+      "q_long_minus_cash": 0.0
     },
     {
       "state": 15,
-      "momentum_regime": "neutral",
+      "momentum_regime": "negative",
       "volatility_regime": "lower",
-      "catalyst_proximity": "within_5_sessions",
+      "catalyst_proximity": "more_than_5_sessions",
       "upcoming_phase": "phase_III",
-      "training_cash_visits": 70,
-      "training_long_visits": 18,
-      "q_cash": 0.009099834586552787,
-      "q_long": 0.00782974885301243,
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
       "greedy_action": "cash",
-      "q_long_minus_cash": -0.0012700857335403559
+      "q_long_minus_cash": 0.0
     },
     {
       "state": 16,
-      "momentum_regime": "neutral",
+      "momentum_regime": "negative",
       "volatility_regime": "lower",
-      "catalyst_proximity": "event_session",
+      "catalyst_proximity": "within_5_sessions",
       "upcoming_phase": "phase_II",
-      "training_cash_visits": 13,
-      "training_long_visits": 0,
-      "q_cash": 0.006595489049403491,
-      "q_long": 0.0,
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 104,
+      "training_long_visits": 11,
+      "q_cash": 0.009806920416714427,
+      "q_long": -0.004880751537757015,
       "greedy_action": "cash",
-      "q_long_minus_cash": -0.006595489049403491
+      "q_long_minus_cash": -0.014687671954471442
     },
     {
       "state": 17,
-      "momentum_regime": "neutral",
+      "momentum_regime": "negative",
       "volatility_regime": "lower",
-      "catalyst_proximity": "event_session",
-      "upcoming_phase": "phase_III",
-      "training_cash_visits": 10,
-      "training_long_visits": 0,
-      "q_cash": 0.01017004538211078,
-      "q_long": 0.0,
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 14,
+      "training_long_visits": 2,
+      "q_cash": 0.002742187426123723,
+      "q_long": -0.004868227121737486,
       "greedy_action": "cash",
-      "q_long_minus_cash": -0.01017004538211078
+      "q_long_minus_cash": -0.007610414547861209
     },
     {
       "state": 18,
-      "momentum_regime": "neutral",
-      "volatility_regime": "upper",
-      "catalyst_proximity": "more_than_5_sessions",
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
       "upcoming_phase": "phase_II",
-      "training_cash_visits": 1409,
-      "training_long_visits": 315,
-      "q_cash": 0.004759412919419853,
-      "q_long": -0.0009201803681307567,
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 88,
+      "training_long_visits": 8,
+      "q_cash": 0.008194087936744893,
+      "q_long": -0.003079587878764549,
       "greedy_action": "cash",
-      "q_long_minus_cash": -0.005679593287550609
+      "q_long_minus_cash": -0.011273675815509442
     },
     {
       "state": 19,
-      "momentum_regime": "neutral",
-      "volatility_regime": "upper",
-      "catalyst_proximity": "more_than_5_sessions",
-      "upcoming_phase": "phase_III",
-      "training_cash_visits": 807,
-      "training_long_visits": 210,
-      "q_cash": 0.00476953096200522,
-      "q_long": -0.0030486464850701693,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 16,
+      "training_long_visits": 3,
+      "q_cash": 0.0030145149489557797,
+      "q_long": -0.0015961449533393214,
       "greedy_action": "cash",
-      "q_long_minus_cash": -0.00781817744707539
+      "q_long_minus_cash": -0.004610659902295101
     },
     {
       "state": 20,
-      "momentum_regime": "neutral",
-      "volatility_regime": "upper",
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
       "catalyst_proximity": "within_5_sessions",
       "upcoming_phase": "phase_II",
-      "training_cash_visits": 66,
-      "training_long_visits": 7,
-      "q_cash": 0.008964028350847334,
-      "q_long": -0.004717671062276633,
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 115,
+      "training_long_visits": 13,
+      "q_cash": 0.007520350260042123,
+      "q_long": -0.007108526625905402,
       "greedy_action": "cash",
-      "q_long_minus_cash": -0.013681699413123968
+      "q_long_minus_cash": -0.014628876885947524
     },
     {
       "state": 21,
-      "momentum_regime": "neutral",
-      "volatility_regime": "upper",
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
       "catalyst_proximity": "within_5_sessions",
-      "upcoming_phase": "phase_III",
-      "training_cash_visits": 67,
-      "training_long_visits": 11,
-      "q_cash": 0.009250158910736814,
-      "q_long": 0.006754068040548733,
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 21,
+      "training_long_visits": 6,
+      "q_cash": 0.003828955577633315,
+      "q_long": -0.005535246743037737,
       "greedy_action": "cash",
-      "q_long_minus_cash": -0.0024960908701880807
+      "q_long_minus_cash": -0.009364202320671053
     },
     {
       "state": 22,
-      "momentum_regime": "neutral",
-      "volatility_regime": "upper",
-      "catalyst_proximity": "event_session",
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
       "upcoming_phase": "phase_II",
-      "training_cash_visits": 11,
-      "training_long_visits": 1,
-      "q_cash": 0.0090887638308982,
-      "q_long": -0.0105408600758787,
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
       "greedy_action": "cash",
-      "q_long_minus_cash": -0.019629623906776902
+      "q_long_minus_cash": 0.0
     },
     {
       "state": 23,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 24,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 117,
+      "training_long_visits": 24,
+      "q_cash": 0.008272250778477763,
+      "q_long": -3.5959401226999445e-05,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.008308210179704763
+    },
+    {
+      "state": 25,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 27,
+      "training_long_visits": 3,
+      "q_cash": 0.004195769245846281,
+      "q_long": -0.001427712751008084,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.005623481996854365
+    },
+    {
+      "state": 26,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 101,
+      "training_long_visits": 20,
+      "q_cash": 0.009135025165571638,
+      "q_long": 0.0012105943986893165,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.007924430766882321
+    },
+    {
+      "state": 27,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 18,
+      "training_long_visits": 7,
+      "q_cash": 0.004937630661816847,
+      "q_long": 0.0008475676375629135,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.004090063024253934
+    },
+    {
+      "state": 28,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 97,
+      "training_long_visits": 13,
+      "q_cash": 0.008504684711760142,
+      "q_long": -0.005943938281309505,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.014448622993069649
+    },
+    {
+      "state": 29,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 19,
+      "training_long_visits": 6,
+      "q_cash": 0.004654268888217765,
+      "q_long": -0.0010817805297768167,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.005736049417994582
+    },
+    {
+      "state": 30,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 31,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 32,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 33,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 34,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 22,
+      "training_long_visits": 3,
+      "q_cash": 0.01347476314741557,
+      "q_long": -0.05228835461778165,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.06576311776519722
+    },
+    {
+      "state": 35,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 3,
+      "training_long_visits": 0,
+      "q_cash": 0.00331514529900943,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.00331514529900943
+    },
+    {
+      "state": 36,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 21,
+      "training_long_visits": 2,
+      "q_cash": 0.012078958899225625,
+      "q_long": -0.004420037620334907,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.016498996519560532
+    },
+    {
+      "state": 37,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 3,
+      "training_long_visits": 0,
+      "q_cash": 0.0020739802636429547,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0020739802636429547
+    },
+    {
+      "state": 38,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 19,
+      "training_long_visits": 0,
+      "q_cash": 0.01037287431953634,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.01037287431953634
+    },
+    {
+      "state": 39,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 4,
+      "training_long_visits": 0,
+      "q_cash": 0.003422993418186633,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.003422993418186633
+    },
+    {
+      "state": 40,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 41,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 42,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 34,
+      "training_long_visits": 1,
+      "q_cash": 0.014401931698369962,
+      "q_long": -0.04896933063699606,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.06337126233536602
+    },
+    {
+      "state": 43,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 1,
+      "training_long_visits": 2,
+      "q_cash": 0.0019602399885147955,
+      "q_long": -0.023072426919649756,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.025032666908164553
+    },
+    {
+      "state": 44,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 20,
+      "training_long_visits": 6,
+      "q_cash": 0.010694295054110209,
+      "q_long": -0.007767332761134879,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.018461627815245088
+    },
+    {
+      "state": 45,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 10,
+      "training_long_visits": 1,
+      "q_cash": 0.006745036382263283,
+      "q_long": -0.047183871031439076,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.05392890741370236
+    },
+    {
+      "state": 46,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 18,
+      "training_long_visits": 4,
+      "q_cash": 0.008323394419164314,
+      "q_long": -0.0864824268553912,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.09480582127455552
+    },
+    {
+      "state": 47,
+      "momentum_regime": "negative",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 4,
+      "training_long_visits": 1,
+      "q_cash": 0.0028332209453691437,
+      "q_long": -0.040396959381658194,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.043230180327027336
+    },
+    {
+      "state": 48,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 1703,
+      "training_long_visits": 174,
+      "q_cash": 0.008776824429007719,
+      "q_long": 0.0038013142657323455,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.004975510163275373
+    },
+    {
+      "state": 49,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 187,
+      "training_long_visits": 46,
+      "q_cash": 0.007789602357189016,
+      "q_long": 0.007346114860764167,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0004434874964248485
+    },
+    {
+      "state": 50,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 1845,
+      "training_long_visits": 357,
+      "q_cash": 0.013244430993060422,
+      "q_long": 0.003188601765443203,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.010055829227617219
+    },
+    {
+      "state": 51,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 334,
+      "training_long_visits": 195,
+      "q_cash": 0.0122445732927871,
+      "q_long": 0.0014903165328365373,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.010754256759950563
+    },
+    {
+      "state": 52,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 2277,
+      "training_long_visits": 369,
+      "q_cash": 0.01100987827328125,
+      "q_long": 0.005059751645249286,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.005950126628031965
+    },
+    {
+      "state": 53,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 375,
+      "training_long_visits": 117,
+      "q_cash": 0.010822968570382901,
+      "q_long": 0.0015698884642731479,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.009253080106109753
+    },
+    {
+      "state": 54,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 4602,
+      "training_long_visits": 711,
+      "q_cash": 0.0049260377641996865,
+      "q_long": -0.00227480082149882,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.007200838585698506
+    },
+    {
+      "state": 55,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 735,
+      "training_long_visits": 255,
+      "q_cash": 0.004479186245165184,
+      "q_long": 0.002031121381498942,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0024480648636662416
+    },
+    {
+      "state": 56,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 1408,
+      "training_long_visits": 257,
+      "q_cash": 0.009892264512693786,
+      "q_long": 0.004793267567003212,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.005098996945690574
+    },
+    {
+      "state": 57,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 244,
+      "training_long_visits": 109,
+      "q_cash": 0.00941604937762975,
+      "q_long": 0.007739989278704359,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0016760600989253905
+    },
+    {
+      "state": 58,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 2005,
+      "training_long_visits": 474,
+      "q_cash": 0.01435856583908492,
+      "q_long": 0.008103552034557763,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.006255013804527157
+    },
+    {
+      "state": 59,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 417,
+      "training_long_visits": 216,
+      "q_cash": 0.014882933951299578,
+      "q_long": 0.013313745715682921,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0015691882356166573
+    },
+    {
+      "state": 60,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 1792,
+      "training_long_visits": 345,
+      "q_cash": 0.011157413514204436,
+      "q_long": 0.010536518237714985,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0006208952764894509
+    },
+    {
+      "state": 61,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 323,
+      "training_long_visits": 268,
+      "q_cash": 0.010810302737545213,
+      "q_long": 0.003694773463300983,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.00711552927424423
+    },
+    {
+      "state": 62,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 63,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 64,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 137,
+      "training_long_visits": 19,
+      "q_cash": 0.008863530603043427,
+      "q_long": 0.006025047345983689,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0028384832570597382
+    },
+    {
+      "state": 65,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 19,
+      "training_long_visits": 3,
+      "q_cash": 0.004198897922499612,
+      "q_long": 0.0020787290810302898,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0021201688414693226
+    },
+    {
+      "state": 66,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 131,
+      "training_long_visits": 30,
+      "q_cash": 0.00882383884477353,
+      "q_long": -0.007727252559654239,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.01655109140442777
+    },
+    {
+      "state": 67,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 32,
+      "training_long_visits": 5,
+      "q_cash": 0.005290401083014245,
+      "q_long": -0.009349306239029444,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.014639707322043689
+    },
+    {
+      "state": 68,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 76,
+      "training_long_visits": 47,
+      "q_cash": 0.007718465026979654,
+      "q_long": 0.0010505895950284907,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0066678754319511625
+    },
+    {
+      "state": 69,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 39,
+      "training_long_visits": 30,
+      "q_cash": 0.007438110079931396,
+      "q_long": 0.004020174279178842,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.003417935800752554
+    },
+    {
+      "state": 70,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 71,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 72,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 167,
+      "training_long_visits": 20,
+      "q_cash": 0.010597814730292103,
+      "q_long": -0.00392069009167806,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.014518504821970164
+    },
+    {
+      "state": 73,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 32,
+      "training_long_visits": 10,
+      "q_cash": 0.00607478328741594,
+      "q_long": -0.002093302814284369,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.00816808610170031
+    },
+    {
+      "state": 74,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 65,
+      "training_long_visits": 63,
+      "q_cash": 0.007735671985600375,
+      "q_long": -0.004367613821443152,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.012103285807043528
+    },
+    {
+      "state": 75,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 66,
+      "training_long_visits": 9,
+      "q_cash": 0.005630633427395714,
+      "q_long": -0.004589299696705151,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.010219933124100865
+    },
+    {
+      "state": 76,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 143,
+      "training_long_visits": 37,
+      "q_cash": 0.00870656605927937,
+      "q_long": -0.0007636598001863394,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.00947022585946571
+    },
+    {
+      "state": 77,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 30,
+      "training_long_visits": 8,
+      "q_cash": 0.005990949120101004,
+      "q_long": -0.00269980631600341,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.008690755436104414
+    },
+    {
+      "state": 78,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 79,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 80,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 81,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 82,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 25,
+      "training_long_visits": 9,
+      "q_cash": 0.013105907058567423,
+      "q_long": -0.02128252087266622,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.034388427931233645
+    },
+    {
+      "state": 83,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 4,
+      "training_long_visits": 0,
+      "q_cash": 0.0022229802879224444,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0022229802879224444
+    },
+    {
+      "state": 84,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 25,
+      "training_long_visits": 4,
+      "q_cash": 0.011952022151185779,
+      "q_long": -0.004814875077811292,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.01676689722899707
+    },
+    {
+      "state": 85,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 3,
+      "training_long_visits": 2,
+      "q_cash": 0.001118812110170139,
+      "q_long": 0.029409466433534082,
+      "greedy_action": "long",
+      "q_long_minus_cash": 0.028290654323363945
+    },
+    {
+      "state": 86,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 23,
+      "training_long_visits": 7,
+      "q_cash": 0.00714117780918348,
+      "q_long": -0.038714932708112784,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.04585611051729627
+    },
+    {
+      "state": 87,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 11,
+      "training_long_visits": 3,
+      "q_cash": 0.009240856552619872,
+      "q_long": -0.04750768067888909,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.05674853723150896
+    },
+    {
+      "state": 88,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 89,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 90,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 35,
+      "training_long_visits": 3,
+      "q_cash": 0.014519514851631943,
+      "q_long": -0.07342172104809061,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.08794123589972255
+    },
+    {
+      "state": 91,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 5,
+      "training_long_visits": 0,
+      "q_cash": 0.0049198627238669895,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0049198627238669895
+    },
+    {
+      "state": 92,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 21,
+      "training_long_visits": 12,
+      "q_cash": 0.011147057947288175,
+      "q_long": -0.027876554907415127,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0390236128547033
+    },
+    {
+      "state": 93,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 7,
+      "training_long_visits": 1,
+      "q_cash": 0.006457678902846791,
+      "q_long": -0.04301426767783937,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.04947194658068616
+    },
+    {
+      "state": 94,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 28,
+      "training_long_visits": 6,
+      "q_cash": 0.0075156669054010595,
+      "q_long": -0.06195389866663645,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.06946956557203751
+    },
+    {
+      "state": 95,
+      "momentum_regime": "negative",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 9,
+      "training_long_visits": 5,
+      "q_cash": 0.006003895284853623,
+      "q_long": -0.0831276038261256,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.08913149911097923
+    },
+    {
+      "state": 96,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 234,
+      "training_long_visits": 25,
+      "q_cash": 0.009373630028013757,
+      "q_long": 0.003973085522989178,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.005400544505024579
+    },
+    {
+      "state": 97,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 37,
+      "training_long_visits": 11,
+      "q_cash": 0.007983831218465591,
+      "q_long": 0.004785412901770961,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0031984183166946303
+    },
+    {
+      "state": 98,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 105,
+      "training_long_visits": 23,
+      "q_cash": 0.011925347161484414,
+      "q_long": -0.002307910667186007,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.01423325782867042
+    },
+    {
+      "state": 99,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 20,
+      "training_long_visits": 14,
+      "q_cash": 0.008722156082370477,
+      "q_long": 0.01407217306724738,
+      "greedy_action": "long",
+      "q_long_minus_cash": 0.005350016984876903
+    },
+    {
+      "state": 100,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 124,
+      "training_long_visits": 20,
+      "q_cash": 0.011210182252159728,
+      "q_long": 0.00182752778070158,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.009382654471458148
+    },
+    {
+      "state": 101,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 36,
+      "training_long_visits": 3,
+      "q_cash": 0.011702469567348916,
+      "q_long": 0.0041772823747247,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.007525187192624216
+    },
+    {
+      "state": 102,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 287,
+      "training_long_visits": 39,
+      "q_cash": 0.005135462280278943,
+      "q_long": 0.002343738418257927,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0027917238620210156
+    },
+    {
+      "state": 103,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 18,
+      "training_long_visits": 62,
+      "q_cash": 0.006352931010647789,
+      "q_long": 0.006459088983976472,
+      "greedy_action": "long",
+      "q_long_minus_cash": 0.00010615797332868323
+    },
+    {
+      "state": 104,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 299,
+      "training_long_visits": 39,
+      "q_cash": 0.009945767811868383,
+      "q_long": 0.0047575783522597875,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.005188189459608595
+    },
+    {
+      "state": 105,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 38,
+      "training_long_visits": 7,
+      "q_cash": 0.008192389170368826,
+      "q_long": 0.005961337258703154,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.002231051911665672
+    },
+    {
+      "state": 106,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 170,
+      "training_long_visits": 36,
+      "q_cash": 0.014926032356989371,
+      "q_long": 0.008088164320507563,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.006837868036481808
+    },
+    {
+      "state": 107,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 30,
+      "training_long_visits": 3,
+      "q_cash": 0.01167893705765917,
+      "q_long": -0.002163939305143578,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.013842876362802747
+    },
+    {
+      "state": 108,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 141,
+      "training_long_visits": 11,
+      "q_cash": 0.011770289809138816,
+      "q_long": 0.005999759258026539,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.005770530551112278
+    },
+    {
+      "state": 109,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 1,
+      "training_long_visits": 22,
+      "q_cash": -5.8695098520476865e-05,
+      "q_long": 0.0010302611999848973,
+      "greedy_action": "long",
+      "q_long_minus_cash": 0.0010889562985053741
+    },
+    {
+      "state": 110,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 111,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 112,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 31,
+      "training_long_visits": 3,
+      "q_cash": 0.007883584993178807,
+      "q_long": 0.004055350072098139,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.003828234921080668
+    },
+    {
+      "state": 113,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 1,
+      "training_long_visits": 0,
+      "q_cash": 0.0007759113732082258,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0007759113732082258
+    },
+    {
+      "state": 114,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 19,
+      "training_long_visits": 1,
+      "q_cash": 0.004572470319497009,
+      "q_long": 0.0008991686795847217,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0036733016399122876
+    },
+    {
+      "state": 115,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 2,
+      "training_long_visits": 3,
+      "q_cash": -0.00011820792103010364,
+      "q_long": 0.0008141961171756365,
+      "greedy_action": "long",
+      "q_long_minus_cash": 0.0009324040382057402
+    },
+    {
+      "state": 116,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 25,
+      "training_long_visits": 1,
+      "q_cash": 0.006540366935406849,
+      "q_long": 0.000844263716991933,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.005696103218414916
+    },
+    {
+      "state": 117,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 4,
+      "training_long_visits": 0,
+      "q_cash": 0.0018582215473547691,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0018582215473547691
+    },
+    {
+      "state": 118,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 119,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 120,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 29,
+      "training_long_visits": 7,
+      "q_cash": 0.007909911180221317,
+      "q_long": -0.004754221450436779,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.012664132630658097
+    },
+    {
+      "state": 121,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 3,
+      "training_long_visits": 4,
+      "q_cash": 0.0009825190094219826,
+      "q_long": -0.0011230061394295375,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.00210552514885152
+    },
+    {
+      "state": 122,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 17,
+      "training_long_visits": 3,
+      "q_cash": 0.006741855442461341,
+      "q_long": -0.002050273701890414,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.008792129144351755
+    },
+    {
+      "state": 123,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 5,
+      "training_long_visits": 0,
+      "q_cash": 0.008191751969073572,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.008191751969073572
+    },
+    {
+      "state": 124,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 8,
+      "training_long_visits": 10,
+      "q_cash": 0.0018602396779176223,
+      "q_long": 0.010574429400838503,
+      "greedy_action": "long",
+      "q_long_minus_cash": 0.00871418972292088
+    },
+    {
+      "state": 125,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 2,
+      "training_long_visits": 0,
+      "q_cash": 0.0030106166208810907,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0030106166208810907
+    },
+    {
+      "state": 126,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 127,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 128,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 129,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 130,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 5,
+      "training_long_visits": 0,
+      "q_cash": 0.006408007672187034,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.006408007672187034
+    },
+    {
+      "state": 131,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 132,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 4,
+      "training_long_visits": 0,
+      "q_cash": 0.004739530611742598,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.004739530611742598
+    },
+    {
+      "state": 133,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 134,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 3,
+      "training_long_visits": 0,
+      "q_cash": 0.0043107945788362035,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0043107945788362035
+    },
+    {
+      "state": 135,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 1,
+      "training_long_visits": 0,
+      "q_cash": 0.0006866032537977138,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0006866032537977138
+    },
+    {
+      "state": 136,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 137,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 138,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 3,
+      "training_long_visits": 0,
+      "q_cash": 0.0039064676635473874,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0039064676635473874
+    },
+    {
+      "state": 139,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 3,
+      "training_long_visits": 0,
+      "q_cash": 0.0041279445227513575,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0041279445227513575
+    },
+    {
+      "state": 140,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 1,
+      "training_long_visits": 0,
+      "q_cash": 0.0013542578243916977,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0013542578243916977
+    },
+    {
+      "state": 141,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 142,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 2,
+      "training_long_visits": 0,
+      "q_cash": 0.004111060672440983,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.004111060672440983
+    },
+    {
+      "state": 143,
+      "momentum_regime": "neutral",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 1,
+      "training_long_visits": 0,
+      "q_cash": 0.0002547901423443604,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0002547901423443604
+    },
+    {
+      "state": 144,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 200,
+      "training_long_visits": 21,
+      "q_cash": 0.00864935045239163,
+      "q_long": 0.00481599555429342,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0038333548980982093
+    },
+    {
+      "state": 145,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 26,
+      "training_long_visits": 3,
+      "q_cash": 0.00691542537246932,
+      "q_long": -0.0004469833318074995,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.00736240870427682
+    },
+    {
+      "state": 146,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 245,
+      "training_long_visits": 44,
+      "q_cash": 0.01197334214358926,
+      "q_long": 0.009672626497330791,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0023007156462584687
+    },
+    {
+      "state": 147,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 48,
+      "training_long_visits": 19,
+      "q_cash": 0.013185540892407293,
+      "q_long": 0.014178744753339988,
+      "greedy_action": "long",
+      "q_long_minus_cash": 0.0009932038609326947
+    },
+    {
+      "state": 148,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 257,
+      "training_long_visits": 43,
+      "q_cash": 0.012839612229672531,
+      "q_long": 0.009269444631946521,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.00357016759772601
+    },
+    {
+      "state": 149,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 42,
+      "training_long_visits": 8,
+      "q_cash": 0.011065552655833158,
+      "q_long": -0.004770687407240401,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.015836240063073558
+    },
+    {
+      "state": 150,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 528,
+      "training_long_visits": 111,
+      "q_cash": 0.0053253880248636185,
+      "q_long": -0.0017128011649222177,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.007038189189785837
+    },
+    {
+      "state": 151,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 108,
+      "training_long_visits": 21,
+      "q_cash": 0.009374426684110952,
+      "q_long": 0.006154179140011614,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0032202475440993375
+    },
+    {
+      "state": 152,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 176,
+      "training_long_visits": 24,
+      "q_cash": 0.009910067008785437,
+      "q_long": 3.932538513367646e-05,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.009870741623651761
+    },
+    {
+      "state": 153,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 5,
+      "training_long_visits": 47,
+      "q_cash": 0.003097323067718174,
+      "q_long": 0.013546136956444566,
+      "greedy_action": "long",
+      "q_long_minus_cash": 0.010448813888726392
+    },
+    {
+      "state": 154,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 298,
+      "training_long_visits": 30,
+      "q_cash": 0.01607561778172664,
+      "q_long": -0.005643725800232553,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.02171934358195919
+    },
+    {
+      "state": 155,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 44,
+      "training_long_visits": 24,
+      "q_cash": 0.015196767724103728,
+      "q_long": 0.004990534482971014,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.010206233241132713
+    },
+    {
+      "state": 156,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 206,
+      "training_long_visits": 90,
+      "q_cash": 0.011433133938728584,
+      "q_long": 0.007693868217746548,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0037392657209820365
+    },
+    {
+      "state": 157,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 10,
+      "training_long_visits": 63,
+      "q_cash": 0.0071265845910794745,
+      "q_long": 0.01899223884887915,
+      "greedy_action": "long",
+      "q_long_minus_cash": 0.011865654257799674
+    },
+    {
+      "state": 158,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 159,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 160,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 19,
+      "training_long_visits": 3,
+      "q_cash": 0.006804978007038613,
+      "q_long": -0.003283928904572002,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.010088906911610615
+    },
+    {
+      "state": 161,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 1,
+      "training_long_visits": 0,
+      "q_cash": 0.00045109191022508056,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.00045109191022508056
+    },
+    {
+      "state": 162,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 10,
+      "training_long_visits": 7,
+      "q_cash": 0.004711894389106901,
+      "q_long": -0.0010886053045182755,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.005800499693625176
+    },
+    {
+      "state": 163,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 3,
+      "training_long_visits": 0,
+      "q_cash": 0.0009824108360457513,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0009824108360457513
+    },
+    {
+      "state": 164,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 16,
+      "training_long_visits": 4,
+      "q_cash": 0.006246589939734394,
+      "q_long": -0.005037083720126954,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.011283673659861347
+    },
+    {
+      "state": 165,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 2,
+      "training_long_visits": 8,
+      "q_cash": 0.0008642510323243497,
+      "q_long": 0.01179343097761502,
+      "greedy_action": "long",
+      "q_long_minus_cash": 0.010929179945290671
+    },
+    {
+      "state": 166,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 167,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 168,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 16,
+      "training_long_visits": 3,
+      "q_cash": 0.0053399505885200135,
+      "q_long": -0.007110175474522152,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.012450126063042166
+    },
+    {
+      "state": 169,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 3,
+      "training_long_visits": 1,
+      "q_cash": -1.9419581942593108e-05,
+      "q_long": -0.0007475580537183839,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0007281384717757908
+    },
+    {
+      "state": 170,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 5,
+      "training_long_visits": 15,
+      "q_cash": 0.0032534129918749257,
+      "q_long": -0.00017670191680556552,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0034301149086804913
+    },
+    {
+      "state": 171,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 10,
+      "training_long_visits": 2,
+      "q_cash": 0.008426523939016802,
+      "q_long": -0.00026254918925120406,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.008689073128268006
+    },
+    {
+      "state": 172,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 18,
+      "training_long_visits": 2,
+      "q_cash": 0.006675346263852078,
+      "q_long": 0.0005053972239966054,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.006169949039855472
+    },
+    {
+      "state": 173,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 2,
+      "training_long_visits": 1,
+      "q_cash": -0.00015952503951843157,
+      "q_long": -0.005433545657113136,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0052740206175947045
+    },
+    {
+      "state": 174,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 175,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 176,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 177,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 178,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 5,
+      "training_long_visits": 0,
+      "q_cash": 0.00549058035509333,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.00549058035509333
+    },
+    {
+      "state": 179,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 180,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 4,
+      "training_long_visits": 1,
+      "q_cash": 0.00404981117818959,
+      "q_long": -0.010669711041155288,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.014719522219344878
+    },
+    {
+      "state": 181,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 1,
+      "training_long_visits": 0,
+      "q_cash": 0.0008791590926285747,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0008791590926285747
+    },
+    {
+      "state": 182,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 1,
+      "training_long_visits": 0,
+      "q_cash": 8.621228003471012e-05,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -8.621228003471012e-05
+    },
+    {
+      "state": 183,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 184,
       "momentum_regime": "neutral",
       "volatility_regime": "upper",
       "catalyst_proximity": "event_session",
       "upcoming_phase": "phase_III",
-      "training_cash_visits": 17,
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 0,
       "training_long_visits": 0,
-      "q_cash": 0.010344435992472433,
+      "q_cash": 0.0,
       "q_long": 0.0,
       "greedy_action": "cash",
-      "q_long_minus_cash": -0.010344435992472433
+      "q_long_minus_cash": 0.0
     },
     {
-      "state": 24,
-      "momentum_regime": "positive",
-      "volatility_regime": "lower",
-      "catalyst_proximity": "more_than_5_sessions",
-      "upcoming_phase": "phase_II",
-      "training_cash_visits": 5255,
-      "training_long_visits": 1513,
-      "q_cash": 0.008167325506227082,
-      "q_long": -0.00040489839442502926,
-      "greedy_action": "cash",
-      "q_long_minus_cash": -0.008572223900652112
-    },
-    {
-      "state": 25,
-      "momentum_regime": "positive",
-      "volatility_regime": "lower",
-      "catalyst_proximity": "more_than_5_sessions",
-      "upcoming_phase": "phase_III",
-      "training_cash_visits": 3436,
-      "training_long_visits": 830,
-      "q_cash": 0.005263716498986377,
-      "q_long": -0.006657729595106594,
-      "greedy_action": "cash",
-      "q_long_minus_cash": -0.011921446094092972
-    },
-    {
-      "state": 26,
-      "momentum_regime": "positive",
-      "volatility_regime": "lower",
-      "catalyst_proximity": "within_5_sessions",
-      "upcoming_phase": "phase_II",
-      "training_cash_visits": 352,
-      "training_long_visits": 97,
-      "q_cash": 0.007486481996561759,
-      "q_long": 0.005377952070822549,
-      "greedy_action": "cash",
-      "q_long_minus_cash": -0.0021085299257392097
-    },
-    {
-      "state": 27,
-      "momentum_regime": "positive",
-      "volatility_regime": "lower",
-      "catalyst_proximity": "within_5_sessions",
-      "upcoming_phase": "phase_III",
-      "training_cash_visits": 371,
-      "training_long_visits": 88,
-      "q_cash": 0.007783241437912414,
-      "q_long": 0.00552609425794457,
-      "greedy_action": "cash",
-      "q_long_minus_cash": -0.0022571471799678437
-    },
-    {
-      "state": 28,
-      "momentum_regime": "positive",
-      "volatility_regime": "lower",
-      "catalyst_proximity": "event_session",
-      "upcoming_phase": "phase_II",
-      "training_cash_visits": 90,
-      "training_long_visits": 10,
-      "q_cash": 0.0056261492657059915,
-      "q_long": -0.03128848494349695,
-      "greedy_action": "cash",
-      "q_long_minus_cash": -0.03691463420920294
-    },
-    {
-      "state": 29,
-      "momentum_regime": "positive",
-      "volatility_regime": "lower",
-      "catalyst_proximity": "event_session",
-      "upcoming_phase": "phase_III",
-      "training_cash_visits": 78,
-      "training_long_visits": 9,
-      "q_cash": 0.005870629293476906,
-      "q_long": -0.12347692362628017,
-      "greedy_action": "cash",
-      "q_long_minus_cash": -0.12934755291975708
-    },
-    {
-      "state": 30,
-      "momentum_regime": "positive",
-      "volatility_regime": "upper",
-      "catalyst_proximity": "more_than_5_sessions",
-      "upcoming_phase": "phase_II",
-      "training_cash_visits": 10528,
-      "training_long_visits": 2999,
-      "q_cash": 0.004390337369226727,
-      "q_long": 0.0013265119522875004,
-      "greedy_action": "cash",
-      "q_long_minus_cash": -0.0030638254169392263
-    },
-    {
-      "state": 31,
-      "momentum_regime": "positive",
-      "volatility_regime": "upper",
-      "catalyst_proximity": "more_than_5_sessions",
-      "upcoming_phase": "phase_III",
-      "training_cash_visits": 6113,
-      "training_long_visits": 1855,
-      "q_cash": 0.00469045950142133,
-      "q_long": 0.002986656400457308,
-      "greedy_action": "cash",
-      "q_long_minus_cash": -0.0017038031009640221
-    },
-    {
-      "state": 32,
-      "momentum_regime": "positive",
-      "volatility_regime": "upper",
-      "catalyst_proximity": "within_5_sessions",
-      "upcoming_phase": "phase_II",
-      "training_cash_visits": 539,
-      "training_long_visits": 90,
-      "q_cash": 0.00744812699676618,
-      "q_long": 0.004045513479519555,
-      "greedy_action": "cash",
-      "q_long_minus_cash": -0.0034026135172466254
-    },
-    {
-      "state": 33,
-      "momentum_regime": "positive",
-      "volatility_regime": "upper",
-      "catalyst_proximity": "within_5_sessions",
-      "upcoming_phase": "phase_III",
-      "training_cash_visits": 424,
-      "training_long_visits": 139,
-      "q_cash": 0.007593331801690815,
-      "q_long": 0.0065846793592004085,
-      "greedy_action": "cash",
-      "q_long_minus_cash": -0.0010086524424904068
-    },
-    {
-      "state": 34,
-      "momentum_regime": "positive",
+      "state": 185,
+      "momentum_regime": "neutral",
       "volatility_regime": "upper",
       "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 186,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 3,
+      "training_long_visits": 0,
+      "q_cash": 0.002883756819420028,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.002883756819420028
+    },
+    {
+      "state": 187,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 2,
+      "training_long_visits": 0,
+      "q_cash": 0.0013253371479215591,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0013253371479215591
+    },
+    {
+      "state": 188,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 2,
+      "training_long_visits": 0,
+      "q_cash": 0.0026740418339060096,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0026740418339060096
+    },
+    {
+      "state": 189,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 3,
+      "training_long_visits": 0,
+      "q_cash": 0.003549014662197054,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.003549014662197054
+    },
+    {
+      "state": 190,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 6,
+      "training_long_visits": 0,
+      "q_cash": 0.006490711868331364,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.006490711868331364
+    },
+    {
+      "state": 191,
+      "momentum_regime": "neutral",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 1,
+      "training_long_visits": 0,
+      "q_cash": 0.0017895390763250155,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0017895390763250155
+    },
+    {
+      "state": 192,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
       "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 1503,
+      "training_long_visits": 216,
+      "q_cash": 0.008991036205713678,
+      "q_long": 0.0063018572215707905,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0026891789841428874
+    },
+    {
+      "state": 193,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 212,
+      "training_long_visits": 39,
+      "q_cash": 0.008686739343541357,
+      "q_long": 0.006377903893769044,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0023088354497723135
+    },
+    {
+      "state": 194,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 813,
+      "training_long_visits": 105,
+      "q_cash": 0.01113346065606493,
+      "q_long": 0.005378571050917667,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.005754889605147262
+    },
+    {
+      "state": 195,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 152,
+      "training_long_visits": 16,
+      "q_cash": 0.01150341376883888,
+      "q_long": 0.0033672817323527706,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.00813613203648611
+    },
+    {
+      "state": 196,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 723,
+      "training_long_visits": 184,
+      "q_cash": 0.011241820000720994,
+      "q_long": 0.006199095330507756,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.005042724670213238
+    },
+    {
+      "state": 197,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 175,
+      "training_long_visits": 46,
+      "q_cash": 0.011577788746822608,
+      "q_long": 0.008115863310278866,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0034619254365437415
+    },
+    {
+      "state": 198,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 1733,
+      "training_long_visits": 363,
+      "q_cash": 0.004964285180887575,
+      "q_long": -0.00223004584198536,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0071943310228729344
+    },
+    {
+      "state": 199,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 368,
+      "training_long_visits": 120,
+      "q_cash": 0.005088935985070436,
+      "q_long": 0.0035273921593725254,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0015615438256979105
+    },
+    {
+      "state": 200,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 1594,
+      "training_long_visits": 227,
+      "q_cash": 0.00983049400897598,
+      "q_long": -7.23996683168783e-05,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.009902893677292858
+    },
+    {
+      "state": 201,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 220,
+      "training_long_visits": 42,
+      "q_cash": 0.009028812498748257,
+      "q_long": 0.00865748676912975,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0003713257296185067
+    },
+    {
+      "state": 202,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 781,
+      "training_long_visits": 175,
+      "q_cash": 0.01639229641129862,
+      "q_long": 0.0022995566997044336,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.014092739711594186
+    },
+    {
+      "state": 203,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 168,
+      "training_long_visits": 50,
+      "q_cash": 0.01405316103341628,
+      "q_long": 0.002906215340774748,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.011146945692641533
+    },
+    {
+      "state": 204,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 785,
+      "training_long_visits": 98,
+      "q_cash": 0.011252918225229683,
+      "q_long": 0.007452070040986607,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0038008481842430756
+    },
+    {
+      "state": 205,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 105,
+      "training_long_visits": 21,
+      "q_cash": 0.011384316549173629,
+      "q_long": -0.0005429950795008366,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.011927311628674466
+    },
+    {
+      "state": 206,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 207,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 208,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 96,
+      "training_long_visits": 29,
+      "q_cash": 0.009503569716802024,
+      "q_long": -0.003943202233193917,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.013446771949995941
+    },
+    {
+      "state": 209,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 23,
+      "training_long_visits": 8,
+      "q_cash": 0.004581889495913673,
+      "q_long": -0.005582792026079809,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.010164681521993481
+    },
+    {
+      "state": 210,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
       "training_cash_visits": 113,
-      "training_long_visits": 11,
-      "q_cash": 0.005527066417942826,
-      "q_long": -0.02778953036608499,
+      "training_long_visits": 13,
+      "q_cash": 0.007466037781978602,
+      "q_long": -0.010868329771021206,
       "greedy_action": "cash",
-      "q_long_minus_cash": -0.03331659678402781
+      "q_long_minus_cash": -0.01833436755299981
     },
     {
-      "state": 35,
+      "state": 211,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 12,
+      "training_long_visits": 4,
+      "q_cash": 0.0008617089930675913,
+      "q_long": -0.004584224684952641,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.005445933678020232
+    },
+    {
+      "state": 212,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 95,
+      "training_long_visits": 28,
+      "q_cash": 0.00825985350764205,
+      "q_long": 0.005159057376110441,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.003100796131531608
+    },
+    {
+      "state": 213,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 21,
+      "training_long_visits": 7,
+      "q_cash": 0.0034845900263823625,
+      "q_long": -0.0005723625309967905,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.004056952557379153
+    },
+    {
+      "state": 214,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 215,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 216,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 123,
+      "training_long_visits": 8,
+      "q_cash": 0.009370832049712109,
+      "q_long": -0.006958047452807713,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.016328879502519822
+    },
+    {
+      "state": 217,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 4,
+      "training_long_visits": 15,
+      "q_cash": 0.0005663943067330802,
+      "q_long": -0.0007355018522884637,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.001301896159021544
+    },
+    {
+      "state": 218,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 71,
+      "training_long_visits": 54,
+      "q_cash": 0.008144707405006597,
+      "q_long": 0.006513859583694743,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.001630847821311854
+    },
+    {
+      "state": 219,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 37,
+      "training_long_visits": 2,
+      "q_cash": 0.015366891771744355,
+      "q_long": -0.004135685391555323,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.01950257716329968
+    },
+    {
+      "state": 220,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 97,
+      "training_long_visits": 20,
+      "q_cash": 0.008623293649666753,
+      "q_long": -0.0029585375405247047,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.011581831190191457
+    },
+    {
+      "state": 221,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 16,
+      "training_long_visits": 12,
+      "q_cash": 0.004889638220664672,
+      "q_long": 0.0005856461934058603,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.004303992027258812
+    },
+    {
+      "state": 222,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 223,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 224,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 225,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 226,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 20,
+      "training_long_visits": 4,
+      "q_cash": 0.014172443305284676,
+      "q_long": -0.04062398975683871,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.05479643306212338
+    },
+    {
+      "state": 227,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 7,
+      "training_long_visits": 1,
+      "q_cash": 0.004684848182642741,
+      "q_long": -0.013966928111225315,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.018651776293868057
+    },
+    {
+      "state": 228,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 26,
+      "training_long_visits": 1,
+      "q_cash": 0.011320522859726501,
+      "q_long": -0.01584456588086581,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.02716508874059231
+    },
+    {
+      "state": 229,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 1,
+      "training_long_visits": 1,
+      "q_cash": 0.0016884439780708257,
+      "q_long": -0.0186395950204853,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.020328038998556126
+    },
+    {
+      "state": 230,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 26,
+      "training_long_visits": 3,
+      "q_cash": 0.008346348092358243,
+      "q_long": -0.016600529968602798,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.02494687806096104
+    },
+    {
+      "state": 231,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 9,
+      "training_long_visits": 1,
+      "q_cash": 0.008426111775350744,
+      "q_long": 0.019287829373569737,
+      "greedy_action": "long",
+      "q_long_minus_cash": 0.010861717598218993
+    },
+    {
+      "state": 232,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 233,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 234,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 18,
+      "training_long_visits": 2,
+      "q_cash": 0.011458279073988251,
+      "q_long": -0.07758787960519764,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.08904615867918589
+    },
+    {
+      "state": 235,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 3,
+      "training_long_visits": 4,
+      "q_cash": 0.0012693617850608814,
+      "q_long": -0.0384903869524406,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.03975974873750148
+    },
+    {
+      "state": 236,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 14,
+      "training_long_visits": 2,
+      "q_cash": 0.01005903569279712,
+      "q_long": -0.09192753573556618,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.1019865714283633
+    },
+    {
+      "state": 237,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 14,
+      "training_long_visits": 3,
+      "q_cash": 0.008678708175284437,
+      "q_long": 0.00512034780985695,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.003558360365427487
+    },
+    {
+      "state": 238,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 21,
+      "training_long_visits": 3,
+      "q_cash": 0.007801365483851833,
+      "q_long": -0.002955132192712831,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.010756497676564664
+    },
+    {
+      "state": 239,
+      "momentum_regime": "positive",
+      "volatility_regime": "lower",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 3,
+      "training_long_visits": 0,
+      "q_cash": 0.0015245716923549522,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0015245716923549522
+    },
+    {
+      "state": 240,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 1501,
+      "training_long_visits": 210,
+      "q_cash": 0.008816935288256087,
+      "q_long": 0.0039613484277956764,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.004855586860460411
+    },
+    {
+      "state": 241,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 186,
+      "training_long_visits": 58,
+      "q_cash": 0.008598909886242605,
+      "q_long": 0.0040485107857629755,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.00455039910047963
+    },
+    {
+      "state": 242,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 1621,
+      "training_long_visits": 431,
+      "q_cash": 0.011843615062210336,
+      "q_long": 0.016137674974206498,
+      "greedy_action": "long",
+      "q_long_minus_cash": 0.004294059911996162
+    },
+    {
+      "state": 243,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 420,
+      "training_long_visits": 181,
+      "q_cash": 0.01303207305967901,
+      "q_long": 0.004408518716466803,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.008623554343212207
+    },
+    {
+      "state": 244,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 2067,
+      "training_long_visits": 383,
+      "q_cash": 0.011347652486760196,
+      "q_long": 0.005839155843680208,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0055084966430799884
+    },
+    {
+      "state": 245,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 385,
+      "training_long_visits": 53,
+      "q_cash": 0.01320631446934762,
+      "q_long": 0.008686942359703284,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.004519372109644336
+    },
+    {
+      "state": 246,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 4233,
+      "training_long_visits": 773,
+      "q_cash": 0.004069977505346434,
+      "q_long": -0.0012363589886890966,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.00530633649403553
+    },
+    {
+      "state": 247,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 754,
+      "training_long_visits": 271,
+      "q_cash": 0.008062666971229477,
+      "q_long": -0.00015312771823194183,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.008215794689461419
+    },
+    {
+      "state": 248,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 1437,
+      "training_long_visits": 260,
+      "q_cash": 0.009895452650078062,
+      "q_long": 0.0022440904190073933,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.007651362231070668
+    },
+    {
+      "state": 249,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 288,
+      "training_long_visits": 54,
+      "q_cash": 0.01040361548420844,
+      "q_long": -0.005203947772067393,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.015607563256275834
+    },
+    {
+      "state": 250,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 2027,
+      "training_long_visits": 388,
+      "q_cash": 0.014201501826544716,
+      "q_long": 0.013710045095778937,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.000491456730765779
+    },
+    {
+      "state": 251,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 415,
+      "training_long_visits": 164,
+      "q_cash": 0.01675063940046184,
+      "q_long": 0.009072546017853107,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.007678093382608732
+    },
+    {
+      "state": 252,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 2056,
+      "training_long_visits": 344,
+      "q_cash": 0.011419809909492524,
+      "q_long": -0.0017779217535486406,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.013197731663041164
+    },
+    {
+      "state": 253,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 433,
+      "training_long_visits": 102,
+      "q_cash": 0.011405761122731652,
+      "q_long": 0.010416299731784012,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0009894613909476394
+    },
+    {
+      "state": 254,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 255,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "more_than_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 256,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 179,
+      "training_long_visits": 14,
+      "q_cash": 0.009332582691759794,
+      "q_long": 0.006570487457082094,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0027620952346777
+    },
+    {
+      "state": 257,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 15,
+      "training_long_visits": 4,
+      "q_cash": 0.003336073682304568,
+      "q_long": -0.0021561199146763136,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.005492193596980882
+    },
+    {
+      "state": 258,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 154,
+      "training_long_visits": 14,
+      "q_cash": 0.009088997374691462,
+      "q_long": -0.014007363401916557,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.023096360776608017
+    },
+    {
+      "state": 259,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 23,
+      "training_long_visits": 9,
+      "q_cash": 0.003781748268445407,
+      "q_long": -0.0006407832297979344,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.004422531498243341
+    },
+    {
+      "state": 260,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 87,
+      "training_long_visits": 64,
+      "q_cash": 0.008014427377847206,
+      "q_long": 0.0015278075367162053,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.006486619841131001
+    },
+    {
+      "state": 261,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 49,
+      "training_long_visits": 17,
+      "q_cash": 0.009203946731026607,
+      "q_long": 0.001457343945273049,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.007746602785753558
+    },
+    {
+      "state": 262,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 263,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 264,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 125,
+      "training_long_visits": 7,
+      "q_cash": 0.010629971969453185,
+      "q_long": -0.009750245041610487,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.02038021701106367
+    },
+    {
+      "state": 265,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 2,
+      "training_long_visits": 15,
+      "q_cash": 0.0004036155283935863,
+      "q_long": 0.005113523951239247,
+      "greedy_action": "long",
+      "q_long_minus_cash": 0.004709908422845661
+    },
+    {
+      "state": 266,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 106,
+      "training_long_visits": 42,
+      "q_cash": 0.008422518123690442,
+      "q_long": 0.001215267947382218,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.007207250176308224
+    },
+    {
+      "state": 267,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 30,
+      "training_long_visits": 52,
+      "q_cash": 0.01009491409941746,
+      "q_long": 0.00884268570361154,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.0012522283958059204
+    },
+    {
+      "state": 268,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 140,
+      "training_long_visits": 17,
+      "q_cash": 0.008667410447882622,
+      "q_long": 0.0018792993424425598,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.006788111105440062
+    },
+    {
+      "state": 269,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 23,
+      "training_long_visits": 4,
+      "q_cash": 0.00648663235328926,
+      "q_long": -0.005571742695552279,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.012058375048841538
+    },
+    {
+      "state": 270,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 271,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "within_5_sessions",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 272,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 273,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 274,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 26,
+      "training_long_visits": 5,
+      "q_cash": 0.012839925610177981,
+      "q_long": -0.01890434251817928,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.03174426812835726
+    },
+    {
+      "state": 275,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 8,
+      "training_long_visits": 0,
+      "q_cash": 0.006134462279229903,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.006134462279229903
+    },
+    {
+      "state": 276,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 32,
+      "training_long_visits": 3,
+      "q_cash": 0.011962351064403057,
+      "q_long": -0.015939756278706904,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.02790210734310996
+    },
+    {
+      "state": 277,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 6,
+      "training_long_visits": 0,
+      "q_cash": 0.005135423394102357,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.005135423394102357
+    },
+    {
+      "state": 278,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 24,
+      "training_long_visits": 2,
+      "q_cash": 0.0069510115106571815,
+      "q_long": -0.006324007077609214,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.013275018588266395
+    },
+    {
+      "state": 279,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_II",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 16,
+      "training_long_visits": 2,
+      "q_cash": 0.010594978502960777,
+      "q_long": -0.01100207065123557,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.021597049154196347
+    },
+    {
+      "state": 280,
       "momentum_regime": "positive",
       "volatility_regime": "upper",
       "catalyst_proximity": "event_session",
       "upcoming_phase": "phase_III",
-      "training_cash_visits": 90,
-      "training_long_visits": 20,
-      "q_cash": 0.00583237806304727,
-      "q_long": -0.0736827907439917,
+      "episode_horizon": "early",
+      "current_position": "cash",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
       "greedy_action": "cash",
-      "q_long_minus_cash": -0.07951516880703897
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 281,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "early",
+      "current_position": "long",
+      "training_cash_visits": 0,
+      "training_long_visits": 0,
+      "q_cash": 0.0,
+      "q_long": 0.0,
+      "greedy_action": "cash",
+      "q_long_minus_cash": 0.0
+    },
+    {
+      "state": 282,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "cash",
+      "training_cash_visits": 28,
+      "training_long_visits": 1,
+      "q_cash": 0.013329641425840907,
+      "q_long": -0.039713764684520786,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.05304340611036169
+    },
+    {
+      "state": 283,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_early",
+      "current_position": "long",
+      "training_cash_visits": 4,
+      "training_long_visits": 1,
+      "q_cash": 0.0033581442898321873,
+      "q_long": -0.044425931099053455,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.04778407538888564
+    },
+    {
+      "state": 284,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "cash",
+      "training_cash_visits": 15,
+      "training_long_visits": 5,
+      "q_cash": 0.010848639766185915,
+      "q_long": -0.06525918159336393,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.07610782135954984
+    },
+    {
+      "state": 285,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "mid_late",
+      "current_position": "long",
+      "training_cash_visits": 17,
+      "training_long_visits": 6,
+      "q_cash": 0.008569274724721389,
+      "q_long": -0.039420512363838096,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.047989787088559485
+    },
+    {
+      "state": 286,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "cash",
+      "training_cash_visits": 25,
+      "training_long_visits": 4,
+      "q_cash": 0.0071408782625811285,
+      "q_long": -0.03485978347503378,
+      "greedy_action": "cash",
+      "q_long_minus_cash": -0.04200066173761491
+    },
+    {
+      "state": 287,
+      "momentum_regime": "positive",
+      "volatility_regime": "upper",
+      "catalyst_proximity": "event_session",
+      "upcoming_phase": "phase_III",
+      "episode_horizon": "late",
+      "current_position": "long",
+      "training_cash_visits": 2,
+      "training_long_visits": 2,
+      "q_cash": 0.00043031673022865356,
+      "q_long": 0.045487080810683804,
+      "greedy_action": "long",
+      "q_long_minus_cash": 0.04505676408045515
     }
   ],
   "state_encoding": {
-    "state_formula": "(((momentum_bin * 2 + volatility_bin) * 3 + catalyst_proximity_bin) * 2) + upcoming_phase_bin",
+    "state_formula": "(((((momentum_bin * 2 + volatility_bin) * 3 + catalyst_proximity_bin) * 2 + upcoming_phase_bin) * 4 + episode_horizon_bin) * 2) + current_position_bin",
     "momentum_bins": [
       "negative",
       "neutral",
@@ -729,6 +5589,17 @@
       "phase_II",
       "phase_III"
     ],
+    "episode_horizon_bins": [
+      "early",
+      "mid_early",
+      "mid_late",
+      "late"
+    ],
+    "current_position_bins": [
+      "cash",
+      "long"
+    ],
+    "available_states": 288,
     "visit_counts_include": "all epsilon-greedy training actions; evaluation paths are not included"
   },
   "evaluation_summary": {
@@ -1387,44 +6258,44 @@
         "p90": 252.0
       },
       "annualized_return": {
-        "median": -0.02283580386210393,
-        "p10": -0.12976853837135904,
-        "p90": 0.12383796043804497
+        "median": 0.0,
+        "p10": -0.1262247629002727,
+        "p90": 0.0886814379407012
       },
       "annualized_volatility": {
-        "median": 0.11992657543743473,
-        "p10": 0.07947274164101077,
-        "p90": 0.1619943717835059
+        "median": 0.08084782584745348,
+        "p10": 0.0,
+        "p90": 0.11951266073704286
       },
       "sharpe": {
-        "median": -0.13957148102212963,
-        "p10": -1.1323757077983747,
-        "p90": 1.2460253645005215
+        "median": 0.0,
+        "p10": -1.6567500713996577,
+        "p90": 0.9378486748829915
       },
       "sortino": {
-        "median": -0.20482365858535956,
-        "p10": -1.4888487995362047,
-        "p90": 2.564334467477557
+        "median": 0.0,
+        "p10": -1.7370334942099228,
+        "p90": 1.7939436428211906
       },
       "max_drawdown": {
-        "median": -0.10987481406347704,
-        "p10": -0.2190976990009885,
-        "p90": -0.045209319470414365
+        "median": -0.061321017147833445,
+        "p10": -0.1574093848137538,
+        "p90": 0.0
       },
       "calmar": {
-        "median": -0.2457125056963445,
-        "p10": -0.7394553287496282,
-        "p90": 3.5105250309874902
+        "median": 0.0,
+        "p10": -0.9822971056010176,
+        "p90": 1.8060390565337598
       },
       "value_at_risk_95": {
-        "median": -0.0018263084028030446,
-        "p10": -0.013492204494661597,
+        "median": -0.001,
+        "p10": -0.001,
         "p90": 0.0
       },
       "expected_shortfall_95": {
-        "median": -0.01878622930927397,
-        "p10": -0.029683346474805233,
-        "p90": -0.008096535542803745
+        "median": -0.008960315410880576,
+        "p10": -0.018255803167344712,
+        "p90": 0.0
       },
       "benchmark_total_return": {
         "median": 0.0808686426652987,
@@ -1432,29 +6303,29 @@
         "p90": 0.3295017612206589
       },
       "benchmark_relative_compounded_return": {
-        "median": -0.11071088419952108,
-        "p10": -0.31807977973247586,
-        "p90": 0.26031991658107484
+        "median": -0.09819272946458685,
+        "p10": -0.25968646329265777,
+        "p90": 0.1131570050117964
       },
       "information_ratio": {
-        "median": -0.6530211359182645,
-        "p10": -1.717672183279211,
-        "p90": 1.1581609164475197
+        "median": -0.6366136781046284,
+        "p10": -1.972212915119387,
+        "p90": 0.5842580448726336
       },
       "annual_turnover": {
-        "median": 20.0,
-        "p10": 11.9,
-        "p90": 29.0
+        "median": 21.0,
+        "p10": 0.0,
+        "p90": 46.2
       },
       "total_cost": {
-        "median": 0.020000000000000004,
-        "p10": 0.0119,
-        "p90": 0.029
+        "median": 0.020999999999999998,
+        "p10": 0.0,
+        "p90": 0.046200000000000005
       },
       "exposure_fraction": {
-        "median": 0.1111111111111111,
-        "p10": 0.03571428571428571,
-        "p90": 0.17896825396825397
+        "median": 0.041666666666666664,
+        "p10": 0.0,
+        "p90": 0.09523809523809523
       },
       "catalyst_exposure_fraction": {
         "median": 0.0,
@@ -1547,19 +6418,19 @@
     "cash": {
       "annualized_return_difference": {
         "paired_episode_seeds": 60,
-        "mean_difference": -0.00873757017034325,
-        "median_difference": -0.02283580386210393,
-        "bootstrap_95pct_interval_low": -0.03731688191436821,
-        "bootstrap_95pct_interval_high": 0.02059998626382729,
+        "mean_difference": -0.019025654416287716,
+        "median_difference": 0.0,
+        "bootstrap_95pct_interval_low": -0.04015780232489489,
+        "bootstrap_95pct_interval_high": 0.0014353161488079805,
         "bootstrap_replicates": 10000,
         "bootstrap_seed": 10000
       },
       "benchmark_relative_compounded_return_difference": {
         "paired_episode_seeds": 60,
-        "mean_difference": -0.007437606674546417,
-        "median_difference": -0.021458360284813904,
-        "bootstrap_95pct_interval_low": -0.034491489913962496,
-        "bootstrap_95pct_interval_high": 0.02063203823280695,
+        "mean_difference": -0.020910725648389895,
+        "median_difference": 0.0,
+        "bootstrap_95pct_interval_low": -0.04144836572916552,
+        "bootstrap_95pct_interval_high": -0.0010531102945714142,
         "bootstrap_replicates": 10000,
         "bootstrap_seed": 10100
       }
@@ -1567,19 +6438,19 @@
     "buy_and_hold": {
       "annualized_return_difference": {
         "paired_episode_seeds": 60,
-        "mean_difference": -0.0016783108644868039,
-        "median_difference": 0.14548913289926751,
-        "bootstrap_95pct_interval_low": -0.2050445620936253,
-        "bootstrap_95pct_interval_high": 0.15680740118999006,
+        "mean_difference": -0.011966395110431263,
+        "median_difference": 0.1277447984811239,
+        "bootstrap_95pct_interval_low": -0.21450657474864146,
+        "bootstrap_95pct_interval_high": 0.14704974152689654,
         "bootstrap_replicates": 10000,
         "bootstrap_seed": 10001
       },
       "benchmark_relative_compounded_return_difference": {
         "paired_episode_seeds": 60,
-        "mean_difference": 0.03646898720937338,
-        "median_difference": 0.11977001869231446,
-        "bootstrap_95pct_interval_low": -0.11618865010017485,
-        "bootstrap_95pct_interval_high": 0.1680448060548313,
+        "mean_difference": 0.02299586823552991,
+        "median_difference": 0.0971729961743103,
+        "bootstrap_95pct_interval_low": -0.12697879811145324,
+        "bootstrap_95pct_interval_high": 0.15378780844931567,
         "bootstrap_replicates": 10000,
         "bootstrap_seed": 10101
       }
@@ -1587,19 +6458,19 @@
     "trend_rule": {
       "annualized_return_difference": {
         "paired_episode_seeds": 60,
-        "mean_difference": 0.05961126872634684,
-        "median_difference": 0.11744413761645528,
-        "bootstrap_95pct_interval_low": -0.05949881082164456,
-        "bootstrap_95pct_interval_high": 0.1687457337175072,
+        "mean_difference": 0.049323184480402356,
+        "median_difference": 0.13320081777422088,
+        "bootstrap_95pct_interval_low": -0.06308558087111861,
+        "bootstrap_95pct_interval_high": 0.1521589966496685,
         "bootstrap_replicates": 10000,
         "bootstrap_seed": 10002
       },
       "benchmark_relative_compounded_return_difference": {
         "paired_episode_seeds": 60,
-        "mean_difference": 0.07506038751708045,
-        "median_difference": 0.12426469517953664,
-        "bootstrap_95pct_interval_low": -0.03460411735090774,
-        "bootstrap_95pct_interval_high": 0.17611967987793786,
+        "mean_difference": 0.061587268543236956,
+        "median_difference": 0.11455899726707086,
+        "bootstrap_95pct_interval_low": -0.04113048534901857,
+        "bootstrap_95pct_interval_high": 0.15651428021976782,
         "bootstrap_replicates": 10000,
         "bootstrap_seed": 10102
       }
@@ -1607,19 +6478,19 @@
     "pre_catalyst_exit": {
       "annualized_return_difference": {
         "paired_episode_seeds": 60,
-        "mean_difference": -0.05311257789683164,
-        "median_difference": 0.044550168088915876,
-        "bootstrap_95pct_interval_low": -0.15879787313696736,
-        "bootstrap_95pct_interval_high": 0.04024939231091841,
+        "mean_difference": -0.06340066214277609,
+        "median_difference": 0.08875342575489953,
+        "bootstrap_95pct_interval_low": -0.1646512706661103,
+        "bootstrap_95pct_interval_high": 0.030127011602304417,
         "bootstrap_replicates": 10000,
         "bootstrap_seed": 10003
       },
       "benchmark_relative_compounded_return_difference": {
         "paired_episode_seeds": 60,
-        "mean_difference": -0.03335163173659977,
-        "median_difference": 0.03216433876960367,
-        "bootstrap_95pct_interval_low": -0.1223466328317101,
-        "bootstrap_95pct_interval_high": 0.05202570057224388,
+        "mean_difference": -0.046824750710443244,
+        "median_difference": 0.07389312111823887,
+        "bootstrap_95pct_interval_low": -0.13634041484400136,
+        "bootstrap_95pct_interval_high": 0.037903596636580536,
         "bootstrap_replicates": 10000,
         "bootstrap_seed": 10103
       }

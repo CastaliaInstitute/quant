@@ -113,15 +113,17 @@
   },
   "observed_training_coverage": {
     "training_replicates": 10,
-    "state_count": 36,
-    "state_action_count": 72,
-    "training_states_visited_min": 36,
-    "training_states_visited_max": 36,
-    "state_action_pairs_visited_min": 69,
-    "state_action_pairs_visited_max": 72,
-    "greedy_long_state_count_min": 0,
-    "greedy_long_state_count_max": 3,
-    "interpretation": "State visits are high; cash-heavy behavior is not explained by gross state undercoverage in this training run."
+    "state_count": 288,
+    "state_action_count": 576,
+    "training_states_visited_min": 220,
+    "training_states_visited_max": 226,
+    "state_coverage_fraction_min": 0.7638888888888888,
+    "state_action_pairs_visited_min": 409,
+    "state_action_pairs_visited_max": 419,
+    "state_action_coverage_fraction_min": 0.7100694444444444,
+    "greedy_long_state_count_min": 7,
+    "greedy_long_state_count_max": 20,
+    "interpretation": "Coverage fractions expose sparse state/action sampling; unseen actions default to tied Q values and the deterministic argmax selects cash."
   },
   "diagnosis": "The configured ordinary-session arithmetic drift is below the volatility-implied break-even drift for log growth, and configured catalyst gaps have negative expected log reward in both phases. Cash-heavy Q behavior is therefore aligned with this generator's reward incentives; this is not evidence that the learner found an investable edge.",
   "research_implication": "Calibrate ordinary-return drift, volatility, and event-gap distributions from point-in-time historical data before using policy exposure as a research conclusion. Keep cash as a valid action; evaluate any risk budget or drawdown constraint as an explicit objective rather than forcing exposure."
