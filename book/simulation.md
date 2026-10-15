@@ -21,6 +21,10 @@ The current synthetic catalyst parameters live in [`config/biopharma_rl_syntheti
 
 Each stage answers a different question. Performance on toy and synthetic markets checks implementation and behavior under stated assumptions. Historical replay examines a strategy against one recorded path. Neither alone establishes future profitability.
 
+### Keep known schedules separate from realized events
+
+In empirical replay, a disclosure's historical date is an outcome label, not automatically a date the agent could have anticipated. The gym accepts `scheduled_event_phases` for event dates/phases proven public before the decision cutoff, and `realized_event_phases` for event-session labels used only after the action and return. Historical callers should pass verified pre-event schedules separately from realized labels; if no schedule was known, pass an all-`-1` schedule. The legacy `event_phases` option populates both arrays for compatibility with the synthetic generator, where catalyst timing is deliberately scheduled by construction. If callers supply both the legacy labels and `realized_event_phases` but omit `scheduled_event_phases`, the gym defaults the observable schedule to no known events. Never feed a later press-release date into `scheduled_event_phases` during historical replay.
+
 ## Separate reward from evidence
 
 Reward is an optimization device, not the research conclusion. A policy can maximize a reward that accidentally rewards turnover, exploits simulator artifacts, or omits tail risk. Publish the exact reward function and report its components separately from evaluation metrics.

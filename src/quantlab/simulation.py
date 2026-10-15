@@ -205,7 +205,8 @@ class BiotechCatalystGym(gym.Env):
         )
         self._returns = np.zeros(self.lookback + self.episode_length, dtype=np.float64)
         self._benchmark = np.zeros_like(self._returns)
-        self._events = np.full(len(self._returns), -1, dtype=np.int8)
+        self._scheduled_events = np.full(len(self._returns), -1, dtype=np.int8)
+        self._realized_event_phases = np.full(len(self._returns), -1, dtype=np.int8)
         self._trial_outcomes = np.full(len(self._returns), -1, dtype=np.int8)
         self._cursor = self.lookback
         self._position = 0
@@ -231,10 +232,21 @@ class BiotechCatalystGym(gym.Env):
                 raise ValueError(f"warmup_returns must be a finite sequence of {self.lookback} values")
             self._returns = np.concatenate((warmup, source))
             self._benchmark = self._validated_series(options, "benchmark_returns", source)
-            self._events = self._validated_events(options, len(source))
+            legacy_events = options.get("event_phases", options.get("event_labels", np.full(len(source), -1)))
+            schedule_default = (
+                np.full(len(source), -1)
+                if "realized_event_phases" in options
+                else legacy_events
+            )
+            self._scheduled_events = self._validated_events(
+                options.get("scheduled_event_phases", schedule_default), len(source), "scheduled_event_phases"
+            )
+            self._realized_event_phases = self._validated_events(
+                options.get("realized_event_phases", legacy_events), len(source), "realized_event_phases"
+            )
             self._trial_outcomes = self._validated_trial_outcomes(options, len(source))
-            if np.any((self._trial_outcomes >= 0) & (self._events < 0)):
-                raise ValueError("known trial outcomes must align with a Phase II/III event phase")
+            if np.any((self._trial_outcomes >= 0) & (self._realized_event_phases < 0)):
+                raise ValueError("known trial outcomes must align with a realized Phase II/III event")
         else:
             issuer, broad, labels, outcomes = generate_catalyst_path(
                 self.np_random, self.episode_length,
@@ -244,7 +256,9 @@ class BiotechCatalystGym(gym.Env):
             warmup = self.np_random.normal(0.0, 0.02, size=self.lookback)
             self._returns = np.concatenate((warmup, issuer))
             self._benchmark = np.concatenate((np.zeros(self.lookback), broad))
-            self._events = np.concatenate((np.full(self.lookback, -1, dtype=np.int8), labels))
+            scheduled = np.concatenate((np.full(self.lookback, -1, dtype=np.int8), labels))
+            self._scheduled_events = scheduled
+            self._realized_event_phases = scheduled.copy()
             self._trial_outcomes = np.concatenate((np.full(self.lookback, -1, dtype=np.int8), outcomes))
         self._cursor = self.lookback
         self._position = 0
@@ -267,10 +281,10 @@ class BiotechCatalystGym(gym.Env):
             raise ValueError(f"{key} must be finite, greater than -100%, and length {len(fallback)}")
         return np.concatenate((np.zeros(self.lookback), values))
 
-    def _validated_events(self, options: dict, periods: int) -> np.ndarray:
-        values = np.asarray(options.get("event_phases", options.get("event_labels", np.full(periods, -1))), dtype=np.int8)
+    def _validated_events(self, values: Sequence[int], periods: int, field: str) -> np.ndarray:
+        values = np.asarray(values, dtype=np.int8)
         if values.shape != (periods,) or not np.isin(values, (-1, 0, 1)).all():
-            raise ValueError("event phases must contain -1 (none), 0 (Phase II), or 1 (Phase III)")
+            raise ValueError(f"{field} must contain -1 (none), 0 (Phase II), or 1 (Phase III)")
         return np.concatenate((np.full(self.lookback, -1, dtype=np.int8), values))
 
     def _validated_trial_outcomes(self, options: dict, periods: int) -> np.ndarray:
@@ -287,7 +301,7 @@ class BiotechCatalystGym(gym.Env):
         new_position = int(action)
         market_return = float(self._returns[self._cursor])
         benchmark_return = float(self._benchmark[self._cursor])
-        event_phase = int(self._events[self._cursor])
+        event_phase = int(self._realized_event_phases[self._cursor])
         trial_outcome = int(self._trial_outcomes[self._cursor])
         turnover = float(abs(new_position - self._position))
         cost = turnover * self.transaction_cost_bps / 10_000.0
@@ -333,11 +347,11 @@ class BiotechCatalystGym(gym.Env):
         history = self._returns[max(0, self._cursor - self.lookback):self._cursor]
         momentum = float(np.prod(1.0 + history[-5:]) - 1.0)
         volatility = float(np.std(history, ddof=1)) if len(history) > 1 else 0.0
-        next_event = np.flatnonzero(self._events[self._cursor:] >= 0)
+        next_event = np.flatnonzero(self._scheduled_events[self._cursor:] >= 0)
         if len(next_event):
             distance = int(next_event[0])
             event_index = self._cursor + distance
-            event_class = float(self._events[event_index])
+            event_class = float(self._scheduled_events[event_index])
         else:
             distance = self.catalyst_interval
             event_class = 0.0

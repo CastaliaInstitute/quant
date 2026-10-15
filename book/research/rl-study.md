@@ -9,6 +9,7 @@ This executable simulator exercise trains a tabular Q learner in a seeded, singl
 ## Environment and policy
 
 - **Observation:** five-session issuer momentum, trailing 20-session volatility, time until the next scheduled readout, and its known Phase II/III category. Continuous features are discretized into 36 tabular states.
+- **Event timing for empirical replay:** future event schedules may enter the observation only when their dates and phase were documented before the decision cutoff. `scheduled_event_phases` controls observable timing; `realized_event_phases` records event labels for post-action reporting. Historical disclosure dates belong only in the realized labels unless a dated pre-event schedule source proves they were known in advance. The legacy `event_phases` option still supplies both arrays for existing synthetic forks.
 - **Action:** 0 = cash; 1 = fully invested long.
 - **Transition:** the action earns the current session return after observing only prior returns. The phase and scheduled catalyst distance are observable; the clinical outcome and market reaction remain hidden until the return is realized. A position change costs 10 basis points per unit turnover.
 - **Reward:** log of one plus net periodic return. Reporting metrics use net simple returns.
