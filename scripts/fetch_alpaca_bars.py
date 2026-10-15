@@ -12,20 +12,53 @@ import csv
 import hashlib
 import json
 import os
+import re
 import urllib.parse
 import urllib.request
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def mapped_symbols() -> list[str]:
+    """Resolve the current issuer universe and related tickers from tracked CSVs."""
+    symbols = {"SPY", "XBI"}
+    for filename, ticker_field in (("universe.csv", "ticker"), ("public_events.csv", "ticker")):
+        path = ROOT / "data/biopharma" / filename
+        with path.open(newline="", encoding="utf-8-sig") as stream:
+            for row in csv.DictReader(stream):
+                symbol = (row.get(ticker_field) or "").strip().upper()
+                if symbol:
+                    symbols.add(symbol)
+                related = (row.get("related_tickers") or "").strip().upper()
+                symbols.update(part.strip() for part in re.split(r"[;,]", related) if part.strip())
+    return sorted(symbols)
+
+
+def event_data_range() -> tuple[str, str]:
+    """Cover a year before the earliest readout and two weeks after the last."""
+    path = ROOT / "data/biopharma/public_events.csv"
+    with path.open(newline="", encoding="utf-8-sig") as stream:
+        dates = [
+            datetime.strptime(row["event_date"], "%Y-%m-%d").date()
+            for row in csv.DictReader(stream)
+            if row.get("event_date")
+        ]
+    if not dates:
+        raise SystemExit("No dated rows in data/biopharma/public_events.csv; provide --start and --end explicitly.")
+    return (
+        (min(dates) - timedelta(days=365)).isoformat(),
+        (max(dates) + timedelta(days=14)).isoformat(),
+    )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--symbols", default="MRNA,PFE,AZN,NVAX,JNJ,SPY,XBI")
-    parser.add_argument("--start", default="2020-10-01")
-    parser.add_argument("--end", default="2021-02-10")
+    parser.add_argument("--symbols", default=None, help="comma-separated tickers; defaults to trial/event mappings plus SPY and XBI")
+    parser.add_argument("--start", default=None, help="default: earliest event date minus 365 calendar days")
+    parser.add_argument("--end", default=None, help="default: latest event date plus 14 calendar days")
     parser.add_argument("--feed", choices=("iex", "sip"), default="sip")
     parser.add_argument("--output", type=Path, default=ROOT / "data/raw/market_prices.csv")
     parser.add_argument("--manifest", type=Path, default=ROOT / "data/raw/market-data-manifest.json")
@@ -34,14 +67,20 @@ def main() -> None:
     secret = os.environ.get("APCA_API_SECRET_KEY")
     if not key or not secret:
         raise SystemExit("Set APCA_API_KEY_ID and APCA_API_SECRET_KEY in your local shell; do not commit them.")
-    symbols = sorted({symbol.strip().upper() for symbol in args.symbols.split(",") if symbol.strip()})
+    symbols = (
+        sorted({symbol.strip().upper() for symbol in args.symbols.split(",") if symbol.strip()})
+        if args.symbols else mapped_symbols()
+    )
     if not symbols:
         raise SystemExit("provide at least one ticker symbol")
+    default_start, default_end = event_data_range() if args.start is None or args.end is None else (None, None)
+    start = args.start or default_start
+    end = args.end or default_end
     query: dict[str, str] = {
         "symbols": ",".join(symbols),
         "timeframe": "1Day",
-        "start": args.start,
-        "end": args.end,
+        "start": start,
+        "end": end,
         "adjustment": "all",
         "feed": args.feed,
         "limit": "10000",
@@ -83,8 +122,8 @@ def main() -> None:
         "endpoint": "GET https://data.alpaca.markets/v2/stocks/bars",
         "retrieved_at_utc": datetime.now(timezone.utc).isoformat(),
         "symbols": symbols,
-        "start": args.start,
-        "end": args.end,
+        "start": start,
+        "end": end,
         "timeframe": "1Day",
         "feed": args.feed,
         "adjustment": "all",
