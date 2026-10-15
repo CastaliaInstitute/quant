@@ -102,7 +102,7 @@ print(allocation.weights)
 print("Cash weight:", allocation.cash_weight)
 ```
 
-Volatility estimates must be computed from information available at each decision date. `portfolio_backtest` consumes time-aligned asset-return and target-weight panels, executes each close-time target on the next row, charges costs on absolute weight turnover, and treats uninvested cash as zero-return unless a cash series is supplied. `portfolio_cost_sensitivity` evaluates one fixed target-weight path at 1×/2×/4× transaction costs. These functions do not fit forecasts, estimate covariance, or model fills; no empirical portfolio result is claimed.
+Volatility estimates must be computed from information available at each decision date. `portfolio_backtest` consumes time-aligned asset-return and target-weight panels, executes each close-time target on the next row, charges costs on absolute weight turnover, and treats uninvested cash as zero-return unless a cash series is supplied. `portfolio_cost_sensitivity` evaluates one fixed target-weight path at 1×/2×/4× transaction costs, requires a benchmark over the same full dates, and reports exposure, cash, turnover, costs, and returns. These functions do not fit forecasts, estimate covariance, or model fills; no empirical portfolio result is claimed.
 
 ## Research principles
 

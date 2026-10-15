@@ -29,6 +29,7 @@ class PortfolioBacktestResult:
 
     returns: pd.Series
     positions: pd.DataFrame
+    gross_exposure: pd.Series
     cash_weights: pd.Series
     equity: pd.Series
     turnover: pd.Series
@@ -151,6 +152,7 @@ def portfolio_backtest(
         raise ValueError("target weights must sum to at most one; excess capital belongs in cash")
 
     positions = weights.shift(1).fillna(0.0)
+    gross_exposure = positions.sum(axis=1).rename("gross_exposure")
     cash_weights = (1.0 - positions.sum(axis=1)).clip(lower=0.0)
     if cash_returns is None:
         cash_return = pd.Series(0.0, index=returns.index)
@@ -186,6 +188,7 @@ def portfolio_backtest(
     return PortfolioBacktestResult(
         returns=net_returns.rename("portfolio_return"),
         positions=positions,
+        gross_exposure=gross_exposure,
         cash_weights=cash_weights.rename("cash_weight"),
         equity=equity.rename("equity"),
         turnover=turnover.rename("turnover"),
@@ -208,6 +211,12 @@ def portfolio_cost_sensitivity(
         raise ValueError("base_cost_bps must be finite and non-negative")
     if not multipliers or any(not np.isfinite(multiplier) or multiplier <= 0 for multiplier in multipliers):
         raise ValueError("multipliers must be a non-empty sequence of positive values")
+    if benchmark_returns is not None:
+        if not benchmark_returns.index.is_unique or not benchmark_returns.index.equals(asset_returns.index):
+            raise ValueError("benchmark returns must use the same unique dates as portfolio returns")
+        benchmark = pd.to_numeric(benchmark_returns, errors="coerce").astype(float)
+        if not np.isfinite(benchmark.to_numpy(dtype=float)).all() or (benchmark <= -1.0).any():
+            raise ValueError("benchmark returns must be finite and greater than -100%")
     rows = []
     for multiplier in multipliers:
         cost_bps = base_cost_bps * multiplier
@@ -222,6 +231,9 @@ def portfolio_cost_sensitivity(
             "transaction_cost_bps": cost_bps,
             "annual_turnover": float(result.turnover.mean() * periods_per_year),
             "total_cost": float(result.costs.sum()),
+            "average_gross_exposure": float(result.gross_exposure.mean()),
+            "maximum_gross_exposure": float(result.gross_exposure.max()),
+            "average_cash_weight": float(result.cash_weights.mean()),
             **performance_metrics(
                 result.returns,
                 periods_per_year=periods_per_year,
