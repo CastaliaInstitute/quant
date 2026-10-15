@@ -9,6 +9,7 @@ chapters:
   - file: data-sources
   - file: research/metrics
   - file: research/evidence-review
+  - file: research/cto-audit
   - file: research/ai-impact
   - file: research/rl-study
   - file: research/rl-stress

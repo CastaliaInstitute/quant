@@ -31,6 +31,145 @@
     "2023": 2230,
     "2024": 1161
   },
+  "label_by_phase_in_selected_cohort": {
+    "EARLY_PHASE1": {
+      "label_0_count": 257,
+      "label_1_count": 48,
+      "count": 305,
+      "label_1_fraction_in_selected_cohort": 0.15737704918032788
+    },
+    "PHASE1": {
+      "label_0_count": 1540,
+      "label_1_count": 386,
+      "count": 1926,
+      "label_1_fraction_in_selected_cohort": 0.20041536863966772
+    },
+    "PHASE1/PHASE2": {
+      "label_0_count": 826,
+      "label_1_count": 184,
+      "count": 1010,
+      "label_1_fraction_in_selected_cohort": 0.18217821782178217
+    },
+    "PHASE2": {
+      "label_0_count": 2520,
+      "label_1_count": 1128,
+      "count": 3648,
+      "label_1_fraction_in_selected_cohort": 0.3092105263157895
+    },
+    "PHASE2/PHASE3": {
+      "label_0_count": 281,
+      "label_1_count": 123,
+      "count": 404,
+      "label_1_fraction_in_selected_cohort": 0.30445544554455445
+    },
+    "PHASE3": {
+      "label_0_count": 1141,
+      "label_1_count": 1278,
+      "count": 2419,
+      "label_1_fraction_in_selected_cohort": 0.5283174865646961
+    },
+    "PHASE4": {
+      "label_0_count": 902,
+      "label_1_count": 398,
+      "count": 1300,
+      "label_1_fraction_in_selected_cohort": 0.30615384615384617
+    }
+  },
+  "label_by_current_status_in_selected_cohort": {
+    "COMPLETED": {
+      "label_0_count": 325,
+      "label_1_count": 3545,
+      "count": 3870,
+      "label_1_fraction_in_selected_cohort": 0.9160206718346253
+    },
+    "SUSPENDED": {
+      "label_0_count": 212,
+      "label_1_count": 0,
+      "count": 212,
+      "label_1_fraction_in_selected_cohort": 0.0
+    },
+    "TERMINATED": {
+      "label_0_count": 4782,
+      "label_1_count": 0,
+      "count": 4782,
+      "label_1_fraction_in_selected_cohort": 0.0
+    },
+    "WITHDRAWN": {
+      "label_0_count": 2148,
+      "label_1_count": 0,
+      "count": 2148,
+      "label_1_fraction_in_selected_cohort": 0.0
+    }
+  },
+  "label_by_completion_year_in_selected_cohort": {
+    "2020": {
+      "label_0_count": 1527,
+      "label_1_count": 929,
+      "count": 2456,
+      "label_1_fraction_in_selected_cohort": 0.378257328990228
+    },
+    "2021": {
+      "label_0_count": 1592,
+      "label_1_count": 900,
+      "count": 2492,
+      "label_1_fraction_in_selected_cohort": 0.3611556982343499
+    },
+    "2022": {
+      "label_0_count": 1755,
+      "label_1_count": 918,
+      "count": 2673,
+      "label_1_fraction_in_selected_cohort": 0.3434343434343434
+    },
+    "2023": {
+      "label_0_count": 1601,
+      "label_1_count": 629,
+      "count": 2230,
+      "label_1_fraction_in_selected_cohort": 0.2820627802690583
+    },
+    "2024": {
+      "label_0_count": 992,
+      "label_1_count": 169,
+      "count": 1161,
+      "label_1_fraction_in_selected_cohort": 0.14556416881998277
+    }
+  },
+  "sponsor_coverage": {
+    "unique_sponsors": 2695,
+    "top_10_sponsor_rows": 1430,
+    "top_10_sponsor_share": 0.12985833636033417
+  },
+  "forbidden_current_status_leakage_probe": {
+    "rule": "predict success (1) when current overall_status is COMPLETED; otherwise predict failure (0)",
+    "accuracy_in_selected_cohort": 0.9704867417362877,
+    "status_label_table": {
+      "COMPLETED": {
+        "label_0_count": 325,
+        "label_1_count": 3545,
+        "count": 3870,
+        "label_1_fraction_in_selected_cohort": 0.9160206718346253
+      },
+      "SUSPENDED": {
+        "label_0_count": 212,
+        "label_1_count": 0,
+        "count": 212,
+        "label_1_fraction_in_selected_cohort": 0.0
+      },
+      "TERMINATED": {
+        "label_0_count": 4782,
+        "label_1_count": 0,
+        "count": 4782,
+        "label_1_fraction_in_selected_cohort": 0.0
+      },
+      "WITHDRAWN": {
+        "label_0_count": 2148,
+        "label_1_count": 0,
+        "count": 2148,
+        "label_1_fraction_in_selected_cohort": 0.0
+      }
+    },
+    "allowed_as_predictive_baseline": false,
+    "interpretation": "Leakage diagnostic only: current status is a post-outcome field and the cohort's label process uses status-based rules. The apparent accuracy is not forecast skill."
+  },
   "study_first_posted_date_min": "1999-11-04",
   "study_first_posted_date_max": "2024-10-15",
   "modeling_disposition": "external clinical-outcome benchmark only; no return modeling and no RL transition probabilities fitted",
@@ -39,11 +178,35 @@
   "market_data_caveat": "The cohort does not supply verified first-public-disclosure timestamps or daily security return histories; it cannot calibrate market reaction or trading reward.",
   "excluded_fields_for_pre_outcome_prediction": [
     "overall_status",
+    "last_known_status",
     "completion_date",
+    "completion_year",
     "primary_completion_date",
+    "results_first_submitted_date",
     "results_first_posted_date",
+    "disposition_first_submitted_date",
+    "disposition_first_posted_date",
     "why_stopped",
     "last_update_posted_date",
+    "created_at",
+    "updated_at",
     "labels"
-  ]
+  ],
+  "point_in_time_feature_disposition": {
+    "verified_as_of_first_public_posting": [],
+    "candidate_fields_requiring_archived_record_version_review": [
+      "phase",
+      "enrollment",
+      "enrollment_type",
+      "number_of_arms",
+      "source",
+      "source_class",
+      "has_dmc",
+      "is_fda_regulated_drug",
+      "baseline_population",
+      "brief_title",
+      "official_title"
+    ],
+    "interpretation": "This pinned CSV is a current metadata extract, not an archived first-posted study version. No trial covariate is admitted to a pre-outcome model until its historical version and availability date are verified."
+  }
 }
