@@ -36,7 +36,7 @@ In the `CastaliaInstitute/quant` repository, open **Settings → Secrets and var
 
 After saving the secret, open **Actions → Build and deploy QuantLab → Run workflow**, select `main`, and start the run. A push to `main` triggers the same workflow. The build job runs the automated project checks and produces the book before any deployment steps begin.
 
-The domain step replaces a single existing CNAME for `quant.castalia.institute` with a proxied CNAME to `quantlab.pages.dev`. It stops before changing DNS if it finds multiple records or a non-CNAME record at that hostname. Once the workflow succeeds, verify all three routes:
+The domain step replaces a single existing CNAME for `quant.castalia.institute` with a proxied CNAME to `quantlab.pages.dev`. It stops before changing DNS if it finds multiple records or a non-CNAME record at that hostname. The workflow then retries HTTPS checks for the public book and Worker health endpoint for up to six minutes, allowing DNS and TLS provisioning time. It fails if either endpoint does not serve the expected response. After the workflow succeeds, verify all three routes:
 
 ```bash
 curl -fsS https://quant.castalia.institute/
