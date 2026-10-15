@@ -3,6 +3,7 @@ root: intro
 chapters:
   - file: charter
   - file: portfolio
+  - file: deployment
   - file: program
   - file: forking
   - file: simulation

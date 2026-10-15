@@ -102,7 +102,7 @@ The published research book is generated at `book/_build/html/`. To preview it, 
 
 Cells run through a Cloudflare Python Worker configured in `worker/wrangler.toml`. The public runtime accepts a small Python subset with capped source length, cell count, loop ranges, arithmetic growth, and output. It rejects imports, attribute access, arbitrary functions, filesystem and network access, and brokerage operations. Each request reconstructs the visible cells in memory and discards that state after returning outputs. It stores no cell code or user session.
 
-The GitHub Actions deployment requires repository secrets `CLOUDFLARE_API_TOKEN` (Workers Scripts:Edit, Account Pages:Edit, and Zone DNS:Read/Edit plus Zone:Read for `castalia.institute`) and `CLOUDFLARE_ACCOUNT_ID`. The workflow creates the `quantlab` Pages project if needed, deploys the Worker and book, associates `quant.castalia.institute` with Pages, and points its proxied CNAME at `quantlab.pages.dev`. The Worker custom domain is declared in `worker/wrangler.toml`. DNS changes run only after the Pages deployment succeeds.
+The GitHub Actions deployment requires `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. Create a custom token with the account, zone, and user permissions listed in the [Cloudflare deployment runbook](book/deployment.md), then store it as a repository Actions secret; do not put it in the repository. The workflow creates the `quantlab` Pages project if needed, deploys the Worker and book, associates `quant.castalia.institute` with Pages, and points its proxied CNAME at `quantlab.pages.dev`. The Worker custom domain is declared in `worker/wrangler.toml`. DNS changes run only after the Pages deployment succeeds.
 
 ## Build around a fork
 
