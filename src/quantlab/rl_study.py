@@ -336,6 +336,14 @@ def run_rl_study(
             "interpretation": "Checks simulator behavior and seed variation only; it does not test historical or new-regime generalization.",
         },
         "metric_definitions": {
+            "learning_reward": (
+                "Q-learning maximizes discounted session log returns: sum(gamma**k * log(1 + net_return_k)). "
+                "Because gamma is below one, this is not the same objective as undiscounted terminal log wealth or net CAGR."
+            ),
+            "discount_factor": float(discount),
+            "reward_discount_half_life_sessions": (
+                float(np.log(0.5) / np.log(discount)) if 0.0 < discount < 1.0 else None
+            ),
             "catalyst_unconditional_expected_shortfall_95": "Mean underlying issuer return in the worst ceil(5% of event observations); independent of policy exposure.",
             "catalyst_policy_net_expected_shortfall_95": "Mean strategy net return on event sessions in its worst ceil(5%); includes zero-return cash exposure and transaction costs.",
             "annual_turnover": "Sum of absolute daily exposure changes multiplied by 252 / episode length.",
