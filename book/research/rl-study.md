@@ -42,6 +42,12 @@ Because the single-policy intervals above condition on one Q table, a second dia
 
 The greedy Q policy chose long in a median of only 1 of 36 states across training runs (range 0–3); median evaluation exposure was 0.4%, and catalyst exposure was 0%. Its small drawdowns therefore reflect an almost-cash policy, not a demonstrated return advantage. The bootstrap has only 10 training-seed clusters and is an exploratory simulator diagnostic, not a market confidence interval.
 
+### Why does the agent choose cash?
+
+The <a href="../_static/rl-reward-incentive-audit.json">reward-incentive audit</a> computes expected log rewards directly from the configured return distributions using Gauss-Hermite quadrature. An ordinary long session has assumed arithmetic drift of 2.38 bps and volatility of 2.52%; its expected log reward is −0.0000813, while cash earns zero. At that volatility, the arithmetic mean needed for zero expected log reward is 3.19 bps per session. The configured event mixtures also have negative expected log reward in both Phase II (−6.65%) and Phase III (−8.93%) event sessions. A 252-session buy-and-hold path with three scheduled events therefore has an expected geometric wealth change of −22.51% after its entry cost, versus 0% for cash, under these synthetic assumptions.
+
+All 36 states and 69–72 of 72 state-action pairs were visited across the ten training runs, though these coverage counts do not show balanced visitation. The cash-heavy policy is consistent with the configured negative geometric-growth incentives, not proof of a market signal. This audit makes the assumption effect inspectable; only calibration from point-in-time historical returns can determine whether those incentives resemble biotech markets.
+
 The default run visited all 36 states across 75,600 training decisions. Its greedy action is cash in 34 states and long in 2; the Q learner's median out-of-sample exposure on catalyst sessions is 0%. The JSON's `learned_policy_by_state` decodes each greedy action into momentum, volatility, catalyst proximity, and phase, and gives separate cash/long training visit counts. A Q preference with few visits is weakly informed even inside this simulator; a well-visited preference is still only a result under the synthetic generator.
 
 ## Reproduce
@@ -52,6 +58,7 @@ From the repository root:
 python -m pip install -e '.[rl]'
 python scripts/run_rl_study.py
 python scripts/run_rl_training_robustness.py
+python scripts/audit_rl_reward_incentives.py
 # To tune a fork, copy and edit config/biopharma_rl_synthetic.json:
 python scripts/run_rl_study.py --assumptions path/to/your-assumptions.json
 # Learner hyperparameters are also explicit:

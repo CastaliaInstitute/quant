@@ -60,6 +60,12 @@ This log preserves both superseded policy experiments and the current biotech ca
 - Result: Q-minus-trend benchmark-relative wealth has a +2.8 percentage-point mean difference with 95% two-way bootstrap interval −6.9 to +12.0 points; the Q-minus-buy-and-hold interval is −17.3 to +13.5 points. Both include zero. Across the 10 learned tables, greedy long actions occur in a median of 1/36 states (range 0–3); median evaluation exposure is 0.4%, with zero catalyst-session exposure.
 - Interpretation: the learner mostly collapses to cash in this generator. Its modest drawdown is not evidence of alpha, and its interval includes both training and evaluation-seed variation but is exploratory with only 10 training policies. See <a href="../_static/rl-training-robustness.json">the full report</a>.
 
+## RL-011 · Reward-incentive attribution
+
+- Method: use 80-node Gauss-Hermite quadrature on the configured ordinary-session normal return and each phase/outcome/reaction event mixture; retain the configured log-net-return reward and 10 bps entry cost. Cross-check training coverage using the RL-010 report.
+- Result: ordinary sessions have 2.375 bps arithmetic drift and 2.524% volatility; expected long log reward is −0.0000813 versus zero for cash. Zero log reward requires 3.188 bps arithmetic drift at that volatility. Expected log reward is −6.65% per Phase II event and −8.93% per Phase III event. The episode-level buy-and-hold geometric wealth change is −22.51% after entry cost; all-cash is 0%.
+- Interpretation: observed cash preference is consistent with the synthetic reward economics. All 36 states and 69–72 of 72 state/action pairs were visited in RL-010, though this does not establish balanced coverage. The audit explains the configured toy environment; it does not calibrate the assumptions to biotech securities. See <a href="../_static/rl-reward-incentive-audit.json">the reward audit</a>.
+
 ## Next study: historical event-risk panel
 
 The current historical data artifact is a nine-disclosure source-lineage fixture spanning vaccines, Alzheimer's, asthma, and oncology. It remains tiny and clustered, with several date-only catalyst times, so it cannot support fitting or a stable return estimate. The next research record should be opened only after adding a wider trial/disclosure cohort, point-in-time event features, a licensed OHLCV file, inactive/delisted issuers, and a preregistered chronological evaluation plan. Preserve every inclusion rule and data-source revision.
