@@ -1,0 +1,81 @@
+{
+  "evidence_status": "data_readiness_audit_only_no_policy_fit_or_return_estimate",
+  "ready_for_historical_rl_replay": false,
+  "input_files": {
+    "events": {
+      "available": true,
+      "file": "public_events.csv"
+    },
+    "prices": {
+      "available": false,
+      "file": "market_prices.csv"
+    },
+    "event_panel": {
+      "available": false,
+      "file": "event_panel.csv"
+    }
+  },
+  "event_coverage": {
+    "records": 9,
+    "source_ledger_issuers": 8,
+    "matched_panel_issuers": 0,
+    "exact_timestamp_records": 5,
+    "source_ledger_chronological_split": {
+      "date_clusters": 9,
+      "train": {
+        "events": 5,
+        "dates": 5
+      },
+      "validation": {
+        "events": 2,
+        "dates": 2
+      },
+      "final_test": {
+        "events": 2,
+        "dates": 2
+      }
+    },
+    "matched_panel_chronological_60_20_20_split": {
+      "date_clusters": 0,
+      "train": {
+        "events": 0,
+        "dates": 0
+      },
+      "validation": {
+        "events": 0,
+        "dates": 0
+      },
+      "final_test": {
+        "events": 0,
+        "dates": 0
+      }
+    }
+  },
+  "price_input": {
+    "available": false,
+    "adjusted_close_column": false,
+    "valid_rows": 0,
+    "symbols": 0,
+    "status": "missing"
+  },
+  "event_panel": {
+    "available": false,
+    "rows": 0,
+    "status": "missing"
+  },
+  "minimum_sample_gates": {
+    "train_events": 30,
+    "validation_events": 8,
+    "final_test_events": 8,
+    "issuers": 10
+  },
+  "gates": {
+    "adjusted_prices_available_and_valid": false,
+    "event_panel_built_with_adjusted_prices": false,
+    "minimum_train_events": false,
+    "minimum_validation_events": false,
+    "minimum_final_test_events": false,
+    "minimum_issuer_coverage": false
+  },
+  "interpretation": "A passing gate permits a historical replay diagnostic, not a claim of trading edge. The final chronological block must remain untouched until the protocol and policy are frozen. Realized disclosure dates must not be supplied as observable event schedules unless a dated pre-event source proves they were known."
+}
