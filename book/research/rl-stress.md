@@ -10,7 +10,7 @@ This is a robustness diagnostic for simulator research. The stress parameters ar
 
 ## Scorecard
 
-The JSON artifact reports median and 10th/90th percentile results across episode seeds for net CAGR, benchmark-relative compounded return, maximum drawdown, expected shortfall, turnover, transaction cost, general exposure, catalyst-session exposure, program advancement, and market response conditional on outcome. Scenario definitions and resolved parameter values are stored with SHA-256 hashes.
+The JSON artifact reports median and 10th/90th percentile results across episode seeds for net CAGR, benchmark-relative compounded return, maximum drawdown, expected shortfall, turnover, transaction cost, general exposure, catalyst-session exposure, program advancement, and market response conditional on outcome. Cost sensitivity includes the base 1× assumption plus 2× and 4× cost scenarios. Scenario definitions and resolved parameter values are stored with SHA-256 hashes.
 
 <a href="../_static/rl-stress.json">Open the reproducible stress report</a>.
 
@@ -25,6 +25,7 @@ For the frozen Q learner, the default 60-seed run produced these median outcomes
 | Positive reaction after advancement −15 percentage points | −5.61% | −10.49% | −13.44% | −18.81% |
 | Event residual noise 2× | −5.61% | −10.49% | −12.89% | −9.21% |
 | Transaction costs 2× | −7.44% | −12.43% | −14.40% | −8.79% |
+| Transaction costs 4× | −11.85% | −16.43% | −16.61% | −8.97% |
 
 Relative wealth is versus the matched broad-market path. Across these scenarios the Q learner's median catalyst-session exposure remains 0%; therefore the frozen policy barely responds to changes in advancement or market-reaction assumptions. The materially changing buy-and-hold results confirm that the stress paths do alter issuer returns. Zero event exposure is a simulator behavior diagnostic, not evidence that the policy found a real risk-adjusted edge. The full report includes cash and all rule-based comparators, percentiles, and tail-risk measures.
 

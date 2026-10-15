@@ -48,6 +48,12 @@ This log preserves both superseded policy experiments and the current biotech ca
 - Result: mean Q-minus-baseline relative-wealth differences are +3.6 percentage points vs buy-and-hold (95% interval −11.6 to +16.8), +7.5 points vs trend (−3.5 to +17.6), and −3.3 points vs pre-catalyst exit (−12.2 to +5.2). All intervals include zero.
 - Interpretation: this quantifies finite-seed variability conditional on one fixed synthetic generator and one trained policy. It excludes training-policy uncertainty and cannot establish a historical-market advantage. The paired values and deterministic bootstrap seeds are in <a href="../_static/rl-simulation.json">the versioned report</a>.
 
+## RL-009 · Four-times transaction-cost stress
+
+- Method: extended the RL-006 frozen-policy stress ladder from 1×/2× to 1×/2×/4× transaction costs, retrained once on base assumptions, and evaluated the same 60 seed paths without retuning.
+- Result: at 4× costs, median Q-policy CAGR is −11.85% and benchmark-relative compounded wealth is −16.43%, versus −5.61% and −10.49% at base costs; median annual turnover is 18× and event-session exposure remains 0%. Buy-and-hold median CAGR is −8.97% at 4× costs.
+- Interpretation: cost drag materially worsens this policy's synthetic result, and its 4× relative-wealth median is numerically close to buy-and-hold's (−16.39%). No paired uncertainty interval is estimated for this cross-scenario stress. This is a cost-mechanics diagnostic in an uncalibrated generator, not historical execution evidence. Results and scenario hashes are in <a href="../_static/rl-stress.json">rl-stress.json</a>.
+
 ## Next study: historical event-risk panel
 
 The current historical data artifact is a nine-disclosure source-lineage fixture spanning vaccines, Alzheimer's, asthma, and oncology. It remains tiny and clustered, with several date-only catalyst times, so it cannot support fitting or a stable return estimate. The next research record should be opened only after adding a wider trial/disclosure cohort, point-in-time event features, a licensed OHLCV file, inactive/delisted issuers, and a preregistered chronological evaluation plan. Preserve every inclusion rule and data-source revision.

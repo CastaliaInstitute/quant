@@ -285,6 +285,43 @@
         "transaction_cost_bps_per_unit_turnover": 20.0
       },
       "sha256": "3b8116cb1be9cf7a131cec4bdd9eddd3463589e3723f5f23e2ede1036238387a"
+    },
+    "transaction_costs_4x": {
+      "values": {
+        "catalyst_interval_sessions": 63,
+        "broad_market_daily_mean": 0.00025,
+        "broad_market_daily_volatility": 0.01,
+        "issuer_market_beta": 0.35,
+        "issuer_daily_mean": 0.00015,
+        "issuer_idiosyncratic_daily_volatility": 0.025,
+        "event_residual_volatility": 0.025,
+        "phase_sampling_probabilities": [
+          0.5,
+          0.5
+        ],
+        "phase_success_probabilities": [
+          0.289,
+          0.578
+        ],
+        "phase_success_market_positive_probabilities": [
+          0.72,
+          0.65
+        ],
+        "phase_failure_market_positive_probabilities": [
+          0.22,
+          0.28
+        ],
+        "phase_positive_market_gaps": [
+          0.13,
+          0.24
+        ],
+        "phase_negative_market_gaps": [
+          -0.16,
+          -0.32
+        ],
+        "transaction_cost_bps_per_unit_turnover": 40.0
+      },
+      "sha256": "10dded321f9d8e6b622367eea7d69f0109dd598aee95b797686737a0ffb19b49"
     }
   },
   "summary_metrics": [
@@ -3308,6 +3345,443 @@
           "median": 0.036000000000000004,
           "p10": 0.024,
           "p90": 0.05220000000000001
+        },
+        "exposure_fraction": {
+          "median": 0.10515873015873015,
+          "p10": 0.05515873015873016,
+          "p90": 0.16746031746031748
+        },
+        "catalyst_exposure_fraction": {
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        },
+        "catalyst_underlying_return_worst": {
+          "median": -0.20149680836407807,
+          "p10": -0.34099439227487904,
+          "p90": -0.1413959674872532
+        },
+        "catalyst_trial_success_fraction": {
+          "median": 0.3333333333333333,
+          "p10": 0.0,
+          "p90": 1.0
+        },
+        "phase_ii_trial_success_fraction": {
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 1.0
+        },
+        "phase_iii_trial_success_fraction": {
+          "median": 0.6666666666666666,
+          "p10": 0.0,
+          "p90": 1.0
+        },
+        "catalyst_market_return_given_success_mean": {
+          "median": 0.1729877048354465,
+          "p10": -0.29117562956922965,
+          "p90": 0.25214386561122976
+        },
+        "catalyst_market_return_given_failure_mean": {
+          "median": -0.1387319325485809,
+          "p10": -0.27981566319368595,
+          "p90": 0.11159453247550483
+        },
+        "catalyst_positive_market_reaction_fraction_given_success": {
+          "median": 1.0,
+          "p10": 0.0,
+          "p90": 1.0
+        },
+        "catalyst_positive_market_reaction_fraction_given_failure": {
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.9333333333333348
+        },
+        "catalyst_policy_net_expected_shortfall_95": {
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        }
+      }
+    },
+    "transaction_costs_4x": {
+      "cash": {
+        "annualized_return": {
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        },
+        "benchmark_relative_compounded_return": {
+          "median": -0.05341884680836123,
+          "p10": -0.21434902333896366,
+          "p90": 0.1309404067228422
+        },
+        "max_drawdown": {
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        },
+        "expected_shortfall_95": {
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        },
+        "annual_turnover": {
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        },
+        "total_cost": {
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        },
+        "exposure_fraction": {
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        },
+        "catalyst_exposure_fraction": {
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        },
+        "catalyst_underlying_return_worst": {
+          "median": -0.20149680836407807,
+          "p10": -0.34099439227487904,
+          "p90": -0.1413959674872532
+        },
+        "catalyst_trial_success_fraction": {
+          "median": 0.3333333333333333,
+          "p10": 0.0,
+          "p90": 1.0
+        },
+        "phase_ii_trial_success_fraction": {
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 1.0
+        },
+        "phase_iii_trial_success_fraction": {
+          "median": 0.6666666666666666,
+          "p10": 0.0,
+          "p90": 1.0
+        },
+        "catalyst_market_return_given_success_mean": {
+          "median": 0.1729877048354465,
+          "p10": -0.29117562956922965,
+          "p90": 0.25214386561122976
+        },
+        "catalyst_market_return_given_failure_mean": {
+          "median": -0.1387319325485809,
+          "p10": -0.27981566319368595,
+          "p90": 0.11159453247550483
+        },
+        "catalyst_positive_market_reaction_fraction_given_success": {
+          "median": 1.0,
+          "p10": 0.0,
+          "p90": 1.0
+        },
+        "catalyst_positive_market_reaction_fraction_given_failure": {
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.9333333333333348
+        },
+        "catalyst_policy_net_expected_shortfall_95": {
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        }
+      },
+      "buy_and_hold": {
+        "annualized_return": {
+          "median": -0.08970218504065713,
+          "p10": -0.5265724440464055,
+          "p90": 0.5735841975313034
+        },
+        "benchmark_relative_compounded_return": {
+          "median": -0.16386653668282786,
+          "p10": -0.5558422720294912,
+          "p90": 0.46813880195312707
+        },
+        "max_drawdown": {
+          "median": -0.45251528401325114,
+          "p10": -0.6369918815533948,
+          "p90": -0.2839370339589965
+        },
+        "expected_shortfall_95": {
+          "median": -0.07094013919096843,
+          "p10": -0.09117370287790627,
+          "p90": -0.05606692318881251
+        },
+        "annual_turnover": {
+          "median": 1.0,
+          "p10": 1.0,
+          "p90": 1.0
+        },
+        "total_cost": {
+          "median": 0.004,
+          "p10": 0.004,
+          "p90": 0.004
+        },
+        "exposure_fraction": {
+          "median": 1.0,
+          "p10": 1.0,
+          "p90": 1.0
+        },
+        "catalyst_exposure_fraction": {
+          "median": 1.0,
+          "p10": 1.0,
+          "p90": 1.0
+        },
+        "catalyst_underlying_return_worst": {
+          "median": -0.20149680836407807,
+          "p10": -0.34099439227487904,
+          "p90": -0.1413959674872532
+        },
+        "catalyst_trial_success_fraction": {
+          "median": 0.3333333333333333,
+          "p10": 0.0,
+          "p90": 1.0
+        },
+        "phase_ii_trial_success_fraction": {
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 1.0
+        },
+        "phase_iii_trial_success_fraction": {
+          "median": 0.6666666666666666,
+          "p10": 0.0,
+          "p90": 1.0
+        },
+        "catalyst_market_return_given_success_mean": {
+          "median": 0.1729877048354465,
+          "p10": -0.29117562956922965,
+          "p90": 0.25214386561122976
+        },
+        "catalyst_market_return_given_failure_mean": {
+          "median": -0.1387319325485809,
+          "p10": -0.27981566319368595,
+          "p90": 0.11159453247550483
+        },
+        "catalyst_positive_market_reaction_fraction_given_success": {
+          "median": 1.0,
+          "p10": 0.0,
+          "p90": 1.0
+        },
+        "catalyst_positive_market_reaction_fraction_given_failure": {
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.9333333333333348
+        },
+        "catalyst_policy_net_expected_shortfall_95": {
+          "median": -0.20149680836407807,
+          "p10": -0.34099439227487904,
+          "p90": -0.1413959674872532
+        }
+      },
+      "trend_rule": {
+        "annualized_return": {
+          "median": -0.27247511875257024,
+          "p10": -0.5383155409870117,
+          "p90": 0.24557841270941017
+        },
+        "benchmark_relative_compounded_return": {
+          "median": -0.28797902854665375,
+          "p10": -0.5540473435235268,
+          "p90": 0.1303010066647283
+        },
+        "max_drawdown": {
+          "median": -0.45504637435902057,
+          "p10": -0.6037096215717425,
+          "p90": -0.24628592534756666
+        },
+        "expected_shortfall_95": {
+          "median": -0.05250301442741988,
+          "p10": -0.0766058258334349,
+          "p90": -0.04054505136058589
+        },
+        "annual_turnover": {
+          "median": 52.0,
+          "p10": 41.8,
+          "p90": 60.1
+        },
+        "total_cost": {
+          "median": 0.20800000000000002,
+          "p10": 0.16720000000000002,
+          "p90": 0.2404
+        },
+        "exposure_fraction": {
+          "median": 0.498015873015873,
+          "p10": 0.42063492063492064,
+          "p90": 0.5873015873015873
+        },
+        "catalyst_exposure_fraction": {
+          "median": 0.5,
+          "p10": 0.3333333333333333,
+          "p90": 1.0
+        },
+        "catalyst_underlying_return_worst": {
+          "median": -0.20149680836407807,
+          "p10": -0.34099439227487904,
+          "p90": -0.1413959674872532
+        },
+        "catalyst_trial_success_fraction": {
+          "median": 0.3333333333333333,
+          "p10": 0.0,
+          "p90": 1.0
+        },
+        "phase_ii_trial_success_fraction": {
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 1.0
+        },
+        "phase_iii_trial_success_fraction": {
+          "median": 0.6666666666666666,
+          "p10": 0.0,
+          "p90": 1.0
+        },
+        "catalyst_market_return_given_success_mean": {
+          "median": 0.1729877048354465,
+          "p10": -0.29117562956922965,
+          "p90": 0.25214386561122976
+        },
+        "catalyst_market_return_given_failure_mean": {
+          "median": -0.1387319325485809,
+          "p10": -0.27981566319368595,
+          "p90": 0.11159453247550483
+        },
+        "catalyst_positive_market_reaction_fraction_given_success": {
+          "median": 1.0,
+          "p10": 0.0,
+          "p90": 1.0
+        },
+        "catalyst_positive_market_reaction_fraction_given_failure": {
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.9333333333333348
+        },
+        "catalyst_policy_net_expected_shortfall_95": {
+          "median": -0.14748889959944855,
+          "p10": -0.33816811490656584,
+          "p90": 0.0
+        }
+      },
+      "pre_catalyst_exit": {
+        "annualized_return": {
+          "median": 0.030399255842902817,
+          "p10": -0.43878408597217744,
+          "p90": 0.53988731000914
+        },
+        "benchmark_relative_compounded_return": {
+          "median": -0.05183106503599638,
+          "p10": -0.47100666892988113,
+          "p90": 0.5005188370535235
+        },
+        "max_drawdown": {
+          "median": -0.3565491366592178,
+          "p10": -0.5303975693688814,
+          "p90": -0.21086551286039915
+        },
+        "expected_shortfall_95": {
+          "median": -0.04974633216239861,
+          "p10": -0.0551648972778238,
+          "p90": -0.04592974527172155
+        },
+        "annual_turnover": {
+          "median": 7.0,
+          "p10": 7.0,
+          "p90": 7.0
+        },
+        "total_cost": {
+          "median": 0.028,
+          "p10": 0.028,
+          "p90": 0.028
+        },
+        "exposure_fraction": {
+          "median": 0.9285714285714286,
+          "p10": 0.9285714285714286,
+          "p90": 0.9285714285714286
+        },
+        "catalyst_exposure_fraction": {
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        },
+        "catalyst_underlying_return_worst": {
+          "median": -0.20149680836407807,
+          "p10": -0.34099439227487904,
+          "p90": -0.1413959674872532
+        },
+        "catalyst_trial_success_fraction": {
+          "median": 0.3333333333333333,
+          "p10": 0.0,
+          "p90": 1.0
+        },
+        "phase_ii_trial_success_fraction": {
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 1.0
+        },
+        "phase_iii_trial_success_fraction": {
+          "median": 0.6666666666666666,
+          "p10": 0.0,
+          "p90": 1.0
+        },
+        "catalyst_market_return_given_success_mean": {
+          "median": 0.1729877048354465,
+          "p10": -0.29117562956922965,
+          "p90": 0.25214386561122976
+        },
+        "catalyst_market_return_given_failure_mean": {
+          "median": -0.1387319325485809,
+          "p10": -0.27981566319368595,
+          "p90": 0.11159453247550483
+        },
+        "catalyst_positive_market_reaction_fraction_given_success": {
+          "median": 1.0,
+          "p10": 0.0,
+          "p90": 1.0
+        },
+        "catalyst_positive_market_reaction_fraction_given_failure": {
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.9333333333333348
+        },
+        "catalyst_policy_net_expected_shortfall_95": {
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        }
+      },
+      "q_learner": {
+        "annualized_return": {
+          "median": -0.11850633719688164,
+          "p10": -0.21338201918437924,
+          "p90": 0.041382372514495495
+        },
+        "benchmark_relative_compounded_return": {
+          "median": -0.16427226614918555,
+          "p10": -0.3397912884324452,
+          "p90": 0.0738460173669397
+        },
+        "max_drawdown": {
+          "median": -0.1660572798744317,
+          "p10": -0.26373785606206707,
+          "p90": -0.07729038976235197
+        },
+        "expected_shortfall_95": {
+          "median": -0.023469055422578405,
+          "p10": -0.032428796019787376,
+          "p90": -0.01327084414972677
+        },
+        "annual_turnover": {
+          "median": 18.0,
+          "p10": 12.0,
+          "p90": 26.1
+        },
+        "total_cost": {
+          "median": 0.07200000000000001,
+          "p10": 0.048,
+          "p90": 0.10440000000000002
         },
         "exposure_fraction": {
           "median": 0.10515873015873015,

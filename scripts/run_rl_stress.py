@@ -86,6 +86,9 @@ def main() -> None:
         "transaction_costs_2x": replace(
             base, transaction_cost_bps_per_unit_turnover=base.transaction_cost_bps_per_unit_turnover * 2.0
         ),
+        "transaction_costs_4x": replace(
+            base, transaction_cost_bps_per_unit_turnover=base.transaction_cost_bps_per_unit_turnover * 4.0
+        ),
     }
 
     q_values = train_q_table(
