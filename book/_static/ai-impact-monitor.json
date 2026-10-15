@@ -1,0 +1,35 @@
+{
+  "generated_at_utc": "2026-10-15T02:39:33.711570+00:00",
+  "status": "coverage_only",
+  "interpretation": "This audit measures curated evidence coverage. It does not estimate the causal effect of AI; observational comparisons remain vulnerable to selection, confounding, and publication bias.",
+  "exposure_ledger": {
+    "path": "data/biopharma/ai_evidence.csv",
+    "sha256": "8f0622800ead2e3a9fe2684ea856a6c14d8e4247b8c6025d76abd01f824c3dc4",
+    "records": 1,
+    "reviewed_records": 1,
+    "dated_records": 1,
+    "exact_timestamp_records": 0,
+    "application_classes": {
+      "target discovery; molecule design/optimization": 1
+    },
+    "review_status": {
+      "reviewed": 1
+    }
+  },
+  "outcome_ledger": {
+    "path": "data/biopharma/ai_outcomes.csv",
+    "sha256": "4bc451caeb5b42aae0931751acd6fc5e41b856efeb4e93526989ea9cb23564d8",
+    "records": 1,
+    "domains": {
+      "clinical_trial_measure": 1
+    },
+    "reviewed_with_comparator_and_design": 1
+  },
+  "causal_effect_estimate_available": false,
+  "gates": {
+    "molecule_or_trial_level_exposure": true,
+    "reviewed_comparator_outcomes": true,
+    "matched_cohort_and_sensitivity_analysis": false,
+    "sufficient_historical_market_data": false
+  }
+}

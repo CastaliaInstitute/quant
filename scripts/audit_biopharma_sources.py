@@ -57,6 +57,9 @@ def main() -> None:
             "current_linked_papers_dated_after_event_hindsight_annotation": sum(stamp.date() > event_date.date() for stamp in linked_dates),
             "source_url": event["source_url"],
             "event_type": event["event_type"],
+            "related_nct_ids": event.get("related_nct_ids", ""),
+            "related_tickers": event.get("related_tickers", ""),
+            "curation_note": event.get("curation_note", ""),
         })
     output = {
         "evidence_status": "source_lineage_audit_only_no_price_join_or_model_fit",

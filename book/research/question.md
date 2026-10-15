@@ -22,7 +22,7 @@ The target is **event-window risk**, not whether a treatment works and not a rec
 
 ## First pilot: event provenance, not model training
 
-The seed cohort records prominent COVID-19 vaccine Phase III readouts from 2020–2021. It is intentionally tiny and shares a pandemic-wide market factor. Its purpose is to prove that the NCT-to-issuer mapping, public announcement evidence, price calendar matching, and feature cutoff are inspectable. It is far too small for ML training or an investment claim.
+The original seed cohort recorded prominent COVID-19 vaccine Phase III readouts from 2020–2021. It has been supplemented with public Phase III disclosures covering Alzheimer’s disease, asthma, and oncology, including both positive and negative results. The expanded nine-disclosure set has some date-only timestamps, paired-trial and joint-company announcements, and still shares substantial event dependence. Its purpose is to make trial-to-issuer mapping, source evidence, price-calendar matching, and feature cutoffs inspectable. It is far too small for ML training or an investment claim.
 
 ```{code-cell} ipython3
 event_dates = ["2020-11-09", "2020-11-16", "2020-11-23", "2021-01-28", "2021-01-29"]

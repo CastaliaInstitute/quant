@@ -155,7 +155,12 @@ def main() -> None:
     if args.with_sec_filings:
         if not all(str(row.get("cik", "")).strip() for row in universe):
             raise SystemExit("--with-sec-filings requires a cik column in the universe CSV")
+        seen_companies: set[tuple[str, str]] = set()
         for row in universe:
+            company_key = (str(row["cik"]).strip().lstrip("0"), row["ticker"].strip().upper())
+            if company_key in seen_companies:
+                continue
+            seen_companies.add(company_key)
             sec_filings.extend(sec_company_filings(row["cik"], row["ticker"], row["issuer"]))
             time.sleep(args.pause)
 

@@ -51,6 +51,7 @@ python scripts/run_rl_study.py
 python scripts/run_rl_stress.py
 python scripts/ingest_biopharma.py --with-sec-filings
 python scripts/monitor_ai_trials.py
+python scripts/audit_ai_impact.py
 python scripts/audit_cto_outcomes.py
 jupyter-book build book --path-output book
 ```
@@ -66,7 +67,7 @@ python scripts/evaluate_event_risk.py
 python scripts/evaluate_event_risk.py --target down_10pct_market_model_car_0_1
 ```
 
-The evaluator requires enough distinct historical event dates and at least 30 training / 8 test events per fold by default. It deliberately exits on the current five-event fixture instead of fitting an unstable model.
+The evaluator requires enough distinct historical event dates and at least 30 training / 8 test events per fold by default. It deliberately exits on the current nine-disclosure fixture instead of fitting an unstable model.
 
 The CTO benchmark audit downloads a pinned 2020–2024 human-labeled subset (about 10 MB) into ignored `data/raw/cto/` and writes aggregate provenance/coverage to `reports/cto-human-labels-audit.json`. It is a separate clinical-outcome benchmark, not the market-event model: its subset was selected to remove easy cases, and its current-record fields are not point-in-time features.
 

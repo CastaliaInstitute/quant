@@ -1,24 +1,24 @@
 {
   "evidence_status": "source_lineage_audit_only_no_price_join_or_model_fit",
   "generated_from_local_source_pull": {
-    "retrieved_at_utc": "2026-10-15T01:25:26.514830+00:00",
+    "retrieved_at_utc": "2026-10-15T02:34:40.752027+00:00",
     "clinicaltrials_gov_api_version": "2.0.5",
     "clinicaltrials_gov_data_timestamp": "2026-10-14T09:00:05",
-    "universe_sha256": "15717aca8d1bfe8cfa0df2428d0aa84489e8274b3d4b9b0a6cc7a9803684c078",
-    "current_trial_record_count": 5,
-    "current_linked_pubmed_reference_count": 58,
-    "europe_pmc_article_metadata_count": 52,
-    "sec_8k_6k_filing_metadata_count": 2747,
-    "sec_filing_ticker_count": 5,
+    "universe_sha256": "e1739c4446643066886d882930f97369e1eb9260a184e3598baac7fd01f85347",
+    "current_trial_record_count": 10,
+    "current_linked_pubmed_reference_count": 88,
+    "europe_pmc_article_metadata_count": 77,
+    "sec_8k_6k_filing_metadata_count": 3637,
+    "sec_filing_ticker_count": 8,
     "sec_filing_timestamp_precision_counts": {
-      "timestamp": 2747
+      "timestamp": 3637
     },
     "sec_filing_date_range": {
       "first": "1994-06-24",
       "last": "2026-10-13"
     },
-    "sec_filings_sha256": "11843fd56ba07aab561814eb60572a8d52579cbc0767d32419009cf0c9b8f26a",
-    "issuer_event_source_count": 5,
+    "sec_filings_sha256": "fe569bdcd29324ee6d8c5c0aa334575e9aae33985c8c55b9d1148da5a6639110",
+    "issuer_event_source_count": 9,
     "historical_price_bar_count": 0
   },
   "events": [
@@ -37,7 +37,10 @@
       "current_linked_papers_dated_on_or_before_event_hindsight_annotation": 0,
       "current_linked_papers_dated_after_event_hindsight_annotation": 17,
       "source_url": "https://www.sec.gov/Archives/edgar/data/1682852/000119312520293735/d53512dex991.htm",
-      "event_type": "phase_3_interim_readout"
+      "event_type": "phase_3_interim_readout",
+      "related_nct_ids": "",
+      "related_tickers": "",
+      "curation_note": ""
     },
     {
       "event_id": "PFE-BNT162B2-INTERIM-20201109",
@@ -54,7 +57,10 @@
       "current_linked_papers_dated_on_or_before_event_hindsight_annotation": 2,
       "current_linked_papers_dated_after_event_hindsight_annotation": 13,
       "source_url": "https://www.pfizer.com/news/press-release/press-release-detail/pfizer-and-biontech-announce-vaccine-candidate-against",
-      "event_type": "phase_3_interim_readout"
+      "event_type": "phase_3_interim_readout",
+      "related_nct_ids": "",
+      "related_tickers": "",
+      "curation_note": ""
     },
     {
       "event_id": "AZN-AZD1222-INTERIM-20201123",
@@ -71,7 +77,10 @@
       "current_linked_papers_dated_on_or_before_event_hindsight_annotation": 7,
       "current_linked_papers_dated_after_event_hindsight_annotation": 8,
       "source_url": "https://www.ox.ac.uk/news/2020-11-23-oxford-university-breakthrough-global-covid-19-vaccine",
-      "event_type": "phase_3_interim_readout"
+      "event_type": "phase_3_interim_readout",
+      "related_nct_ids": "",
+      "related_tickers": "",
+      "curation_note": ""
     },
     {
       "event_id": "NVAX-NVX-COV2373-UK-20210128",
@@ -88,7 +97,10 @@
       "current_linked_papers_dated_on_or_before_event_hindsight_annotation": 0,
       "current_linked_papers_dated_after_event_hindsight_annotation": 1,
       "source_url": "https://ir.novavax.com/press-releases/2021-01-28-Novavax-COVID-19-Vaccine-Demonstrates-89-3-Efficacy-in-UK-Phase-3-Trial",
-      "event_type": "phase_3_readout"
+      "event_type": "phase_3_readout",
+      "related_nct_ids": "",
+      "related_tickers": "",
+      "curation_note": ""
     },
     {
       "event_id": "JNJ-ENSEMBLE-20210129",
@@ -105,7 +117,90 @@
       "current_linked_papers_dated_on_or_before_event_hindsight_annotation": 1,
       "current_linked_papers_dated_after_event_hindsight_annotation": 8,
       "source_url": "https://www.jnj.com/media-center/press-releases/johnson-and-johnson-announces-single-shot-janssen-covid-19-vaccine-candidate-met-primary-endpoints-in-interim-analysis-of-its-phase-3-ensemble-trial",
-      "event_type": "phase_3_interim_readout"
+      "event_type": "phase_3_interim_readout",
+      "related_nct_ids": "",
+      "related_tickers": "",
+      "curation_note": ""
+    },
+    {
+      "event_id": "BIIB-ADUCANUMAB-FUTILITY-20190321",
+      "issuer": "Biogen",
+      "ticker": "BIIB",
+      "nct_id": "NCT02484547",
+      "issuer_disclosure_date": "2019-03-21",
+      "timestamp_precision": "date_only",
+      "trial_first_post_date": "2015-06-29",
+      "trial_primary_completion_date": "2019-08-05",
+      "current_registry_results_first_post_date": "2021-09-02",
+      "days_from_public_disclosure_to_registry_results_post": 896,
+      "linked_pubmed_ids_in_current_record": 6,
+      "current_linked_papers_dated_on_or_before_event_hindsight_annotation": 0,
+      "current_linked_papers_dated_after_event_hindsight_annotation": 5,
+      "source_url": "https://investors.biogen.com/news-releases/news-release-details/biogen-and-eisai-discontinue-phase-3-engage-and-emerge-trials",
+      "event_type": "phase_3_futility_discontinuation",
+      "related_nct_ids": "NCT02477800",
+      "related_tickers": "",
+      "curation_note": "One issuer disclosure covers both EMERGE and ENGAGE; represented once to avoid double-counting the same BIIB return."
+    },
+    {
+      "event_id": "AZN-TEZEPELUMAB-SOURCE-20201222",
+      "issuer": "AstraZeneca",
+      "ticker": "AZN",
+      "nct_id": "NCT03406078",
+      "issuer_disclosure_date": "2020-12-22",
+      "timestamp_precision": "date_and_time",
+      "trial_first_post_date": "2018-01-23",
+      "trial_primary_completion_date": "2020-09-25",
+      "current_registry_results_first_post_date": "2021-12-09",
+      "days_from_public_disclosure_to_registry_results_post": 352,
+      "linked_pubmed_ids_in_current_record": 3,
+      "current_linked_papers_dated_on_or_before_event_hindsight_annotation": 1,
+      "current_linked_papers_dated_after_event_hindsight_annotation": 2,
+      "source_url": "https://www.prnewswire.com/news-releases/update-on-source-phase-3-trial-for-tezepelumab-in-patients-with-severe-oral-corticosteroid-dependent-asthma-301197136.html",
+      "event_type": "phase_3_primary_endpoint_miss",
+      "related_nct_ids": "",
+      "related_tickers": "AMGN",
+      "curation_note": "Issuer newswire identifies the AMGN/AZN co-development announcement and timestamps distribution at 02:00 ET on Dec. 22."
+    },
+    {
+      "event_id": "BMY-BEMPEG-PIVOT-IO-001-20220314",
+      "issuer": "Bristol-Myers Squibb",
+      "ticker": "BMY",
+      "nct_id": "NCT03635983",
+      "issuer_disclosure_date": "2022-03-14",
+      "timestamp_precision": "date_only",
+      "trial_first_post_date": "2018-08-17",
+      "trial_primary_completion_date": "2021-11-19",
+      "current_registry_results_first_post_date": "2022-12-19",
+      "days_from_public_disclosure_to_registry_results_post": 280,
+      "linked_pubmed_ids_in_current_record": 2,
+      "current_linked_papers_dated_on_or_before_event_hindsight_annotation": 1,
+      "current_linked_papers_dated_after_event_hindsight_annotation": 1,
+      "source_url": "https://news.bms.com/news/details/2022/Bristol-Myers-Squibb-and-Nektar-Announce-Update-on-Phase-3-PIVOT-IO-001-Trial-Evaluating-Bempegaldesleukin-BEMPEG-in-Combination-with-Opdivo-nivolumab-in-Previously-Untreated-Unresectable-or-Metastatic-Melanoma/default.aspx",
+      "event_type": "phase_3_primary_endpoint_miss",
+      "related_nct_ids": "",
+      "related_tickers": "NKTR",
+      "curation_note": "One joint BMY/NKTR announcement for a BMS-sponsored trial; BMY is the single price series in this seed record."
+    },
+    {
+      "event_id": "LLY-DONANEMAB-TRAILBLAZER-ALZ2-20230503",
+      "issuer": "Eli Lilly and Company",
+      "ticker": "LLY",
+      "nct_id": "NCT04437511",
+      "issuer_disclosure_date": "2023-05-03",
+      "timestamp_precision": "date_and_time",
+      "trial_first_post_date": "2020-06-18",
+      "trial_primary_completion_date": "2023-04-14",
+      "current_registry_results_first_post_date": "2024-05-20",
+      "days_from_public_disclosure_to_registry_results_post": 383,
+      "linked_pubmed_ids_in_current_record": 15,
+      "current_linked_papers_dated_on_or_before_event_hindsight_annotation": 1,
+      "current_linked_papers_dated_after_event_hindsight_annotation": 14,
+      "source_url": "https://www.prnewswire.com/news-releases/lillys-donanemab-significantly-slowed-cognitive-and-functional-decline-in-phase-3-study-of-early-alzheimers-disease-301814001.html",
+      "event_type": "phase_3_positive_readout",
+      "related_nct_ids": "",
+      "related_tickers": "",
+      "curation_note": "Lilly newswire timestamps the positive Phase III result at 06:00 ET."
     }
   ],
   "interpretation": "Registry result-post dates can lag public issuer readouts by years; current trial fields and current linked references are hindsight annotations, not historical model inputs."
