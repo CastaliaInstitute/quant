@@ -17,10 +17,12 @@ ROOT = Path(__file__).resolve().parents[1]
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--training-episodes", type=int, default=300)
+    parser.add_argument("--baseline-selection-runs", type=int, default=60)
     parser.add_argument("--evaluation-runs", type=int, default=60)
     parser.add_argument("--episode-length", type=int, default=252)
     parser.add_argument("--training-seed", type=int, default=17)
-    parser.add_argument("--evaluation-seed", type=int, default=10_000)
+    parser.add_argument("--baseline-selection-seed", type=int, default=10_000)
+    parser.add_argument("--evaluation-seed", type=int, default=20_000)
     parser.add_argument("--learning-rate", type=float, default=0.12)
     parser.add_argument("--discount", type=float, default=1.0)
     parser.add_argument("--assumptions", type=Path, default=ROOT / "config/biopharma_rl_synthetic.json")
@@ -36,9 +38,11 @@ def main() -> None:
 
     study = run_rl_study(
         training_episodes=args.training_episodes,
+        baseline_selection_runs=args.baseline_selection_runs,
         evaluation_runs=args.evaluation_runs,
         episode_length=args.episode_length,
         training_seed=args.training_seed,
+        baseline_selection_seed=args.baseline_selection_seed,
         evaluation_seed=args.evaluation_seed,
         learning_rate=args.learning_rate,
         discount=args.discount,

@@ -16,23 +16,23 @@
     }
   },
   "event_coverage": {
-    "records": 9,
-    "source_ledger_issuers": 8,
+    "records": 18,
+    "source_ledger_issuers": 12,
     "matched_panel_issuers": 0,
-    "exact_timestamp_records": 5,
+    "exact_timestamp_records": 11,
     "source_ledger_chronological_split": {
-      "date_clusters": 9,
+      "date_clusters": 18,
       "train": {
-        "events": 5,
-        "dates": 5
+        "events": 10,
+        "dates": 10
       },
       "validation": {
-        "events": 2,
-        "dates": 2
+        "events": 4,
+        "dates": 4
       },
       "final_test": {
-        "events": 2,
-        "dates": 2
+        "events": 4,
+        "dates": 4
       }
     },
     "matched_panel_chronological_60_20_20_split": {

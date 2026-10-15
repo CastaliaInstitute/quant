@@ -169,6 +169,10 @@ def evaluate_policies(
                     observed_success = info["program_advancement_observed_after_transition"]
                     event_trial_outcomes.append(-1 if observed_success is None else int(observed_success))
             metrics = performance_metrics(pd.Series(returns), benchmark_returns=pd.Series(benchmarks))
+            log_terminal_wealth = float(np.log1p(np.asarray(returns, dtype=float)).sum())
+            benchmark_log_wealth = float(np.log1p(np.asarray(benchmarks, dtype=float)).sum())
+            metrics["log_terminal_wealth"] = log_terminal_wealth
+            metrics["benchmark_relative_log_wealth"] = log_terminal_wealth - benchmark_log_wealth
             event_losses = np.asarray(event_returns, dtype=float)
             policy_event_losses = np.asarray(event_net_returns, dtype=float)
             phases_array = np.asarray(event_phases, dtype=int)
@@ -231,12 +235,27 @@ def run_rl_study(
     evaluation_runs: int = 60,
     episode_length: int = 252,
     training_seed: int = 17,
-    evaluation_seed: int = 10_000,
+    evaluation_seed: int = 20_000,
     learning_rate: float = 0.12,
     discount: float = 1.0,
     assumptions: CatalystAssumptions | None = None,
     assumptions_sha256: str | None = None,
+    baseline_selection_runs: int = 60,
+    baseline_selection_seed: int = 10_000,
 ) -> RLStudy:
+    if training_episodes <= 0 or baseline_selection_runs <= 0 or evaluation_runs <= 0:
+        raise ValueError("training, baseline-selection, and evaluation episode counts must be positive")
+
+    def blocks_overlap(start_a: int, count_a: int, start_b: int, count_b: int) -> bool:
+        return max(start_a, start_b) < min(start_a + count_a, start_b + count_b)
+
+    if blocks_overlap(training_seed, training_episodes, baseline_selection_seed, baseline_selection_runs):
+        raise ValueError("training and baseline-selection seed blocks must not overlap")
+    if blocks_overlap(training_seed, training_episodes, evaluation_seed, evaluation_runs):
+        raise ValueError("training and final evaluation seed blocks must not overlap")
+    if blocks_overlap(baseline_selection_seed, baseline_selection_runs, evaluation_seed, evaluation_runs):
+        raise ValueError("baseline-selection and final evaluation seed blocks must not overlap")
+
     config = assumptions or CatalystAssumptions()
     training_visit_counts = np.zeros((RL_STATE_COUNT, 2), dtype=np.int64)
     q_values = train_q_table(
@@ -248,11 +267,25 @@ def run_rl_study(
         assumptions=config,
         visit_counts=training_visit_counts,
     )
+    # Choose the strongest transparent comparator on its own seed block. Keep
+    # that block separate from the final paired comparison so the headline
+    # interval does not inherit comparator-selection optimism.
+    selection_results = evaluate_policies(
+        q_values, baseline_selection_runs, episode_length, baseline_selection_seed, config
+    )
+    baseline_names = ("cash", "buy_and_hold", "trend_rule", "pre_catalyst_exit")
+    selection_means = (
+        selection_results.loc[selection_results.policy.isin(baseline_names)]
+        .groupby("policy")["benchmark_relative_compounded_return"]
+        .mean()
+    )
+    selected_baseline = max(baseline_names, key=lambda name: float(selection_means[name]))
     episode_results = evaluate_policies(q_values, evaluation_runs, episode_length, evaluation_seed, config)
     metrics = (
         "observation_count", "annualized_return", "annualized_volatility", "sharpe", "sortino", "max_drawdown",
         "calmar", "value_at_risk_95", "expected_shortfall_95",
-        "benchmark_total_return", "benchmark_relative_compounded_return", "information_ratio",
+        "benchmark_total_return", "benchmark_relative_compounded_return", "benchmark_relative_log_wealth",
+        "log_terminal_wealth", "information_ratio",
         "annual_turnover", "total_cost", "exposure_fraction",
         "catalyst_exposure_fraction", "catalyst_sessions_per_episode",
         "catalyst_trial_outcome_count", "catalyst_trial_success_fraction",
@@ -312,12 +345,14 @@ def run_rl_study(
         },
         "configuration": {
             "training_episodes": training_episodes,
+            "baseline_selection_runs": baseline_selection_runs,
             "evaluation_runs": evaluation_runs,
             "episode_length_sessions": episode_length,
             "training_seed": training_seed,
             "learning_rate": learning_rate,
             "discount_factor": discount,
             "exploration_schedule": "epsilon=max(0.04, 0.35 * (1 - episode / training_episodes)); linear decay with 0.04 floor",
+            "baseline_selection_seed_start": baseline_selection_seed,
             "evaluation_seed_start": evaluation_seed,
             "simulator_assumptions": config.to_dict(),
             "policies": ["cash", "buy_and_hold", "trend_rule", "pre_catalyst_exit", "q_learner"],
@@ -338,10 +373,24 @@ def run_rl_study(
             "interpretation": "Hash identifies the exact JSON config file when run through scripts/run_rl_study.py; direct API runs hash canonicalized parameter values.",
         },
         "evaluation_protocol": {
-            "episodes": "matched independent random seeds sampled from the same synthetic generator family used in training",
+            "baseline_selection": (
+                "Select the strongest predeclared simple baseline by mean benchmark-relative compounded return "
+                "on an independent validation seed block; the Q policy is fixed and is not selected or tuned there."
+            ),
+            "episodes": "matched independent random seeds from the same synthetic generator family; final evaluation seeds do not overlap training or baseline selection",
+            "baseline_selection_seed_block": {
+                "start": baseline_selection_seed,
+                "episodes": baseline_selection_runs,
+                "baseline_mean_benchmark_relative_compounded_return": {
+                    name: float(selection_means[name]) for name in baseline_names
+                },
+                "selected_strongest_simple_baseline": selected_baseline,
+                "selection_metric": "mean benchmark-relative compounded return",
+            },
+            "final_seed_block": {"start": evaluation_seed, "episodes": evaluation_runs},
             "market_holdout": False,
-            "evaluation_seed_block_used_for_post_hoc_search": False,
-            "interpretation": "Checks simulator behavior and seed variation only; it does not test historical or new-regime generalization.",
+            "final_seed_block_used_for_policy_or_baseline_selection": False,
+            "interpretation": "This is an independent-seed diagnostic under one fixed synthetic generator, not a historical-market holdout or new-regime test.",
         },
         "metric_definitions": {
             "learning_reward": (
@@ -350,6 +399,8 @@ def run_rl_study(
                 "gamma below one is a time-preference sensitivity and no longer equals terminal log wealth."
             ),
             "discount_factor": float(discount),
+            "log_terminal_wealth": "Sum of log(1 + net periodic return); equals the finite-horizon training reward when gamma=1.",
+            "benchmark_relative_log_wealth": "Sum of strategy log returns minus benchmark log returns on the same path; paired differences equal log relative terminal wealth.",
             "reward_discount_half_life_sessions": (
                 float(np.log(0.5) / np.log(discount)) if 0.0 < discount < 1.0 else None
             ),
@@ -382,8 +433,35 @@ def run_rl_study(
                     episode_results, "q_learner", comparator, "benchmark_relative_compounded_return",
                     evaluation_seed + 100 + index,
                 ),
+                "benchmark_relative_log_wealth_difference": _paired_bootstrap_difference(
+                    episode_results, "q_learner", comparator, "benchmark_relative_log_wealth",
+                    evaluation_seed + 200 + index,
+                ),
             }
             for index, comparator in enumerate(("cash", "buy_and_hold", "trend_rule", "pre_catalyst_exit"))
+        },
+        "primary_final_comparison": {
+            "metric": "paired net benchmark-relative compounded wealth difference",
+            "q_policy": "q_learner",
+            "baseline_selected_on_validation_seeds": selected_baseline,
+            "comparison": _paired_bootstrap_difference(
+                episode_results,
+                "q_learner",
+                selected_baseline,
+                "benchmark_relative_compounded_return",
+                evaluation_seed + 100 + baseline_names.index(selected_baseline),
+            ),
+            "objective_aligned_log_wealth_comparison": _paired_bootstrap_difference(
+                episode_results,
+                "q_learner",
+                selected_baseline,
+                "benchmark_relative_log_wealth",
+                evaluation_seed + 200 + baseline_names.index(selected_baseline),
+            ),
+            "positive_interval_required_for_improvement_claim": True,
+            "drawdown_and_tail_risk_limits_predeclared": False,
+            "improvement_claim_supported": False,
+            "interpretation": "No improvement claim is supported unless the paired 95% interval is above zero and separately predeclared drawdown/tail-risk limits pass.",
         },
         "paired_comparison_interpretation": (
             "Intervals resample matched synthetic evaluation episode seeds and describe uncertainty under this one fixed generator and trained policy. "

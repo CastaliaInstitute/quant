@@ -32,8 +32,8 @@ The starter keeps these choices visible in code and experiment records. A user f
 - A seeded Gymnasium-compatible synthetic biotech catalyst environment, with separately sampled Phase II/III program advancement and market reactions. Advancement priors use published 2011–2020 aggregate transition rates; market reactions remain synthetic. Tabular Q-learning is compared with cash, buy-and-hold, a trend rule, and a pre-catalyst risk rule.
 - A historical event-data pipeline for ClinicalTrials.gov, biomedical publication metadata, SEC issuer filings, and a user-supplied licensed stock-price file, with SPY and XBI context; point-in-time features exclude records unavailable at the decision cutoff, and source hashes are recorded in a local panel manifest. It estimates a pre-event two-factor market model and keeps abnormal-return outputs separate from pre-event model features. Fetched and processed datasets remain local and are excluded from Git.
 - A pinned audit of the MIT-licensed Clinical Trial Outcome human-label benchmark. Its [leakage review](book/research/cto-audit.md) quantifies a forbidden 97.05%-accurate current-status rule and explains why zero current registry fields are yet verified as point-in-time predictors; no labels feed the RL priors or market-return model.
-- An AI-impact monitoring lane for candidate-level discovery, clinical-trial operations, and company/market effects. A versioned ClinicalTrials.gov keyword snapshot feeds a manually curated, point-in-time evidence ledger; keyword hits are not treated as AI-discovered drugs or outcome evidence. The watch tracks recent clinical-pipeline cohort publications separately from candidate-level evidence and does not interpret those descriptive cohorts as causal AI effects.
-- A gated expanding-window event-risk evaluator that compares overall, volatility-conditioned, and trial-phase-conditioned historical rates with a regularized logistic model, reports probability scores, and keeps a final chronological block untouched.
+- An AI-impact monitoring lane for candidate-level discovery, clinical-trial operations, company/market effects, patient access and safety, workforce impacts, and environmental costs. The monitor separates curated outcomes from AI-exposure contrasts and does not interpret descriptive cohorts as causal AI effects.
+- A gated expanding-window event-risk evaluator governed by the [frozen protocol](book/research/protocol.md) and machine-readable JSON; it compares historical-rate baselines with regularized logistic regression and keeps a final chronological block untouched.
 - A synthetic ML signal demonstration that uses chronological train/test separation.
 - Cloudflare Pages and Worker deployment configuration for `quant.castalia.institute` and `cells.quant.castalia.institute`.
 
@@ -58,7 +58,7 @@ python scripts/audit_cto_outcomes.py
 jupyter-book build book --path-output book
 ```
 
-Historical registry, biomedical-publication, and issuer filing metadata have been pulled for ten trial-to-issuer mappings and nine sourced disclosures across four therapeutic areas. The cohort is a source-lineage fixture, not a training sample. Market prices are fetched separately through a provider account or imported from a licensed CSV; see [the biopharma data guide](book/data-sources.md). No stock-price file has been provided yet, so there is no historical event-return result or fitted historical model.
+Historical registry, biomedical-publication, and issuer filing metadata have been pulled for nineteen trial-to-issuer mappings and eighteen sourced disclosures across eight therapeutic areas/indications. The cohort remains a source-lineage fixture, not a training sample. Market prices are fetched separately through a provider account or imported from a licensed CSV; see [the biopharma data guide](book/data-sources.md). No stock-price file has been provided yet, so there is no historical event-return result or fitted historical model.
 
 After a broader event cohort, archived point-in-time trial versions, and licensed price bars are available, build the local panel and run the gated walk-forward evaluator:
 
@@ -69,13 +69,13 @@ python scripts/evaluate_event_risk.py
 python scripts/evaluate_event_risk.py --target down_10pct_market_model_car_0_1
 ```
 
-The evaluator requires enough distinct historical event dates and at least 30 training / 8 test events per fold by default. It deliberately exits on the current nine-disclosure fixture instead of fitting an unstable model.
+The evaluator reads the versioned protocol, requires enough distinct historical event dates and at least 30 training / 8 test events per fold by default, and deliberately exits on the current eighteen-disclosure fixture instead of fitting an unstable model. For a predeclared sensitivity, pass `--target down_10pct_market_model_car_0_1`. Changes to frozen evaluation settings require `--allow-protocol-deviation` and are recorded in the output summary.
 
 The CTO benchmark audit downloads a pinned 2020–2024 human-labeled subset (about 10 MB) into ignored `data/raw/cto/` and writes aggregate provenance/coverage to `reports/cto-human-labels-audit.json`. It is a separate clinical-outcome benchmark, not the market-event model: its subset was selected to remove easy cases, and its current-record fields are not point-in-time features.
 
 ## Return scorecard
 
-For eventual trading evaluation, primary metrics are net CAGR, annualized volatility, Sharpe ratio, maximum drawdown, annualized turnover, and sensitivity to 1×/2×/4× transaction costs. For the initial biotech event-risk question, report calibration and tail-risk metrics: 5% historical VaR/expected shortfall, worst event move, event counts, and phase/issuer distributions. Include biotech-index and broad-market context on matched dates. Definitions and limits are set out in [book/research/metrics.md](book/research/metrics.md).
+For RL policy evaluation, select the strongest predeclared simple baseline on a separate validation seed block, then report paired net benchmark-relative compounded wealth on untouched final seeds. Net CAGR, drawdown, volatility, Sharpe/Sortino, expected shortfall, turnover, exposure, and 1×/2×/4× cost stress complete the risk scorecard. The finite-horizon learner's `γ=1` log-return reward is its training objective, not a result metric. For the initial biotech event-risk question, report calibration and tail-risk metrics: 5% historical VaR/expected shortfall, worst event move, event counts, and phase/issuer distributions. Include biotech-index and broad-market context on matched dates. Definitions and limits are set out in [book/research/metrics.md](book/research/metrics.md).
 
 The portfolio construction baselines are weight generators, not backtests. They cap exposures by retaining the excess as cash rather than silently spreading it across other names:
 

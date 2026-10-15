@@ -32,7 +32,7 @@ The platform is a research prototype. A successful calculation demonstrates only
 7. [Baselines](research/baselines.md): compare event-risk forecasts with simple reference estimates.
 8. [Return metrics](research/metrics.md): the net performance and tail-risk scorecards.
 9. [Evidence review](research/evidence-review.md): published clinical-transition and market-response evidence, and how each may shape the simulator.
-10. [AI impact watch](research/ai-impact.md): distinguish AI claims from measured effects in drug pipelines, trial operations, and company value.
+10. [AI impact watch](research/ai-impact.md): monitor AI's effects on drug science, operations, economics, patients, workforces, and the environment.
 11. [Simulation and RL study](research/rl-study.md): a seeded biotech catalyst gym, Q-learning policy, and simulator-only result.
 12. [Adversarial review](research/review.md): identify leakage, fragility, and reasons to reject the result.
 

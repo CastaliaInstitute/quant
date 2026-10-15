@@ -80,9 +80,22 @@ This log preserves both superseded policy experiments and the current biotech ca
 - Result: under the one-table evaluation, median Q net CAGR is 0.00% [−12.62%, +8.87%], median relative wealth is −9.82% [−25.97%, +11.32%], median drawdown −6.13%, turnover 21×, and overall exposure 4.2%; event exposure remains zero. The paired Q-minus-cash relative-wealth interval is −4.1 to −0.1 points in this synthetic sample. In the crossed 10-training-seed report, Q-minus-trend is +2.5 points (95% interval −7.1 to +11.9) and Q-minus-buy-and-hold is −1.7 points (−17.6 to +13.4). Training covers 220–226/288 states and 409–419/576 state/action pairs; unseen ties default to cash.
 - Interpretation gate: these remain simulator diagnostics only. The learner is sparse and its cash-relative result is unfavorable under the configured return process. It must be calibrated on point-in-time biotech events and beat cash plus transparent portfolio baselines on historical data with licensed prices before any market-skill claim.
 
+## RL-014 · Separate baseline selection from final seed evaluation
+
+- Protocol correction: choose the strongest simple comparator by mean benchmark-relative compounded return on 60 validation paths (seeds 10,000–10,059), then compare the fixed Q table with that comparator on 60 new final paths (seeds 20,000–20,059). The Q policy and its hyperparameters are unchanged; the final seed block is not used for policy or comparator selection.
+- Primary metric: paired difference in net benchmark-relative compounded wealth against the validation-selected comparator, with a 10,000-replicate paired episode-seed bootstrap. Net CAGR, drawdown, volatility, Sharpe/Sortino, tail loss, exposure, turnover, and costs remain the supporting scorecard.
+- Result: validation selected pre-catalyst exit. On final paths, Q-minus-exit relative wealth is −7.0 percentage points (95% paired interval −18.1 to +3.4); it does not establish improvement. No drawdown or tail-risk limits were predeclared, so the study supports no policy-improvement claim even if the interval were positive.
+- Interpretation: this removes comparator-selection reuse from the primary interval, but both seed blocks still come from one uncalibrated synthetic generator. It is not a historical holdout or evidence of generalization. The regenerated scorecard and exact seed protocol are in <a href="../_static/rl-simulation.json">the report</a>.
+
+## RL-015 · Audit the learner's log-wealth objective
+
+- Metric addition: alongside paired benchmark-relative compounded wealth, report paired benchmark-relative log wealth. At `gamma=1`, each episode's strategy log wealth is exactly the sum of training rewards; the Q-minus-baseline log difference is therefore objective-aligned.
+- Result: on the RL-014 final seed block, Q-minus-validation-selected-exit log wealth is −0.0027, with a paired 95% bootstrap interval of −0.1060 to +0.0983. It spans zero, consistent with the primary wealth metric's non-improvement conclusion.
+- Interpretation: log wealth is a secondary objective audit, not a replacement for the predeclared compounded-wealth headline. Both remain synthetic diagnostics until historical, licensed, point-in-time market data exists.
+
 ## Next study: historical event-risk panel
 
-The current historical data artifact is a nine-disclosure source-lineage fixture spanning vaccines, Alzheimer's, asthma, and oncology. It remains tiny and clustered, with several date-only catalyst times, so it cannot support fitting or a stable return estimate. The next research record should be opened only after adding a wider trial/disclosure cohort, point-in-time event features, a licensed OHLCV file, inactive/delisted issuers, and a preregistered chronological evaluation plan. Preserve every inclusion rule and data-source revision.
+The current historical data artifact is an eighteen-disclosure source-lineage fixture spanning vaccines, Alzheimer's disease, asthma, oncology, eosinophilic esophagitis, heart failure, chronic rhinosinusitis with nasal polyps, and Duchenne muscular dystrophy. It remains small and clustered, with several date-only catalyst times, so it cannot support fitting or a stable return estimate. The next research record should be opened only after adding a broader trial/disclosure cohort, point-in-time event features, a licensed OHLCV file, inactive/delisted issuers, and a preregistered chronological evaluation plan. Preserve every inclusion rule and data-source revision.
 
 ## Data audit · CTO 2020–2024 human-label subset
 

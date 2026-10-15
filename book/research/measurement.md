@@ -21,7 +21,7 @@ In biotech event research, a feature is valid only if the information was public
 
 For adjusted close `P[t]`, simple return is `P[t] / P[t-1] - 1`. A five-session momentum feature compounds returns ending at the last close before the public catalyst. Realized volatility uses only prior sessions. Relative volume compares that last complete session with a trailing reference; the event-day volume is a response, not a pre-event feature.
 
-```{code-cell} python
+```{code-cell} ipython3
 prices = [100.0, 101.0, 100.5, 102.0, 103.0, 102.5, 104.0, 105.0]
 returns = []
 for index in range(1, len(prices)):

@@ -82,6 +82,7 @@ def main() -> None:
         "start": start,
         "end": end,
         "adjustment": "all",
+        "license_review_status": "unverified",
         "feed": args.feed,
         "limit": "10000",
         "sort": "asc",

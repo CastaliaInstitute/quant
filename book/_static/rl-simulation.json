@@ -10,13 +10,15 @@
   },
   "configuration": {
     "training_episodes": 300,
+    "baseline_selection_runs": 60,
     "evaluation_runs": 60,
     "episode_length_sessions": 252,
     "training_seed": 17,
     "learning_rate": 0.12,
     "discount_factor": 1.0,
     "exploration_schedule": "epsilon=max(0.04, 0.35 * (1 - episode / training_episodes)); linear decay with 0.04 floor",
-    "evaluation_seed_start": 10000,
+    "baseline_selection_seed_start": 10000,
+    "evaluation_seed_start": 20000,
     "simulator_assumptions": {
       "catalyst_interval_sessions": 63,
       "broad_market_daily_mean": 0.00025,
@@ -79,14 +81,33 @@
     "interpretation": "Hash identifies the exact JSON config file when run through scripts/run_rl_study.py; direct API runs hash canonicalized parameter values."
   },
   "evaluation_protocol": {
-    "episodes": "matched independent random seeds sampled from the same synthetic generator family used in training",
+    "baseline_selection": "Select the strongest predeclared simple baseline by mean benchmark-relative compounded return on an independent validation seed block; the Q policy is fixed and is not selected or tuned there.",
+    "episodes": "matched independent random seeds from the same synthetic generator family; final evaluation seeds do not overlap training or baseline selection",
+    "baseline_selection_seed_block": {
+      "start": 10000,
+      "episodes": 60,
+      "baseline_mean_benchmark_relative_compounded_return": {
+        "cash": -0.06988809998490607,
+        "buy_and_hold": -0.11379469386882587,
+        "trend_rule": -0.15238609417653295,
+        "pre_catalyst_exit": -0.04397407492285272
+      },
+      "selected_strongest_simple_baseline": "pre_catalyst_exit",
+      "selection_metric": "mean benchmark-relative compounded return"
+    },
+    "final_seed_block": {
+      "start": 20000,
+      "episodes": 60
+    },
     "market_holdout": false,
-    "evaluation_seed_block_used_for_post_hoc_search": false,
-    "interpretation": "Checks simulator behavior and seed variation only; it does not test historical or new-regime generalization."
+    "final_seed_block_used_for_policy_or_baseline_selection": false,
+    "interpretation": "This is an independent-seed diagnostic under one fixed synthetic generator, not a historical-market holdout or new-regime test."
   },
   "metric_definitions": {
     "learning_reward": "Q-learning maximizes sum(gamma**k * log(1 + net_return_k)). At gamma=1 in this finite-horizon environment, this equals log terminal wealth; gamma below one is a time-preference sensitivity and no longer equals terminal log wealth.",
     "discount_factor": 1.0,
+    "log_terminal_wealth": "Sum of log(1 + net periodic return); equals the finite-horizon training reward when gamma=1.",
+    "benchmark_relative_log_wealth": "Sum of strategy log returns minus benchmark log returns on the same path; paired differences equal log relative terminal wealth.",
     "reward_discount_half_life_sessions": null,
     "catalyst_unconditional_expected_shortfall_95": "Mean underlying issuer return in the worst ceil(5% of event observations); independent of policy exposure.",
     "catalyst_policy_net_expected_shortfall_95": "Mean strategy net return on event sessions in its worst ceil(5%); includes zero-return cash exposure and transaction costs.",
@@ -5650,19 +5671,29 @@
         "p90": 0.0
       },
       "benchmark_total_return": {
-        "median": 0.0808686426652987,
-        "p10": -0.09385047214401081,
-        "p90": 0.3295017612206589
+        "median": 0.05643927598110243,
+        "p10": -0.11577950147205404,
+        "p90": 0.27287485931544714
       },
       "benchmark_relative_compounded_return": {
-        "median": -0.07481588469838968,
-        "p10": -0.24783203034705703,
-        "p90": 0.10357227575945567
+        "median": -0.05341884680836123,
+        "p10": -0.21434902333896366,
+        "p90": 0.1309404067228422
+      },
+      "benchmark_relative_log_wealth": {
+        "median": -0.05490132577067211,
+        "p10": -0.2412602295916426,
+        "p90": 0.12304915958769075
+      },
+      "log_terminal_wealth": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
       },
       "information_ratio": {
-        "median": -0.5585617728266798,
-        "p10": -1.9131862592709943,
-        "p90": 0.5800558411178434
+        "median": -0.4118731102133205,
+        "p10": -1.6098788471189684,
+        "p90": 0.6813076196896982
       },
       "annual_turnover": {
         "median": 0.0,
@@ -5697,7 +5728,7 @@
       "catalyst_trial_success_fraction": {
         "median": 0.3333333333333333,
         "p10": 0.0,
-        "p90": 0.6666666666666666
+        "p90": 1.0
       },
       "phase_ii_trial_success_fraction": {
         "median": 0.0,
@@ -5705,19 +5736,19 @@
         "p90": 1.0
       },
       "phase_iii_trial_success_fraction": {
-        "median": 0.5,
+        "median": 0.6666666666666666,
         "p10": 0.0,
         "p90": 1.0
       },
       "catalyst_market_return_given_success_mean": {
-        "median": 0.16504347882794967,
-        "p10": -0.12448113255500597,
-        "p90": 0.24587790431210674
+        "median": 0.1729877048354465,
+        "p10": -0.29117562956922965,
+        "p90": 0.25214386561122976
       },
       "catalyst_market_return_given_failure_mean": {
-        "median": -0.15392532619036314,
-        "p10": -0.3207917247246023,
-        "p90": 0.13584936752883545
+        "median": -0.1387319325485809,
+        "p10": -0.27981566319368595,
+        "p90": 0.11159453247550483
       },
       "catalyst_positive_market_reaction_fraction_given_success": {
         "median": 1.0,
@@ -5727,22 +5758,22 @@
       "catalyst_positive_market_reaction_fraction_given_failure": {
         "median": 0.0,
         "p10": 0.0,
-        "p90": 1.0
+        "p90": 0.9333333333333348
       },
       "catalyst_underlying_return_mean": {
-        "median": -0.04032631980343578,
-        "p10": -0.16309492297528214,
-        "p90": 0.10454724478392557
+        "median": -0.030387631148205467,
+        "p10": -0.20919386969637346,
+        "p90": 0.10707789810161379
       },
       "catalyst_underlying_return_worst": {
-        "median": -0.19794377280980055,
-        "p10": -0.3466609695776586,
-        "p90": -0.0989832381039569
+        "median": -0.20149680836407807,
+        "p10": -0.34099439227487904,
+        "p90": -0.1413959674872532
       },
       "catalyst_unconditional_expected_shortfall_95": {
-        "median": -0.19794377280980055,
-        "p10": -0.3466609695776586,
-        "p90": -0.0989832381039569
+        "median": -0.20149680836407807,
+        "p10": -0.34099439227487904,
+        "p90": -0.1413959674872532
       },
       "catalyst_policy_net_expected_shortfall_95": {
         "median": 0.0,
@@ -5772,59 +5803,69 @@
         "p90": 252.0
       },
       "annualized_return": {
-        "median": -0.17707100351622362,
-        "p10": -0.5732833701604251,
-        "p90": 0.560727438910411
+        "median": -0.08695801059332592,
+        "p10": -0.5251334112334658,
+        "p90": 0.5782012575233674
       },
       "annualized_volatility": {
-        "median": 0.535080664783788,
-        "p10": 0.45956978985830116,
-        "p90": 0.6185800506362855
+        "median": 0.5379099989853093,
+        "p10": 0.4828805998155009,
+        "p90": 0.607128424826969
       },
       "sharpe": {
-        "median": 0.03743370535643108,
-        "p10": -1.4267393757187892,
-        "p90": 1.1142478311421085
+        "median": 0.09189701802504614,
+        "p10": -1.0571500904830622,
+        "p90": 1.058388133539703
       },
       "sortino": {
-        "median": 0.050961366154933706,
-        "p10": -1.6508038077576515,
-        "p90": 1.736842446610063
+        "median": 0.11997876099665351,
+        "p10": -1.332052615779308,
+        "p90": 1.7707670167044693
       },
       "max_drawdown": {
-        "median": -0.46040250305520636,
-        "p10": -0.6845965929258712,
-        "p90": -0.2541173031559141
+        "median": -0.4525152840132511,
+        "p10": -0.6369378598661952,
+        "p90": -0.2839370339589959
       },
       "calmar": {
-        "median": -0.32948084907782416,
-        "p10": -0.8888370496498071,
-        "p90": 1.904798338816382
+        "median": -0.2325653348936245,
+        "p10": -0.8396337959172752,
+        "p90": 1.8585274603283723
       },
       "value_at_risk_95": {
-        "median": -0.041735111308958545,
-        "p10": -0.045883593248220556,
-        "p90": -0.03832013532800073
+        "median": -0.041784528316042596,
+        "p10": -0.04631978367040857,
+        "p90": -0.03806508151066558
       },
       "expected_shortfall_95": {
-        "median": -0.07137625381041365,
-        "p10": -0.08678220294080796,
-        "p90": -0.05323354064246467
+        "median": -0.07094013919096843,
+        "p10": -0.09115062595482934,
+        "p90": -0.05606692318881251
       },
       "benchmark_total_return": {
-        "median": 0.0808686426652987,
-        "p10": -0.09385047214401081,
-        "p90": 0.3295017612206589
+        "median": 0.05643927598110243,
+        "p10": -0.11577950147205404,
+        "p90": 0.27287485931544714
       },
       "benchmark_relative_compounded_return": {
-        "median": -0.2338695644551535,
-        "p10": -0.6023220091091207,
-        "p90": 0.504181745962164
+        "median": -0.16133191905728694,
+        "p10": -0.5544611309235801,
+        "p90": 0.47242633670098083
+      },
+      "benchmark_relative_log_wealth": {
+        "median": -0.17595858249477003,
+        "p10": -0.8085143603038736,
+        "p90": 0.386696034246187
+      },
+      "log_terminal_wealth": {
+        "median": -0.09131238173407977,
+        "p10": -0.745092952508071,
+        "p90": 0.4561936198621631
       },
       "information_ratio": {
-        "median": -0.1657736603519847,
-        "p10": -1.3212001461633014,
-        "p90": 1.075158283141668
+        "median": -0.09004257083298271,
+        "p10": -1.1857563488122558,
+        "p90": 1.0052096874674692
       },
       "annual_turnover": {
         "median": 1.0,
@@ -5859,7 +5900,7 @@
       "catalyst_trial_success_fraction": {
         "median": 0.3333333333333333,
         "p10": 0.0,
-        "p90": 0.6666666666666666
+        "p90": 1.0
       },
       "phase_ii_trial_success_fraction": {
         "median": 0.0,
@@ -5867,19 +5908,19 @@
         "p90": 1.0
       },
       "phase_iii_trial_success_fraction": {
-        "median": 0.5,
+        "median": 0.6666666666666666,
         "p10": 0.0,
         "p90": 1.0
       },
       "catalyst_market_return_given_success_mean": {
-        "median": 0.16504347882794967,
-        "p10": -0.12448113255500597,
-        "p90": 0.24587790431210674
+        "median": 0.1729877048354465,
+        "p10": -0.29117562956922965,
+        "p90": 0.25214386561122976
       },
       "catalyst_market_return_given_failure_mean": {
-        "median": -0.15392532619036314,
-        "p10": -0.3207917247246023,
-        "p90": 0.13584936752883545
+        "median": -0.1387319325485809,
+        "p10": -0.27981566319368595,
+        "p90": 0.11159453247550483
       },
       "catalyst_positive_market_reaction_fraction_given_success": {
         "median": 1.0,
@@ -5889,37 +5930,37 @@
       "catalyst_positive_market_reaction_fraction_given_failure": {
         "median": 0.0,
         "p10": 0.0,
-        "p90": 1.0
+        "p90": 0.9333333333333348
       },
       "catalyst_underlying_return_mean": {
-        "median": -0.04032631980343578,
-        "p10": -0.16309492297528214,
-        "p90": 0.10454724478392557
+        "median": -0.030387631148205467,
+        "p10": -0.20919386969637346,
+        "p90": 0.10707789810161379
       },
       "catalyst_underlying_return_worst": {
-        "median": -0.19794377280980055,
-        "p10": -0.3466609695776586,
-        "p90": -0.0989832381039569
+        "median": -0.20149680836407807,
+        "p10": -0.34099439227487904,
+        "p90": -0.1413959674872532
       },
       "catalyst_unconditional_expected_shortfall_95": {
-        "median": -0.19794377280980055,
-        "p10": -0.3466609695776586,
-        "p90": -0.0989832381039569
+        "median": -0.20149680836407807,
+        "p10": -0.34099439227487904,
+        "p90": -0.1413959674872532
       },
       "catalyst_policy_net_expected_shortfall_95": {
-        "median": -0.19794377280980055,
-        "p10": -0.3466609695776586,
-        "p90": -0.0989832381039569
+        "median": -0.20149680836407807,
+        "p10": -0.34099439227487904,
+        "p90": -0.1413959674872532
       },
       "catalyst_policy_net_mean": {
-        "median": -0.04032631980343578,
-        "p10": -0.16309492297528214,
-        "p90": 0.10454724478392557
+        "median": -0.030387631148205467,
+        "p10": -0.20919386969637346,
+        "p90": 0.10707789810161379
       },
       "catalyst_policy_net_worst": {
-        "median": -0.19794377280980055,
-        "p10": -0.3466609695776586,
-        "p90": -0.0989832381039569
+        "median": -0.20149680836407807,
+        "p10": -0.34099439227487904,
+        "p90": -0.1413959674872532
       },
       "catalyst_event_transaction_cost": {
         "median": 0.0,
@@ -5934,78 +5975,88 @@
         "p90": 252.0
       },
       "annualized_return": {
-        "median": -0.14607557346039735,
-        "p10": -0.45583527135193314,
-        "p90": 0.4401391282403866
+        "median": -0.14869659006388725,
+        "p10": -0.45052957265003324,
+        "p90": 0.4628288475307396
       },
       "annualized_volatility": {
-        "median": 0.35704265213414055,
-        "p10": 0.282015550572387,
-        "p90": 0.48510734024606844
+        "median": 0.3776461641114328,
+        "p10": 0.2953807668307943,
+        "p90": 0.505046146598109
       },
       "sharpe": {
-        "median": -0.3580438385338691,
-        "p10": -1.567337228152999,
-        "p90": 1.2382534894194734
+        "median": -0.23932207550813628,
+        "p10": -1.316999741733793,
+        "p90": 1.055643223339468
       },
       "sortino": {
-        "median": -0.474527519155046,
-        "p10": -1.924993534959967,
-        "p90": 2.364629667539589
+        "median": -0.3370566330385706,
+        "p10": -1.525123359482454,
+        "p90": 2.024046836536781
       },
       "max_drawdown": {
-        "median": -0.3713042603690711,
-        "p10": -0.5703668791176083,
-        "p90": -0.20564992912089083
+        "median": -0.39743323617046084,
+        "p10": -0.5449901871683287,
+        "p90": -0.22281771826604596
       },
       "calmar": {
-        "median": -0.46488272374238976,
-        "p10": -0.9206440416080768,
-        "p90": 2.417663865449639
+        "median": -0.383449598462215,
+        "p10": -0.8913227924506003,
+        "p90": 1.6238163150388918
       },
       "value_at_risk_95": {
-        "median": -0.0326958499603187,
-        "p10": -0.03653540090210989,
-        "p90": -0.029148851843368257
+        "median": -0.031434451461831894,
+        "p10": -0.036881401499056256,
+        "p90": -0.027527307278569686
       },
       "expected_shortfall_95": {
-        "median": -0.0505385371835605,
-        "p10": -0.07103669746148589,
-        "p90": -0.040028078429332536
+        "median": -0.05169532211972756,
+        "p10": -0.07542187421673231,
+        "p90": -0.039986509257661534
       },
       "benchmark_total_return": {
-        "median": 0.0808686426652987,
-        "p10": -0.09385047214401081,
-        "p90": 0.3295017612206589
+        "median": 0.05643927598110243,
+        "p10": -0.11577950147205404,
+        "p90": 0.27287485931544714
       },
       "benchmark_relative_compounded_return": {
-        "median": -0.20967735034739748,
-        "p10": -0.5245148235223153,
-        "p90": 0.2959643786790603
+        "median": -0.17860478628486226,
+        "p10": -0.4798029495452293,
+        "p90": 0.32111886321525107
+      },
+      "benchmark_relative_log_wealth": {
+        "median": -0.19675288110484612,
+        "p10": -0.6535485391932857,
+        "p90": 0.2784738688468716
+      },
+      "log_terminal_wealth": {
+        "median": -0.16106335600551322,
+        "p10": -0.5993555501976764,
+        "p90": 0.3803660840161315
       },
       "information_ratio": {
-        "median": -0.4980426644310073,
-        "p10": -1.645529345746117,
-        "p90": 0.7884837831223874
+        "median": -0.25651405523249227,
+        "p10": -1.451887952438742,
+        "p90": 0.8241579321433562
       },
       "annual_turnover": {
-        "median": 53.0,
-        "p10": 42.0,
-        "p90": 63.0
+        "median": 52.0,
+        "p10": 41.8,
+        "p90": 60.1
       },
       "total_cost": {
-        "median": 0.053000000000000005,
-        "p10": 0.042,
-        "p90": 0.063
+        "median": 0.052000000000000005,
+        "p10": 0.041800000000000004,
+        "p90": 0.0601
       },
       "exposure_fraction": {
-        "median": 0.49206349206349204,
-        "p10": 0.42777777777777776,
-        "p90": 0.5722222222222222
+        "median": 0.498015873015873,
+        "p10": 0.42063492063492064,
+        "p90": 0.5873015873015873
       },
       "catalyst_exposure_fraction": {
-        "median": 0.3333333333333333,
-        "p10": 0.0,
+        "median": 0.5,
+        "p10": 0.3333333333333333,
         "p90": 1.0
       },
       "catalyst_sessions_per_episode": {
@@ -6021,7 +6072,7 @@
       "catalyst_trial_success_fraction": {
         "median": 0.3333333333333333,
         "p10": 0.0,
-        "p90": 0.6666666666666666
+        "p90": 1.0
       },
       "phase_ii_trial_success_fraction": {
         "median": 0.0,
@@ -6029,19 +6080,19 @@
         "p90": 1.0
       },
       "phase_iii_trial_success_fraction": {
-        "median": 0.5,
+        "median": 0.6666666666666666,
         "p10": 0.0,
         "p90": 1.0
       },
       "catalyst_market_return_given_success_mean": {
-        "median": 0.16504347882794967,
-        "p10": -0.12448113255500597,
-        "p90": 0.24587790431210674
+        "median": 0.1729877048354465,
+        "p10": -0.29117562956922965,
+        "p90": 0.25214386561122976
       },
       "catalyst_market_return_given_failure_mean": {
-        "median": -0.15392532619036314,
-        "p10": -0.3207917247246023,
-        "p90": 0.13584936752883545
+        "median": -0.1387319325485809,
+        "p10": -0.27981566319368595,
+        "p90": 0.11159453247550483
       },
       "catalyst_positive_market_reaction_fraction_given_success": {
         "median": 1.0,
@@ -6051,42 +6102,42 @@
       "catalyst_positive_market_reaction_fraction_given_failure": {
         "median": 0.0,
         "p10": 0.0,
-        "p90": 1.0
+        "p90": 0.9333333333333348
       },
       "catalyst_underlying_return_mean": {
-        "median": -0.04032631980343578,
-        "p10": -0.16309492297528214,
-        "p90": 0.10454724478392557
+        "median": -0.030387631148205467,
+        "p10": -0.20919386969637346,
+        "p90": 0.10707789810161379
       },
       "catalyst_underlying_return_worst": {
-        "median": -0.19794377280980055,
-        "p10": -0.3466609695776586,
-        "p90": -0.0989832381039569
+        "median": -0.20149680836407807,
+        "p10": -0.34099439227487904,
+        "p90": -0.1413959674872532
       },
       "catalyst_unconditional_expected_shortfall_95": {
-        "median": -0.19794377280980055,
-        "p10": -0.3466609695776586,
-        "p90": -0.0989832381039569
+        "median": -0.20149680836407807,
+        "p10": -0.34099439227487904,
+        "p90": -0.1413959674872532
       },
       "catalyst_policy_net_expected_shortfall_95": {
-        "median": -0.06253887963715407,
-        "p10": -0.3403376109488537,
+        "median": -0.14748889959944855,
+        "p10": -0.33816811490656584,
         "p90": 0.0
       },
       "catalyst_policy_net_mean": {
-        "median": -0.0005,
-        "p10": -0.14083288272835826,
-        "p90": 0.09991147894535454
+        "median": -0.0008333333333333333,
+        "p10": -0.1487042138018431,
+        "p90": 0.12186367171907808
       },
       "catalyst_policy_net_worst": {
-        "median": -0.06253887963715407,
-        "p10": -0.3403376109488537,
+        "median": -0.14748889959944855,
+        "p10": -0.33816811490656584,
         "p90": 0.0
       },
       "catalyst_event_transaction_cost": {
-        "median": 0.0,
+        "median": 0.001,
         "p10": 0.0,
-        "p90": 0.001
+        "p90": 0.002
       }
     },
     "pre_catalyst_exit": {
@@ -6096,59 +6147,69 @@
         "p90": 252.0
       },
       "annualized_return": {
-        "median": -0.09570546753970427,
-        "p10": -0.3526408558517819,
-        "p90": 0.5208108628366052
+        "median": 0.052203045986086605,
+        "p10": -0.42681212108496985,
+        "p90": 0.5725232381650435
       },
       "annualized_volatility": {
-        "median": 0.38093522978126926,
-        "p10": 0.35978381933101367,
-        "p90": 0.39946252434762003
+        "median": 0.38392263016169415,
+        "p10": 0.363414929602188,
+        "p90": 0.40203755096050714
       },
       "sharpe": {
-        "median": -0.07743663047504419,
-        "p10": -1.0096351101586025,
-        "p90": 1.2648093038746566
+        "median": 0.3255937582917424,
+        "p10": -1.3014035229390206,
+        "p90": 1.3689654278664798
       },
       "sortino": {
-        "median": -0.10876024478617752,
-        "p10": -1.387494156335881,
-        "p90": 1.8734767413653124
+        "median": 0.46478014176095983,
+        "p10": -1.7525716854590931,
+        "p90": 2.0368259313329773
       },
       "max_drawdown": {
-        "median": -0.3570922744279408,
-        "p10": -0.479623890247563,
-        "p90": -0.22099108777473275
+        "median": -0.3480715129593521,
+        "p10": -0.5206125164185973,
+        "p90": -0.2108655128603991
       },
       "calmar": {
-        "median": -0.30584234164548507,
-        "p10": -0.8061790517534947,
-        "p90": 1.605838558834825
+        "median": 0.12843174972761312,
+        "p10": -0.8681787169763996,
+        "p90": 2.5062825672079434
       },
       "value_at_risk_95": {
-        "median": -0.03920921621176674,
-        "p10": -0.042175522471654486,
-        "p90": -0.03601340470748237
+        "median": -0.03899328714994046,
+        "p10": -0.04316271876760984,
+        "p90": -0.03510825031146814
       },
       "expected_shortfall_95": {
-        "median": -0.04883296791015919,
-        "p10": -0.05435018294419318,
-        "p90": -0.044420484259578154
+        "median": -0.04974633216239861,
+        "p10": -0.0551648972778238,
+        "p90": -0.04592974527172155
       },
       "benchmark_total_return": {
-        "median": 0.0808686426652987,
-        "p10": -0.09385047214401081,
-        "p90": 0.3295017612206589
+        "median": 0.05643927598110243,
+        "p10": -0.11577950147205404,
+        "p90": 0.27287485931544714
       },
       "benchmark_relative_compounded_return": {
-        "median": -0.11707098200880245,
-        "p10": -0.41394466933944857,
-        "p90": 0.3898227724006023
+        "median": -0.03166341260068267,
+        "p10": -0.4597050735079579,
+        "p90": 0.5323227937760584
+      },
+      "benchmark_relative_log_wealth": {
+        "median": -0.032175538075445924,
+        "p10": -0.6159806953846368,
+        "p90": 0.42678458308806577
+      },
+      "log_terminal_wealth": {
+        "median": 0.05086043896203339,
+        "p10": -0.556558479407077,
+        "p90": 0.4526811150461103
       },
       "information_ratio": {
-        "median": -0.17262219795623798,
-        "p10": -1.2187473646733,
-        "p90": 1.0013879397998728
+        "median": 0.08226064514810612,
+        "p10": -1.4851269724974874,
+        "p90": 1.2508295777920002
       },
       "annual_turnover": {
         "median": 7.0,
@@ -6183,7 +6244,7 @@
       "catalyst_trial_success_fraction": {
         "median": 0.3333333333333333,
         "p10": 0.0,
-        "p90": 0.6666666666666666
+        "p90": 1.0
       },
       "phase_ii_trial_success_fraction": {
         "median": 0.0,
@@ -6191,19 +6252,19 @@
         "p90": 1.0
       },
       "phase_iii_trial_success_fraction": {
-        "median": 0.5,
+        "median": 0.6666666666666666,
         "p10": 0.0,
         "p90": 1.0
       },
       "catalyst_market_return_given_success_mean": {
-        "median": 0.16504347882794967,
-        "p10": -0.12448113255500597,
-        "p90": 0.24587790431210674
+        "median": 0.1729877048354465,
+        "p10": -0.29117562956922965,
+        "p90": 0.25214386561122976
       },
       "catalyst_market_return_given_failure_mean": {
-        "median": -0.15392532619036314,
-        "p10": -0.3207917247246023,
-        "p90": 0.13584936752883545
+        "median": -0.1387319325485809,
+        "p10": -0.27981566319368595,
+        "p90": 0.11159453247550483
       },
       "catalyst_positive_market_reaction_fraction_given_success": {
         "median": 1.0,
@@ -6213,22 +6274,22 @@
       "catalyst_positive_market_reaction_fraction_given_failure": {
         "median": 0.0,
         "p10": 0.0,
-        "p90": 1.0
+        "p90": 0.9333333333333348
       },
       "catalyst_underlying_return_mean": {
-        "median": -0.04032631980343578,
-        "p10": -0.16309492297528214,
-        "p90": 0.10454724478392557
+        "median": -0.030387631148205467,
+        "p10": -0.20919386969637346,
+        "p90": 0.10707789810161379
       },
       "catalyst_underlying_return_worst": {
-        "median": -0.19794377280980055,
-        "p10": -0.3466609695776586,
-        "p90": -0.0989832381039569
+        "median": -0.20149680836407807,
+        "p10": -0.34099439227487904,
+        "p90": -0.1413959674872532
       },
       "catalyst_unconditional_expected_shortfall_95": {
-        "median": -0.19794377280980055,
-        "p10": -0.3466609695776586,
-        "p90": -0.0989832381039569
+        "median": -0.20149680836407807,
+        "p10": -0.34099439227487904,
+        "p90": -0.1413959674872532
       },
       "catalyst_policy_net_expected_shortfall_95": {
         "median": 0.0,
@@ -6258,34 +6319,34 @@
         "p90": 252.0
       },
       "annualized_return": {
-        "median": 0.0,
-        "p10": -0.1262247629002727,
-        "p90": 0.0886814379407012
+        "median": -0.0024925312631680074,
+        "p10": -0.0990094668575791,
+        "p90": 0.10776511518044009
       },
       "annualized_volatility": {
-        "median": 0.08084782584745348,
+        "median": 0.08439257648746806,
         "p10": 0.0,
-        "p90": 0.11951266073704286
+        "p90": 0.13325277968882324
       },
       "sharpe": {
-        "median": 0.0,
-        "p10": -1.6567500713996577,
-        "p90": 0.9378486748829915
+        "median": -0.019627725084756804,
+        "p10": -1.1104612732506005,
+        "p90": 1.0247732557127855
       },
       "sortino": {
-        "median": 0.0,
-        "p10": -1.7370334942099228,
-        "p90": 1.7939436428211906
+        "median": -0.032314326001053974,
+        "p10": -1.243607503073178,
+        "p90": 1.9834576467132339
       },
       "max_drawdown": {
-        "median": -0.061321017147833445,
-        "p10": -0.1574093848137538,
+        "median": -0.07732030836874476,
+        "p10": -0.15708366388381426,
         "p90": 0.0
       },
       "calmar": {
-        "median": 0.0,
-        "p10": -0.9822971056010176,
-        "p90": 1.8060390565337598
+        "median": -0.030386268523627902,
+        "p10": -0.8886612933785747,
+        "p90": 2.0723189745711283
       },
       "value_at_risk_95": {
         "median": -0.001,
@@ -6293,39 +6354,49 @@
         "p90": 0.0
       },
       "expected_shortfall_95": {
-        "median": -0.008960315410880576,
-        "p10": -0.018255803167344712,
+        "median": -0.009459556078862888,
+        "p10": -0.018716487921698534,
         "p90": 0.0
       },
       "benchmark_total_return": {
-        "median": 0.0808686426652987,
-        "p10": -0.09385047214401081,
-        "p90": 0.3295017612206589
+        "median": 0.05643927598110243,
+        "p10": -0.11577950147205404,
+        "p90": 0.27287485931544714
       },
       "benchmark_relative_compounded_return": {
-        "median": -0.09819272946458685,
-        "p10": -0.25968646329265777,
-        "p90": 0.1131570050117964
+        "median": -0.07330361707612948,
+        "p10": -0.2272522106547614,
+        "p90": 0.11833261836491503
+      },
+      "benchmark_relative_log_wealth": {
+        "median": -0.07612929413988558,
+        "p10": -0.2578784966910681,
+        "p90": 0.11182772636254422
+      },
+      "log_terminal_wealth": {
+        "median": -0.0024987646999429097,
+        "p10": -0.10426059201756074,
+        "p90": 0.10234290595391711
       },
       "information_ratio": {
-        "median": -0.6366136781046284,
-        "p10": -1.972212915119387,
-        "p90": 0.5842580448726336
+        "median": -0.5307842966767969,
+        "p10": -1.5277677683508328,
+        "p90": 0.6788014128001747
       },
       "annual_turnover": {
-        "median": 21.0,
+        "median": 23.0,
         "p10": 0.0,
-        "p90": 46.2
+        "p90": 38.0
       },
       "total_cost": {
-        "median": 0.020999999999999998,
+        "median": 0.023,
         "p10": 0.0,
-        "p90": 0.046200000000000005
+        "p90": 0.038000000000000006
       },
       "exposure_fraction": {
-        "median": 0.041666666666666664,
+        "median": 0.047619047619047616,
         "p10": 0.0,
-        "p90": 0.09523809523809523
+        "p90": 0.07539682539682539
       },
       "catalyst_exposure_fraction": {
         "median": 0.0,
@@ -6345,7 +6416,7 @@
       "catalyst_trial_success_fraction": {
         "median": 0.3333333333333333,
         "p10": 0.0,
-        "p90": 0.6666666666666666
+        "p90": 1.0
       },
       "phase_ii_trial_success_fraction": {
         "median": 0.0,
@@ -6353,19 +6424,19 @@
         "p90": 1.0
       },
       "phase_iii_trial_success_fraction": {
-        "median": 0.5,
+        "median": 0.6666666666666666,
         "p10": 0.0,
         "p90": 1.0
       },
       "catalyst_market_return_given_success_mean": {
-        "median": 0.16504347882794967,
-        "p10": -0.12448113255500597,
-        "p90": 0.24587790431210674
+        "median": 0.1729877048354465,
+        "p10": -0.29117562956922965,
+        "p90": 0.25214386561122976
       },
       "catalyst_market_return_given_failure_mean": {
-        "median": -0.15392532619036314,
-        "p10": -0.3207917247246023,
-        "p90": 0.13584936752883545
+        "median": -0.1387319325485809,
+        "p10": -0.27981566319368595,
+        "p90": 0.11159453247550483
       },
       "catalyst_positive_market_reaction_fraction_given_success": {
         "median": 1.0,
@@ -6375,22 +6446,22 @@
       "catalyst_positive_market_reaction_fraction_given_failure": {
         "median": 0.0,
         "p10": 0.0,
-        "p90": 1.0
+        "p90": 0.9333333333333348
       },
       "catalyst_underlying_return_mean": {
-        "median": -0.04032631980343578,
-        "p10": -0.16309492297528214,
-        "p90": 0.10454724478392557
+        "median": -0.030387631148205467,
+        "p10": -0.20919386969637346,
+        "p90": 0.10707789810161379
       },
       "catalyst_underlying_return_worst": {
-        "median": -0.19794377280980055,
-        "p10": -0.3466609695776586,
-        "p90": -0.0989832381039569
+        "median": -0.20149680836407807,
+        "p10": -0.34099439227487904,
+        "p90": -0.1413959674872532
       },
       "catalyst_unconditional_expected_shortfall_95": {
-        "median": -0.19794377280980055,
-        "p10": -0.3466609695776586,
-        "p90": -0.0989832381039569
+        "median": -0.20149680836407807,
+        "p10": -0.34099439227487904,
+        "p90": -0.1413959674872532
       },
       "catalyst_policy_net_expected_shortfall_95": {
         "median": 0.0,
@@ -6418,99 +6489,162 @@
     "cash": {
       "annualized_return_difference": {
         "paired_episode_seeds": 60,
-        "mean_difference": -0.019025654416287716,
-        "median_difference": 0.0,
-        "bootstrap_95pct_interval_low": -0.04015780232489489,
-        "bootstrap_95pct_interval_high": 0.0014353161488079805,
+        "mean_difference": -0.012754753628300182,
+        "median_difference": -0.0024925312631680074,
+        "bootstrap_95pct_interval_low": -0.03317053724919331,
+        "bootstrap_95pct_interval_high": 0.0072306364954217986,
         "bootstrap_replicates": 10000,
-        "bootstrap_seed": 10000
+        "bootstrap_seed": 20000
       },
       "benchmark_relative_compounded_return_difference": {
         "paired_episode_seeds": 60,
-        "mean_difference": -0.020910725648389895,
-        "median_difference": 0.0,
-        "bootstrap_95pct_interval_low": -0.04144836572916552,
-        "bootstrap_95pct_interval_high": -0.0010531102945714142,
+        "mean_difference": -0.012021644968303744,
+        "median_difference": -0.002319354645953009,
+        "bootstrap_95pct_interval_low": -0.031389082050842246,
+        "bootstrap_95pct_interval_high": 0.007122430276992923,
         "bootstrap_replicates": 10000,
-        "bootstrap_seed": 10100
+        "bootstrap_seed": 20100
+      },
+      "benchmark_relative_log_wealth_difference": {
+        "paired_episode_seeds": 60,
+        "mean_difference": -0.01606786422203118,
+        "median_difference": -0.0024987646999429097,
+        "bootstrap_95pct_interval_low": -0.03707749787988433,
+        "bootstrap_95pct_interval_high": 0.004058328996247273,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 20200
       }
     },
     "buy_and_hold": {
       "annualized_return_difference": {
         "paired_episode_seeds": 60,
-        "mean_difference": -0.011966395110431263,
-        "median_difference": 0.1277447984811239,
-        "bootstrap_95pct_interval_low": -0.21450657474864146,
-        "bootstrap_95pct_interval_high": 0.14704974152689654,
+        "mean_difference": 0.02793460671399227,
+        "median_difference": 0.029623495491746754,
+        "bootstrap_95pct_interval_low": -0.08920466830093415,
+        "bootstrap_95pct_interval_high": 0.1411437676316181,
         "bootstrap_replicates": 10000,
-        "bootstrap_seed": 10001
+        "bootstrap_seed": 20001
       },
       "benchmark_relative_compounded_return_difference": {
         "paired_episode_seeds": 60,
-        "mean_difference": 0.02299586823552991,
-        "median_difference": 0.0971729961743103,
-        "bootstrap_95pct_interval_low": -0.12697879811145324,
-        "bootstrap_95pct_interval_high": 0.15378780844931567,
+        "mean_difference": 0.04649118568738617,
+        "median_difference": 0.025878721949503136,
+        "bootstrap_95pct_interval_low": -0.05940480727877279,
+        "bootstrap_95pct_interval_high": 0.14854489735466272,
         "bootstrap_replicates": 10000,
-        "bootstrap_seed": 10101
+        "bootstrap_seed": 20101
+      },
+      "benchmark_relative_log_wealth_difference": {
+        "paired_episode_seeds": 60,
+        "mean_difference": 0.13294486980071238,
+        "median_difference": 0.03368023130065881,
+        "bootstrap_95pct_interval_low": 0.012361960115619991,
+        "bootstrap_95pct_interval_high": 0.25556109982947633,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 20201
       }
     },
     "trend_rule": {
       "annualized_return_difference": {
         "paired_episode_seeds": 60,
-        "mean_difference": 0.049323184480402356,
-        "median_difference": 0.13320081777422088,
-        "bootstrap_95pct_interval_low": -0.06308558087111861,
-        "bootstrap_95pct_interval_high": 0.1521589966496685,
+        "mean_difference": 0.05882802411255371,
+        "median_difference": 0.13088168808822925,
+        "bootstrap_95pct_interval_low": -0.03392027911417199,
+        "bootstrap_95pct_interval_high": 0.1460379397985205,
         "bootstrap_replicates": 10000,
-        "bootstrap_seed": 10002
+        "bootstrap_seed": 20002
       },
       "benchmark_relative_compounded_return_difference": {
         "paired_episode_seeds": 60,
-        "mean_difference": 0.061587268543236956,
-        "median_difference": 0.11455899726707086,
-        "bootstrap_95pct_interval_low": -0.04113048534901857,
-        "bootstrap_95pct_interval_high": 0.15651428021976782,
+        "mean_difference": 0.06346464740820854,
+        "median_difference": 0.14725170691882838,
+        "bootstrap_95pct_interval_low": -0.02372617621724509,
+        "bootstrap_95pct_interval_high": 0.14579699808949628,
         "bootstrap_replicates": 10000,
-        "bootstrap_seed": 10102
+        "bootstrap_seed": 20102
+      },
+      "benchmark_relative_log_wealth_difference": {
+        "paired_episode_seeds": 60,
+        "mean_difference": 0.12786676362646016,
+        "median_difference": 0.1337323150299255,
+        "bootstrap_95pct_interval_low": 0.0318760992227814,
+        "bootstrap_95pct_interval_high": 0.2229936879311326,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 20202
       }
     },
     "pre_catalyst_exit": {
       "annualized_return_difference": {
         "paired_episode_seeds": 60,
-        "mean_difference": -0.06340066214277609,
-        "median_difference": 0.08875342575489953,
-        "bootstrap_95pct_interval_low": -0.1646512706661103,
-        "bootstrap_95pct_interval_high": 0.030127011602304417,
+        "mean_difference": -0.08139747768619872,
+        "median_difference": -0.013900828049814795,
+        "bootstrap_95pct_interval_low": -0.194449641206061,
+        "bootstrap_95pct_interval_high": 0.02290355217233905,
         "bootstrap_replicates": 10000,
-        "bootstrap_seed": 10003
+        "bootstrap_seed": 20003
       },
       "benchmark_relative_compounded_return_difference": {
         "paired_episode_seeds": 60,
-        "mean_difference": -0.046824750710443244,
-        "median_difference": 0.07389312111823887,
-        "bootstrap_95pct_interval_low": -0.13634041484400136,
-        "bootstrap_95pct_interval_high": 0.037903596636580536,
+        "mean_difference": -0.06965461054376476,
+        "median_difference": -0.012854598020275498,
+        "bootstrap_95pct_interval_low": -0.18060611859618425,
+        "bootstrap_95pct_interval_high": 0.03357835052710243,
         "bootstrap_replicates": 10000,
-        "bootstrap_seed": 10103
+        "bootstrap_seed": 20103
+      },
+      "benchmark_relative_log_wealth_difference": {
+        "paired_episode_seeds": 60,
+        "mean_difference": -0.0027371756285828035,
+        "median_difference": -0.013874660415474027,
+        "bootstrap_95pct_interval_low": -0.10599988886751706,
+        "bootstrap_95pct_interval_high": 0.09829039013635701,
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 20203
       }
     }
+  },
+  "primary_final_comparison": {
+    "metric": "paired net benchmark-relative compounded wealth difference",
+    "q_policy": "q_learner",
+    "baseline_selected_on_validation_seeds": "pre_catalyst_exit",
+    "comparison": {
+      "paired_episode_seeds": 60,
+      "mean_difference": -0.06965461054376476,
+      "median_difference": -0.012854598020275498,
+      "bootstrap_95pct_interval_low": -0.18060611859618425,
+      "bootstrap_95pct_interval_high": 0.03357835052710243,
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 20103
+    },
+    "objective_aligned_log_wealth_comparison": {
+      "paired_episode_seeds": 60,
+      "mean_difference": -0.0027371756285828035,
+      "median_difference": -0.013874660415474027,
+      "bootstrap_95pct_interval_low": -0.10599988886751706,
+      "bootstrap_95pct_interval_high": 0.09829039013635701,
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 20203
+    },
+    "positive_interval_required_for_improvement_claim": true,
+    "drawdown_and_tail_risk_limits_predeclared": false,
+    "improvement_claim_supported": false,
+    "interpretation": "No improvement claim is supported unless the paired 95% interval is above zero and separately predeclared drawdown/tail-risk limits pass."
   },
   "paired_comparison_interpretation": "Intervals resample matched synthetic evaluation episode seeds and describe uncertainty under this one fixed generator and trained policy. They are not historical-market confidence intervals, do not include policy-training uncertainty, and do not establish statistical significance or a trading edge.",
   "evaluation_event_process_summary": {
     "independent_episode_seeds": 60,
     "catalyst_count": 180,
-    "clinical_success_count": 71,
-    "clinical_failure_count": 109,
-    "clinical_success_fraction": 0.39444444444444443,
-    "phase_ii_count": 101,
-    "phase_ii_clinical_success_fraction": 0.3069306930693069,
-    "phase_iii_count": 79,
-    "phase_iii_clinical_success_fraction": 0.5063291139240507,
-    "positive_market_reaction_fraction_given_clinical_success": 0.8169014084507042,
-    "positive_market_reaction_fraction_given_clinical_failure": 0.22935779816513763,
-    "mean_issuer_event_return_given_clinical_success": 0.11262808570344215,
-    "mean_issuer_event_return_given_clinical_failure": -0.12102127850274545,
+    "clinical_success_count": 79,
+    "clinical_failure_count": 101,
+    "clinical_success_fraction": 0.4388888888888889,
+    "phase_ii_count": 100,
+    "phase_ii_clinical_success_fraction": 0.27,
+    "phase_iii_count": 80,
+    "phase_iii_clinical_success_fraction": 0.65,
+    "positive_market_reaction_fraction_given_clinical_success": 0.6835443037974683,
+    "positive_market_reaction_fraction_given_clinical_failure": 0.297029702970297,
+    "mean_issuer_event_return_given_clinical_success": 0.05516513170737574,
+    "mean_issuer_event_return_given_clinical_failure": -0.09073466196822744,
     "interpretation": "Synthetic generator diagnostics across unique matched evaluation paths; advancement and stock reaction are separate draws. Advancement priors use published aggregate transitions; these counts are not empirical event-panel estimates."
   }
 }

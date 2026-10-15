@@ -31,7 +31,7 @@ Quant. will monitor AI's impact across drug discovery, clinical development, and
 <script src="../_static/ai-impact-monitor.js" defer></script>
 ```
 
-The monitor is deliberately a coverage instrument. Its three lanes are scientific outcomes (molecule or trial results), operational outcomes (time, cost, or trial execution), and economic outcomes (issuer value, revenue, or market response). Each lane separates outcomes with any comparator from direct AI-versus-conventional comparisons. A populated clinical comparator is not an estimate of AI's effect: the rentosertib comparison is drug versus placebo, not AI-assisted versus conventional discovery. The build validates ledger identifiers and source hashes before publishing the monitor.
+The monitor is deliberately a coverage instrument. It tracks six dimensions: scientific outcomes (molecule or trial results), operational outcomes (time, cost, trial execution, and productivity), economic outcomes (issuer value, revenue, market response, and labor markets), patient access and safety (including health equity), workforce and social outcomes (employment, work quality, and scientific roles), and environmental impact (energy, compute, and emissions). Each lane reports reviewed evidence, comparator coverage, direct AI-exposure contrasts, impact dimensions, and affected groups. A populated clinical comparator is not an estimate of AI's effect: the rentosertib comparison is drug versus placebo, not AI-assisted versus conventional discovery. The build validates ledger identifiers and source hashes before publishing the monitor.
 
 ## What current evidence says—and doesn't say
 
@@ -59,14 +59,20 @@ Tag clinical-operations applications separately from molecule discovery: site se
 
 Create a dated catalog of first verifiable disclosures: validated candidate entry, trial milestone, partnership, licensing deal, platform revenue, or material capital/expense commitment. Estimate issuer CAR and event-window downside with broad-market and biotech-sector controls. Separate AI-discovery catalysts from general partnerships, financing, acquisitions, and ordinary earnings news. A price reaction measures changed expectations at the disclosure; it does not prove scientific impact or durable revenue.
 
+### 4. Who benefits, who bears the costs, and what changes outside the pipeline?
+
+Track patient access and safety (time to treatment, affordability, geographic reach, demographic representation, adverse events, and post-market signals); workforce effects (employment, role mix, work quality, training, and scientific contribution); social distribution (who receives benefits and who carries risks); and environmental footprint (compute energy, water where reported, and emissions). Record affected group, geography, time horizon, denominator, comparator, and whether the outcome is directly attributable to AI exposure. Productivity gains are not automatically patient benefit; lower discovery cost is not automatically lower treatment cost. Missing or selectively reported outcomes remain visible as missingness rather than being scored as zero.
+
 ## Exposure classification and evidence ledger
 
-The tracked unit is a **company, candidate/program, trial, or disclosure**, with explicit links among them. Classify each record along two axes:
+The tracked unit is a **company, candidate/program, trial, patient or worker population, or disclosure**, with explicit links among them. Classify each record along two axes:
 
 | Axis | Values to curate | Example distinction |
 | --- | --- | --- |
 | AI application | target discovery; molecule design/optimization; biomarker or patient stratification; trial design/recruitment; clinical data analysis; manufacturing/quality; regulatory/postmarket; general productivity | Generative molecule design and LLM-written regulatory summaries answer different scientific and economic questions |
 | Evidence strength | public claim; specific workflow disclosed; candidate-level attribution; independently supported use; measured comparative result | A press release saying “AI-powered platform” is weaker evidence than a named molecule with a peer-reviewed or regulatory-verified AI role |
+
+Outcome rows additionally carry `impact_dimension` and `affected_group`. The controlled vocabulary covers clinical efficacy, development time, productivity, company value, patient access, patient safety, health equity, employment, workforce conditions, scientific workforce, energy use, and compute emissions. A source can support multiple distinct outcome rows; do not infer unreported societal effects from company announcements or model benchmarks.
 
 Every record needs a public-availability date and its precision (date-only or exact timestamp), source URL and hash, entity mapping, curator status, and taxonomy version. Outcome rows explicitly indicate whether their comparator contrasts AI exposure (`ai_exposure_contrast=yes/no/unclear`). Keep AI exposure records separate from transition outcomes and stock returns so future evidence cannot leak into a historical feature. The exposure ledger is [`data/biopharma/ai_evidence.csv`](../../data/biopharma/ai_evidence.csv), with fields defined in [`ai_evidence.schema.csv`](../../data/biopharma/ai_evidence.schema.csv). Outcome observations live separately in [`ai_outcomes.csv`](../../data/biopharma/ai_outcomes.csv), defined by [`ai_outcomes.schema.csv`](../../data/biopharma/ai_outcomes.schema.csv).
 

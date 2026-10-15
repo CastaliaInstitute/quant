@@ -26,7 +26,7 @@ OUTCOME_REQUIRED = {
     "outcome_id", "entity_type", "entity_id", "outcome_domain", "metric",
     "observed_value", "unit", "comparison_group", "comparison_value",
     "comparison_unit", "observation_start", "observation_end",
-    "ai_exposure_contrast",
+    "ai_exposure_contrast", "impact_dimension", "affected_group",
     "public_available_at_utc", "public_time_precision", "source_url", "source_sha256", "study_design",
     "review_status",
 }
@@ -65,6 +65,10 @@ def validate_ledger(rows: list[dict[str, str]], *, path: Path, id_field: str, ha
         if identifier in seen:
             raise SystemExit(f"{path}:{line}: duplicate {id_field} {identifier!r}")
         seen.add(identifier)
+        if id_field == "outcome_id":
+            for field in ("impact_dimension", "affected_group"):
+                if not (row.get(field) or "").strip():
+                    raise SystemExit(f"{path}:{line}: {field} must not be empty")
         for field in hash_fields:
             value = (row.get(field) or "").strip()
             if value and not re.fullmatch(r"[0-9a-fA-F]{64}", value):
@@ -122,8 +126,11 @@ def main() -> None:
         domain_rows.setdefault((row.get("outcome_domain") or "unspecified").strip(), []).append(row)
     impact_domains = {
         "scientific": {"clinical_trial_measure", "clinical_progression", "drug_discovery"},
-        "operational": {"trial_operations", "development_timeline", "development_cost"},
-        "economic": {"company_value", "market_response", "revenue"},
+        "operational": {"trial_operations", "development_timeline", "development_cost", "productivity"},
+        "economic": {"company_value", "market_response", "revenue", "labor_market"},
+        "patient_access_and_safety": {"patient_access", "patient_safety", "health_equity"},
+        "workforce_and_society": {"labor_market", "workforce_conditions", "scientific_workforce"},
+        "environmental": {"environmental_impact", "energy_use", "compute_emissions"},
     }
     impact_coverage = {}
     for impact, known_domains in impact_domains.items():
@@ -132,6 +139,8 @@ def main() -> None:
         comparable = [row for row in reviewed if present(row, "comparison_group", "comparison_value", "comparison_unit", "study_design")]
         direct_ai_contrasts = [row for row in comparable if row.get("ai_exposure_contrast", "").strip().lower() == "yes"]
         impact_coverage[impact] = {
+            "dimensions": dict(sorted(Counter((row.get("impact_dimension") or "unspecified").strip() for row in matching).items())),
+            "affected_groups": dict(sorted(Counter((row.get("affected_group") or "unspecified").strip() for row in matching).items())),
             "outcome_records": len(matching),
             "reviewed_records": len(reviewed),
             "reviewed_comparator_records": len(comparable),
