@@ -61,13 +61,15 @@
   "event_panel": {
     "available": false,
     "rows": 0,
+    "usable_rows": 0,
     "status": "missing"
   },
   "minimum_sample_gates": {
     "train_events": 30,
     "validation_events": 8,
     "final_test_events": 8,
-    "issuers": 10
+    "issuers": 10,
+    "calendar_quarters": 10
   },
   "gates": {
     "adjusted_prices_available_and_valid": false,
@@ -75,7 +77,8 @@
     "minimum_train_events": false,
     "minimum_validation_events": false,
     "minimum_final_test_events": false,
-    "minimum_issuer_coverage": false
+    "minimum_issuer_coverage": false,
+    "minimum_calendar_quarter_coverage": false
   },
   "interpretation": "A passing gate permits a historical replay diagnostic, not a claim of trading edge. The final chronological block must remain untouched until the protocol and policy are frozen. Realized disclosure dates must not be supplied as observable event schedules unless a dated pre-event source proves they were known."
 }

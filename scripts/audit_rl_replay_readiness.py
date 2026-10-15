@@ -47,8 +47,12 @@ def main() -> None:
     parser.add_argument("--minimum-validation-events", type=int, default=8)
     parser.add_argument("--minimum-test-events", type=int, default=8)
     parser.add_argument("--minimum-issuers", type=int, default=10)
+    parser.add_argument("--minimum-calendar-quarters", type=int, default=10)
     args = parser.parse_args()
-    if min(args.minimum_train_events, args.minimum_validation_events, args.minimum_test_events, args.minimum_issuers) <= 0:
+    if min(
+        args.minimum_train_events, args.minimum_validation_events,
+        args.minimum_test_events, args.minimum_issuers, args.minimum_calendar_quarters,
+    ) <= 0:
         raise SystemExit("all minimum sample gates must be positive")
 
     events = pd.read_csv(args.events).fillna("") if args.events.exists() else pd.DataFrame()
@@ -77,39 +81,80 @@ def main() -> None:
             valid = prices.dropna(subset=["date", "symbol", "adjusted_close"])
             positive = valid.adjusted_close.gt(0).all()
             unique = not valid.duplicated(["date", "symbol"]).any()
+            observed_symbols = set(valid.symbol)
+            required_symbols = {"SPY", "XBI"} | set(
+                events.ticker.astype(str).str.strip().str.upper().replace("", pd.NA).dropna()
+            )
+            missing_symbols = sorted(required_symbols - observed_symbols)
             price_check.update({
                 "adjusted_close_column": True,
                 "valid_rows": int(len(valid)),
                 "symbols": int(valid.symbol.nunique()),
+                "missing_required_symbols": missing_symbols,
+                "date_range": {
+                    "first": valid.date.min().date().isoformat() if len(valid) else None,
+                    "last": valid.date.max().date().isoformat() if len(valid) else None,
+                },
                 "positive_prices": bool(positive),
                 "unique_symbol_dates": bool(unique),
-                "status": "ready" if positive and unique and len(valid) else "invalid",
+                "status": "ready" if positive and unique and len(valid) and not missing_symbols else "invalid_or_incomplete",
             })
 
     panel_exists = args.panel.exists()
-    panel_check: dict[str, object] = {"available": panel_exists, "rows": 0, "status": "missing"}
+    panel_check: dict[str, object] = {"available": panel_exists, "rows": 0, "usable_rows": 0, "status": "missing"}
     if panel_exists:
         panel = pd.read_csv(args.panel)
-        required = {"event_id", "ticker", "event_date", "matched_first_session", "matched_second_session", "price_field_used"}
+        required = {
+            "event_id", "ticker", "event_date", "matched_first_session", "matched_second_session",
+            "price_field_used", "two_session_event_window_return", "down_10pct_event_window",
+        }
         missing = sorted(required - set(panel.columns))
         if missing:
             panel_check.update({"status": "invalid", "missing_columns": missing})
         else:
             adjusted = panel.price_field_used.astype(str).eq("adjusted_close")
+            duplicate_ids = panel.event_id.astype(str).duplicated(keep=False)
+            valid_dates = pd.to_datetime(panel.event_date, errors="coerce").notna()
+            valid_sessions = (
+                pd.to_datetime(panel.matched_first_session, errors="coerce").notna()
+                & pd.to_datetime(panel.matched_second_session, errors="coerce").notna()
+            )
+            returns = pd.to_numeric(panel.two_session_event_window_return, errors="coerce")
+            target = pd.to_numeric(panel.down_10pct_event_window, errors="coerce")
+            usable = (
+                panel.event_id.astype(str).str.strip().ne("")
+                & panel.ticker.astype(str).str.strip().ne("")
+                & valid_dates & valid_sessions & adjusted
+                & returns.notna() & target.isin([0, 1])
+            )
             source_event_ids = set(events.event_id.astype(str))
             panel_event_ids = set(panel.event_id.astype(str))
+            usable_panel = panel.loc[usable].copy()
+            usable_panel["event_date"] = pd.to_datetime(usable_panel.event_date, errors="coerce")
+            usable_quarters = usable_panel.event_date.dt.to_period("Q").astype(str)
+            issuer_quarter_clusters = int(
+                pd.DataFrame({
+                    "ticker": usable_panel.ticker.astype(str).str.upper(),
+                    "quarter": usable_quarters,
+                }).drop_duplicates().shape[0]
+            )
             panel_check.update({
                 "rows": int(len(panel)),
                 "unique_event_ids": int(panel.event_id.nunique()),
+                "duplicate_event_id_rows": int(duplicate_ids.sum()),
+                "usable_rows": int(usable.sum()),
                 "source_events_without_panel_rows": int(len(source_event_ids - panel_event_ids)),
+                "panel_ids_not_in_source_ledger": int(len(panel_event_ids - source_event_ids)),
                 "adjusted_price_rows": int(adjusted.sum()),
-                "status": "ready" if len(panel) and adjusted.all() else "invalid_or_unadjusted",
+                "calendar_quarter_clusters": int(usable_quarters.nunique()),
+                "issuer_quarter_clusters": issuer_quarter_clusters,
+                "status": "ready" if len(panel) and usable.all() and not duplicate_ids.any() else "invalid_or_incomplete",
             })
 
-    panel_for_split = panel if panel_exists and panel_check["status"] == "ready" else pd.DataFrame(columns=["event_date"])
+    panel_for_split = usable_panel if panel_exists and panel_check["status"] == "ready" else pd.DataFrame(columns=["event_date"])
     panel_splits = chronological_counts(panel_for_split)
     issuers = (
-        panel.ticker if panel_exists and "ticker" in panel
+        panel_for_split.ticker if "ticker" in panel_for_split
         else pd.Series(dtype=str)
     ).astype(str).str.strip().str.upper()
     issuer_count = int(issuers[issuers.ne("")].nunique())
@@ -121,6 +166,7 @@ def main() -> None:
         "minimum_validation_events": panel_splits["validation"]["events"] >= args.minimum_validation_events,
         "minimum_final_test_events": panel_splits["final_test"]["events"] >= args.minimum_test_events,
         "minimum_issuer_coverage": issuer_count >= args.minimum_issuers,
+        "minimum_calendar_quarter_coverage": panel_check.get("calendar_quarter_clusters", 0) >= args.minimum_calendar_quarters,
     }
     report = {
         "evidence_status": "data_readiness_audit_only_no_policy_fit_or_return_estimate",
@@ -145,6 +191,7 @@ def main() -> None:
             "validation_events": args.minimum_validation_events,
             "final_test_events": args.minimum_test_events,
             "issuers": args.minimum_issuers,
+            "calendar_quarters": args.minimum_calendar_quarters,
         },
         "gates": gates,
         "interpretation": (
