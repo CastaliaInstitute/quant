@@ -6,6 +6,8 @@
 
 This executable simulator exercise trains a tabular Q learner in a seeded, single-issuer catalyst gym. It compares the learned policy with cash, buy-and-hold, a five-day trend rule, and a pre-catalyst exit heuristic on matched synthetic paths. This revision separates program advancement from the stock's response to the readout. The previous direction-linked synthetic model is preserved as <a href="../_static/rl-simulation-legacy-linked-outcomes.json">a superseded report</a>.
 
+**Evidence label: synthetic mechanics diagnostic.** This experiment is not historical replay, portfolio construction, or out-of-sample market evidence. Its synthetic seed paths validate implementation and expose reward behavior under the configured generator; they do not count as independent observed market regimes. The predeclared return metric and promotion gates are in [Return Metrics](metrics.md#hiring-portfolio-rl-ladder).
+
 ## Environment and policy
 
 - **Observation:** five-session issuer momentum, trailing 20-session volatility, time until the next scheduled readout, its known Phase II/III category, remaining episode horizon, and current position. The last two variables make the finite-horizon reward and turnover-cost transition observable. The tabular state space contains 288 combinations (36 market/catalyst states × 4 horizon bins × 2 position states); sparse state-action coverage is reported.
