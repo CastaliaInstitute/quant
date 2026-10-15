@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Join curated public catalyst timestamps, trial metadata, and licensed price bars.
 
-Input price CSV columns: date, symbol, close (optional adjusted_close, volume).
+Input price CSV columns: date, symbol, adjusted_close (optional volume). A raw
+close-only export requires the explicit --allow-unadjusted-close option.
 The event return spans the last close before the public event date to the second
 close on/after it; pre-event features stop strictly before the event date.
 """
@@ -138,6 +139,11 @@ def main() -> None:
     parser.add_argument("--research-evidence", type=Path, default=ROOT / "data/biopharma/research_evidence.schema.csv")
     parser.add_argument("--sec-filings", type=Path, default=ROOT / "data/raw/sec_filings.csv")
     parser.add_argument("--prices", type=Path, default=ROOT / "data/raw/market_prices.csv")
+    parser.add_argument(
+        "--allow-unadjusted-close",
+        action="store_true",
+        help="allow a close-only input and mark the result as using unadjusted prices",
+    )
     parser.add_argument("--market-benchmark", default="SPY", help="Broad-market ticker in the price input; blank disables")
     parser.add_argument("--sector-benchmark", default="XBI", help="Biotech-sector ticker in the price input; blank disables")
     parser.add_argument("--output", type=Path, default=ROOT / "data/processed/event_panel.csv")
@@ -149,10 +155,22 @@ def main() -> None:
     research_evidence = read_csv(args.research_evidence) if args.research_evidence.exists() else pd.DataFrame()
     sec_filings = read_csv(args.sec_filings) if args.sec_filings.exists() else pd.DataFrame()
     prices = read_csv(args.prices)
-    required = {"date", "symbol", "close"}
+    required = {"date", "symbol"}
     if not required.issubset(prices.columns):
         raise SystemExit(f"Price input needs columns: {', '.join(sorted(required))}")
-    price_column = "adjusted_close" if "adjusted_close" in prices.columns else "close"
+    if "adjusted_close" in prices.columns:
+        price_column = "adjusted_close"
+        price_basis = "adjusted_close"
+    elif "close" in prices.columns and args.allow_unadjusted_close:
+        price_column = "close"
+        price_basis = "unadjusted_close_explicitly_allowed"
+    elif "close" in prices.columns:
+        raise SystemExit(
+            "Price input contains only close. Supply adjusted_close, or pass "
+            "--allow-unadjusted-close to explicitly accept unadjusted prices."
+        )
+    else:
+        raise SystemExit("Price input needs an adjusted_close column")
     prices["date"] = pd.to_datetime(prices["date"], errors="coerce").dt.normalize()
     prices["symbol"] = prices["symbol"].astype(str).str.upper()
     prices[price_column] = pd.to_numeric(prices[price_column], errors="coerce")
@@ -454,6 +472,7 @@ def main() -> None:
         "evidence_status": "historical_event_panel_requires_manual_timestamp_and_coverage_review",
         "row_count": len(rows),
         "price_field": price_column,
+        "price_basis": price_basis,
         "benchmark_symbols": benchmark_symbols,
         "event_study_model": {
             "method": "OLS issuer simple returns on SPY and XBI simple returns",

@@ -103,7 +103,7 @@ def main() -> None:
                 rows.append({
                     "date": bar["t"][:10],
                     "symbol": symbol,
-                    "close": bar["c"],
+                    "adjusted_close": bar["c"],
                     "volume": bar["v"],
                 })
         token = page.get("next_page_token")
@@ -114,7 +114,7 @@ def main() -> None:
         raise SystemExit("The provider returned no bars; check ticker entitlement, feed, and date range.")
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with args.output.open("w", newline="", encoding="utf-8") as stream:
-        writer = csv.DictWriter(stream, fieldnames=("date", "symbol", "close", "volume"))
+        writer = csv.DictWriter(stream, fieldnames=("date", "symbol", "adjusted_close", "volume"))
         writer.writeheader()
         writer.writerows(sorted(rows, key=lambda item: (item["symbol"], item["date"])))
     args.manifest.write_text(json.dumps({

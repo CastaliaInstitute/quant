@@ -53,7 +53,7 @@ export APCA_API_SECRET_KEY='…'
 python scripts/fetch_alpaca_bars.py --feed sip
 ```
 
-The script requests split-, dividend-, and spin-off-adjusted bars; SIP access may require a corresponding entitlement for consolidated US coverage. Alternatively, place a licensed vendor export at `data/raw/market_prices.csv`, with columns `date,symbol,close` and optional `adjusted_close,volume`. Then build the local event panel. A sibling manifest records SHA-256 hashes of all source files, making the panel reproducible without publishing price bars:
+The script requests split-, dividend-, and spin-off-adjusted bars and writes the selected price as `adjusted_close`; SIP access may require a corresponding entitlement for consolidated US coverage. Alternatively, place a licensed vendor export at `data/raw/market_prices.csv`, with columns `date,symbol,adjusted_close` and optional `volume`. The event-panel builder now requires `adjusted_close` by default. A close-only export can be used with `--allow-unadjusted-close`, which records that choice in the panel manifest; raw closes can create false returns around splits and other corporate actions. A sibling manifest records SHA-256 hashes of all source files, making the panel reproducible without publishing price bars:
 
 ```bash
 python scripts/build_biopharma_event_panel.py
