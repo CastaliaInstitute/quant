@@ -58,7 +58,7 @@ python scripts/audit_cto_outcomes.py
 jupyter-book build book --path-output book
 ```
 
-Historical registry, biomedical-publication, and issuer filing metadata have been pulled for nineteen trial-to-issuer mappings and eighteen sourced disclosures across eight therapeutic areas/indications. The cohort remains a source-lineage fixture, not a training sample. Market prices are fetched separately through a provider account or imported from a licensed CSV; see [the biopharma data guide](book/data-sources.md). No stock-price file has been provided yet, so there is no historical event-return result or fitted historical model.
+Historical registry, biomedical-publication, and issuer filing metadata have been pulled for 27 trial-to-issuer mappings and 26 sourced disclosures across multiple therapeutic areas/indications. The cohort remains a source-lineage fixture, not a training sample. Market prices are fetched separately through a provider account or imported from a licensed CSV; see [the biopharma data guide](book/data-sources.md). No stock-price file has been provided yet, so there is no historical event-return result or fitted historical model.
 
 After a broader event cohort, archived point-in-time trial versions, and licensed price bars are available, build the local panel and run the gated walk-forward evaluator:
 
@@ -69,7 +69,7 @@ python scripts/evaluate_event_risk.py
 python scripts/evaluate_event_risk.py --target down_10pct_market_model_car_0_1
 ```
 
-The evaluator reads the versioned protocol, requires enough distinct historical event dates and at least 30 training / 8 test events per fold by default, and deliberately exits on the current eighteen-disclosure fixture instead of fitting an unstable model. For a predeclared sensitivity, pass `--target down_10pct_market_model_car_0_1`. Changes to frozen evaluation settings require `--allow-protocol-deviation` and are recorded in the output summary.
+The evaluator reads the versioned protocol, requires enough distinct historical event dates and at least 30 training / 8 test events per fold by default, and deliberately exits on the current 26-disclosure fixture instead of fitting an unstable model. For a predeclared sensitivity, pass `--target down_10pct_market_model_car_0_1`. Changes to frozen evaluation settings require `--allow-protocol-deviation` and are recorded in the output summary.
 
 The CTO benchmark audit downloads a pinned 2020–2024 human-labeled subset (about 10 MB) into ignored `data/raw/cto/` and writes aggregate provenance/coverage to `reports/cto-human-labels-audit.json`. It is a separate clinical-outcome benchmark, not the market-event model: its subset was selected to remove easy cases, and its current-record fields are not point-in-time features.
 

@@ -95,7 +95,7 @@ This log preserves both superseded policy experiments and the current biotech ca
 
 ## Next study: historical event-risk panel
 
-The current historical data artifact is an eighteen-disclosure source-lineage fixture spanning vaccines, Alzheimer's disease, asthma, oncology, eosinophilic esophagitis, heart failure, chronic rhinosinusitis with nasal polyps, and Duchenne muscular dystrophy. It remains small and clustered, with several date-only catalyst times, so it cannot support fitting or a stable return estimate. The next research record should be opened only after adding a broader trial/disclosure cohort, point-in-time event features, a licensed OHLCV file, inactive/delisted issuers, and a preregistered chronological evaluation plan. Preserve every inclusion rule and data-source revision.
+The current historical data artifact is an 26-disclosure source-lineage fixture spanning vaccines, Alzheimer's disease, asthma, oncology, eosinophilic esophagitis, heart failure, chronic rhinosinusitis with nasal polyps, and Duchenne muscular dystrophy. It remains small and clustered, with several date-only catalyst times, so it cannot support fitting or a stable return estimate. The next research record should be opened only after adding a broader trial/disclosure cohort, point-in-time event features, a licensed OHLCV file, inactive/delisted issuers, and a preregistered chronological evaluation plan. Preserve every inclusion rule and data-source revision.
 
 ## Data audit · CTO 2020–2024 human-label subset
 

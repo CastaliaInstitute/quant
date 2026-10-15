@@ -9,7 +9,7 @@
       "The causal effect of trial biology on issuer returns",
       "Tradable alpha or an investable policy return"
     ],
-    "cohort_limitation": "The current 18-disclosure ledger is manually curated and selected for source traceability. It is not a representative event cohort and is ineligible for fitting under the sample gates."
+    "cohort_limitation": "The current 26-disclosure ledger is manually curated and selected for source traceability. It is not a representative event cohort and is ineligible for fitting under the sample gates."
   },
   "event_and_feature_timing": {
     "event_catalog": "data/biopharma/public_events.csv",
