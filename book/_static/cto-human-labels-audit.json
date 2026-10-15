@@ -1,0 +1,49 @@
+{
+  "dataset": "Clinical Trial Outcome (CTO), human_labels_2020_2024",
+  "dataset_revision": "6b080abb5a510e8a6573085f4b843e08ac3b6204",
+  "source_url": "https://huggingface.co/datasets/chufangao/CTO/resolve/6b080abb5a510e8a6573085f4b843e08ac3b6204/human_labels_2020_2024/human_labels_2020_2024.csv",
+  "source_sha256": "c51b9c455de8c0befc07bc3ec58ba4b09da35767fd7f0d9f2ecb048cdb51fc47",
+  "row_count": 11012,
+  "unique_trials": 11012,
+  "label_counts_in_selected_cohort": {
+    "0.0": 7467,
+    "1.0": 3545
+  },
+  "phase_counts_in_selected_cohort": {
+    "EARLY_PHASE1": 305,
+    "PHASE1": 1926,
+    "PHASE1/PHASE2": 1010,
+    "PHASE2": 3648,
+    "PHASE2/PHASE3": 404,
+    "PHASE3": 2419,
+    "PHASE4": 1300
+  },
+  "status_counts_in_selected_cohort": {
+    "COMPLETED": 3870,
+    "SUSPENDED": 212,
+    "TERMINATED": 4782,
+    "WITHDRAWN": 2148
+  },
+  "completion_year_counts": {
+    "2020": 2456,
+    "2021": 2492,
+    "2022": 2673,
+    "2023": 2230,
+    "2024": 1161
+  },
+  "study_first_posted_date_min": "1999-11-04",
+  "study_first_posted_date_max": "2024-10-15",
+  "modeling_disposition": "external clinical-outcome benchmark only; no return modeling and no RL transition probabilities fitted",
+  "selection_caveat": "The authors describe a manually annotated subset that applies prior rule-based filtering to remove easy cases. Its label prevalence is not a population success-rate prior.",
+  "temporal_caveat": "The extract contains current registry metadata and outcome-derived fields; it is not a point-in-time feature archive. Use only after a separate leakage audit and do not use status, completion, results-posting, or post-outcome fields as predictors.",
+  "market_data_caveat": "The cohort does not supply verified first-public-disclosure timestamps or daily security return histories; it cannot calibrate market reaction or trading reward.",
+  "excluded_fields_for_pre_outcome_prediction": [
+    "overall_status",
+    "completion_date",
+    "primary_completion_date",
+    "results_first_posted_date",
+    "why_stopped",
+    "last_update_posted_date",
+    "labels"
+  ]
+}

@@ -1,0 +1,8 @@
+[project]
+name = "quantlab-cells-worker"
+version = "0.1.0"
+description = "Bounded Python execution runtime for QuantLab research cells"
+requires-python = ">=3.13"
+
+[dependency-groups]
+dev = ["workers-py", "workers-runtime-sdk"]

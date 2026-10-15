@@ -1,0 +1,30 @@
+title: Quant. Research Portfolio · Castalia Institute
+author: Castalia Institute
+logo: _static/castalia-mark.svg
+only_build_toc_files: true
+execute:
+  execute_notebooks: off
+parse:
+  myst_enable_extensions:
+    - colon_fence
+    - deflist
+    - dollarmath
+    - amsmath
+html:
+  favicon: _static/favicon.svg
+  use_issues_button: false
+  use_repository_button: true
+  use_edit_page_button: false
+  extra_footer: |
+    <p class="castalia-footer">CASTALIA INSTITUTE · RESEARCH BEFORE EXECUTION · LIVE TRADING DISABLED</p>
+  extra_css:
+    - _static/castalia.css
+  extra_js:
+    - _static/live-cells.js
+repository:
+  url: https://github.com/CastaliaInstitute/quant
+  branch: main
+sphinx:
+  config:
+    highlight_language: python3
+    thebe_config: {}

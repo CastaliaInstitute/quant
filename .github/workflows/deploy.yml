@@ -1,0 +1,71 @@
+name: Build and deploy QuantLab
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quantlab-production
+  cancel-in-progress: true
+
+jobs:
+  build-book:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install Jupyter Book
+        run: python -m pip install -e ".[dev]" -r requirements-book.txt
+      - name: Run project checks
+        run: PYTHONPATH=worker/src pytest -q tests
+      - name: Build the research book
+        run: jupyter-book build book --path-output book
+      - uses: actions/upload-artifact@v4
+        with:
+          name: quantlab-book
+          path: book/_build/html
+          if-no-files-found: error
+
+  deploy:
+    needs: build-book
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: quantlab-book
+          path: book/_build/html
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Ensure Cloudflare Pages project exists
+        run: python scripts/configure_cloudflare_pages.py --phase prepare
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.12.3"
+      - name: Deploy the Python cell Worker
+        working-directory: worker
+        run: uv run --group dev pywrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Deploy the book to Cloudflare Pages
+        working-directory: worker
+        run: uv run --group dev pywrangler pages deploy ../book/_build/html --project-name quantlab --branch main
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Attach custom domain and point DNS to Pages
+        run: python scripts/configure_cloudflare_pages.py --phase domain
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

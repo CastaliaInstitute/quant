@@ -1,0 +1,241 @@
+{
+  "study": "toy_regime_switching_trading_gym",
+  "evidence_status": "synthetic_simulator_diagnostic_only",
+  "not_a_claim": "No historical market data or evidence of a trading edge is represented.",
+  "configuration": {
+    "training_episodes": 300,
+    "evaluation_runs": 60,
+    "episode_length_sessions": 252,
+    "training_seed": 17,
+    "evaluation_seed_start": 10000,
+    "transaction_cost_bps_per_unit_turnover": 5.0,
+    "policies": [
+      "cash",
+      "buy_and_hold",
+      "trend_rule",
+      "q_learner"
+    ]
+  },
+  "evaluation_protocol": {
+    "episodes": "independent seeds sampled from the same synthetic generator family used for training",
+    "market_holdout": false,
+    "interpretation": "This checks simulator behavior and seed variation; it does not test historical or new-regime generalization.",
+    "seed_reuse_note": "This published seed block was also inspected in a post hoc 1,000-episode training-budget run; treat it as exploratory, not as an untouched holdout."
+  },
+  "learned_q_values": [
+    [
+      0.00026563927383287534,
+      -0.005298209786587539
+    ],
+    [
+      0.0003899660334939818,
+      -0.003518098473741994
+    ],
+    [
+      0.00023939682403890215,
+      -0.0017236030148409637
+    ],
+    [
+      0.0003845568353932793,
+      8.444993176953686e-05
+    ],
+    [
+      0.0002741296914630205,
+      -0.0008022214355489286
+    ],
+    [
+      0.0003945213261166637,
+      -0.0008235511824779845
+    ]
+  ],
+  "evaluation_summary": {
+    "cash": {
+      "annualized_return": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "annualized_volatility": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "sharpe": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "sortino": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "max_drawdown": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "calmar": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "information_ratio": {
+        "median": -0.2500557421129343,
+        "p10": -1.5595207768998989,
+        "p90": 1.3049810620514855
+      },
+      "annual_turnover": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "total_cost": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      }
+    },
+    "buy_and_hold": {
+      "annualized_return": {
+        "median": 0.02774529187616459,
+        "p10": -0.20711516824993642,
+        "p90": 0.2718239772020564
+      },
+      "annualized_volatility": {
+        "median": 0.18039007108563848,
+        "p10": 0.15595344716569465,
+        "p90": 0.20515677176893649
+      },
+      "sharpe": {
+        "median": 0.2500557421129343,
+        "p10": -1.3049810620514852,
+        "p90": 1.5595207768998989
+      },
+      "sortino": {
+        "median": 0.3581401699211555,
+        "p10": -1.6791795631572604,
+        "p90": 2.373876701814673
+      },
+      "max_drawdown": {
+        "median": -0.16547857037809943,
+        "p10": -0.29724518029150687,
+        "p90": -0.10999986582501076
+      },
+      "calmar": {
+        "median": 0.18002630235103093,
+        "p10": -0.7880545092772405,
+        "p90": 2.6925317592499556
+      },
+      "information_ratio": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "annual_turnover": {
+        "median": 1.0,
+        "p10": 1.0,
+        "p90": 1.0
+      },
+      "total_cost": {
+        "median": 0.0005,
+        "p10": 0.0005,
+        "p90": 0.0005
+      }
+    },
+    "trend_rule": {
+      "annualized_return": {
+        "median": -0.034290972228374794,
+        "p10": -0.16210408763202053,
+        "p90": 0.20826538103445535
+      },
+      "annualized_volatility": {
+        "median": 0.1303995812088915,
+        "p10": 0.10288662813063448,
+        "p90": 0.14676962438089905
+      },
+      "sharpe": {
+        "median": -0.2058076044434079,
+        "p10": -1.3657513104317203,
+        "p90": 1.2601426664710014
+      },
+      "sortino": {
+        "median": -0.28641875413739337,
+        "p10": -1.815068916734295,
+        "p90": 2.0292885501080655
+      },
+      "max_drawdown": {
+        "median": -0.12506557516260414,
+        "p10": -0.1987910006705864,
+        "p90": -0.07049663563504241
+      },
+      "calmar": {
+        "median": -0.2403155788545288,
+        "p10": -0.878547088256989,
+        "p90": 2.0893135132221294
+      },
+      "information_ratio": {
+        "median": -0.1968483817495913,
+        "p10": -1.865745402441867,
+        "p90": 0.8919620800543225
+      },
+      "annual_turnover": {
+        "median": 51.0,
+        "p10": 46.0,
+        "p90": 58.1
+      },
+      "total_cost": {
+        "median": 0.025500000000000002,
+        "p10": 0.023,
+        "p90": 0.029050000000000003
+      }
+    },
+    "q_learner": {
+      "annualized_return": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "annualized_volatility": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "sharpe": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "sortino": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "max_drawdown": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "calmar": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "information_ratio": {
+        "median": -0.2500557421129343,
+        "p10": -1.5595207768998989,
+        "p90": 1.3049810620514855
+      },
+      "annual_turnover": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      },
+      "total_cost": {
+        "median": 0.0,
+        "p10": 0.0,
+        "p90": 0.0
+      }
+    }
+  }
+}

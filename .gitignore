@@ -10,3 +10,7 @@ dist/
 !.env.example
 
 *.egg-info/
+_build/
+.wrangler/
+data/raw/
+data/processed/

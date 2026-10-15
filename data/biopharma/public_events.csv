@@ -1,0 +1,6 @@
+event_id,ticker,issuer,nct_id,event_date,event_time_local,event_timezone,event_type,source_url,time_precision
+MRNA-mRNA1273-COVE-20201116,MRNA,Moderna,NCT04470427,2020-11-16,,,phase_3_interim_readout,https://www.sec.gov/Archives/edgar/data/1682852/000119312520293735/d53512dex991.htm,date_only
+PFE-BNT162B2-INTERIM-20201109,PFE,Pfizer,NCT04368728,2020-11-09,06:45,America/New_York,phase_3_interim_readout,https://www.pfizer.com/news/press-release/press-release-detail/pfizer-and-biontech-announce-vaccine-candidate-against,date_and_time
+AZN-AZD1222-INTERIM-20201123,AZN,AstraZeneca,NCT04516746,2020-11-23,,,phase_3_interim_readout,https://www.ox.ac.uk/news/2020-11-23-oxford-university-breakthrough-global-covid-19-vaccine,date_only
+NVAX-NVX-COV2373-UK-20210128,NVAX,Novavax,NCT04583995,2021-01-28,,,phase_3_readout,https://ir.novavax.com/press-releases/2021-01-28-Novavax-COVID-19-Vaccine-Demonstrates-89-3-Efficacy-in-UK-Phase-3-Trial,date_only
+JNJ-ENSEMBLE-20210129,JNJ,Johnson & Johnson,NCT04505722,2021-01-29,,,phase_3_interim_readout,https://www.jnj.com/media-center/press-releases/johnson-and-johnson-announces-single-shot-janssen-covid-19-vaccine-candidate-met-primary-endpoints-in-interim-analysis-of-its-phase-3-ensemble-trial,date_only

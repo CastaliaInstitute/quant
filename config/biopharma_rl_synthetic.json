@@ -1,0 +1,16 @@
+{
+  "catalyst_interval_sessions": 63,
+  "broad_market_daily_mean": 0.00025,
+  "broad_market_daily_volatility": 0.01,
+  "issuer_market_beta": 0.35,
+  "issuer_daily_mean": 0.00015,
+  "issuer_idiosyncratic_daily_volatility": 0.025,
+  "event_residual_volatility": 0.025,
+  "phase_sampling_probabilities": [0.5, 0.5],
+  "phase_success_probabilities": [0.289, 0.578],
+  "phase_success_market_positive_probabilities": [0.72, 0.65],
+  "phase_failure_market_positive_probabilities": [0.22, 0.28],
+  "phase_positive_market_gaps": [0.13, 0.24],
+  "phase_negative_market_gaps": [-0.16, -0.32],
+  "transaction_cost_bps_per_unit_turnover": 10.0
+}

@@ -1,0 +1,10 @@
+name = "quantlab-cells"
+main = "src/entry.py"
+compatibility_date = "2026-10-14"
+compatibility_flags = ["python_workers"]
+workers_dev = true
+preview_urls = false
+
+[[routes]]
+pattern = "cells.quant.castalia.institute"
+custom_domain = true

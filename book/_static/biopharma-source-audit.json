@@ -1,0 +1,112 @@
+{
+  "evidence_status": "source_lineage_audit_only_no_price_join_or_model_fit",
+  "generated_from_local_source_pull": {
+    "retrieved_at_utc": "2026-10-15T01:25:26.514830+00:00",
+    "clinicaltrials_gov_api_version": "2.0.5",
+    "clinicaltrials_gov_data_timestamp": "2026-10-14T09:00:05",
+    "universe_sha256": "15717aca8d1bfe8cfa0df2428d0aa84489e8274b3d4b9b0a6cc7a9803684c078",
+    "current_trial_record_count": 5,
+    "current_linked_pubmed_reference_count": 58,
+    "europe_pmc_article_metadata_count": 52,
+    "sec_8k_6k_filing_metadata_count": 2747,
+    "sec_filing_ticker_count": 5,
+    "sec_filing_timestamp_precision_counts": {
+      "timestamp": 2747
+    },
+    "sec_filing_date_range": {
+      "first": "1994-06-24",
+      "last": "2026-10-13"
+    },
+    "sec_filings_sha256": "11843fd56ba07aab561814eb60572a8d52579cbc0767d32419009cf0c9b8f26a",
+    "issuer_event_source_count": 5,
+    "historical_price_bar_count": 0
+  },
+  "events": [
+    {
+      "event_id": "MRNA-mRNA1273-COVE-20201116",
+      "issuer": "Moderna",
+      "ticker": "MRNA",
+      "nct_id": "NCT04470427",
+      "issuer_disclosure_date": "2020-11-16",
+      "timestamp_precision": "date_only",
+      "trial_first_post_date": "2020-07-14",
+      "trial_primary_completion_date": "2022-12-29",
+      "current_registry_results_first_post_date": "2024-03-21",
+      "days_from_public_disclosure_to_registry_results_post": 1221,
+      "linked_pubmed_ids_in_current_record": 18,
+      "current_linked_papers_dated_on_or_before_event_hindsight_annotation": 0,
+      "current_linked_papers_dated_after_event_hindsight_annotation": 17,
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1682852/000119312520293735/d53512dex991.htm",
+      "event_type": "phase_3_interim_readout"
+    },
+    {
+      "event_id": "PFE-BNT162B2-INTERIM-20201109",
+      "issuer": "Pfizer",
+      "ticker": "PFE",
+      "nct_id": "NCT04368728",
+      "issuer_disclosure_date": "2020-11-09",
+      "timestamp_precision": "date_and_time",
+      "trial_first_post_date": "2020-04-30",
+      "trial_primary_completion_date": "2023-02-10",
+      "current_registry_results_first_post_date": "2026-03-25",
+      "days_from_public_disclosure_to_registry_results_post": 1962,
+      "linked_pubmed_ids_in_current_record": 15,
+      "current_linked_papers_dated_on_or_before_event_hindsight_annotation": 2,
+      "current_linked_papers_dated_after_event_hindsight_annotation": 13,
+      "source_url": "https://www.pfizer.com/news/press-release/press-release-detail/pfizer-and-biontech-announce-vaccine-candidate-against",
+      "event_type": "phase_3_interim_readout"
+    },
+    {
+      "event_id": "AZN-AZD1222-INTERIM-20201123",
+      "issuer": "AstraZeneca",
+      "ticker": "AZN",
+      "nct_id": "NCT04516746",
+      "issuer_disclosure_date": "2020-11-23",
+      "timestamp_precision": "date_only",
+      "trial_first_post_date": "2020-08-18",
+      "trial_primary_completion_date": "2021-03-05",
+      "current_registry_results_first_post_date": "2022-04-01",
+      "days_from_public_disclosure_to_registry_results_post": 494,
+      "linked_pubmed_ids_in_current_record": 15,
+      "current_linked_papers_dated_on_or_before_event_hindsight_annotation": 7,
+      "current_linked_papers_dated_after_event_hindsight_annotation": 8,
+      "source_url": "https://www.ox.ac.uk/news/2020-11-23-oxford-university-breakthrough-global-covid-19-vaccine",
+      "event_type": "phase_3_interim_readout"
+    },
+    {
+      "event_id": "NVAX-NVX-COV2373-UK-20210128",
+      "issuer": "Novavax",
+      "ticker": "NVAX",
+      "nct_id": "NCT04583995",
+      "issuer_disclosure_date": "2021-01-28",
+      "timestamp_precision": "date_only",
+      "trial_first_post_date": "2020-10-12",
+      "trial_primary_completion_date": "2022-03-29",
+      "current_registry_results_first_post_date": null,
+      "days_from_public_disclosure_to_registry_results_post": null,
+      "linked_pubmed_ids_in_current_record": 1,
+      "current_linked_papers_dated_on_or_before_event_hindsight_annotation": 0,
+      "current_linked_papers_dated_after_event_hindsight_annotation": 1,
+      "source_url": "https://ir.novavax.com/press-releases/2021-01-28-Novavax-COVID-19-Vaccine-Demonstrates-89-3-Efficacy-in-UK-Phase-3-Trial",
+      "event_type": "phase_3_readout"
+    },
+    {
+      "event_id": "JNJ-ENSEMBLE-20210129",
+      "issuer": "Johnson & Johnson",
+      "ticker": "JNJ",
+      "nct_id": "NCT04505722",
+      "issuer_disclosure_date": "2021-01-29",
+      "timestamp_precision": "date_only",
+      "trial_first_post_date": "2020-08-10",
+      "trial_primary_completion_date": "2023-03-31",
+      "current_registry_results_first_post_date": "2022-04-15",
+      "days_from_public_disclosure_to_registry_results_post": 441,
+      "linked_pubmed_ids_in_current_record": 9,
+      "current_linked_papers_dated_on_or_before_event_hindsight_annotation": 1,
+      "current_linked_papers_dated_after_event_hindsight_annotation": 8,
+      "source_url": "https://www.jnj.com/media-center/press-releases/johnson-and-johnson-announces-single-shot-janssen-covid-19-vaccine-candidate-met-primary-endpoints-in-interim-analysis-of-its-phase-3-ensemble-trial",
+      "event_type": "phase_3_interim_readout"
+    }
+  ],
+  "interpretation": "Registry result-post dates can lag public issuer readouts by years; current trial fields and current linked references are hindsight annotations, not historical model inputs."
+}
