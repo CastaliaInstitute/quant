@@ -60,7 +60,7 @@ jupyter-book build book --path-output book
 
 Historical registry, biomedical-publication, and issuer filing metadata have been pulled for 27 trial-to-issuer mappings and 26 sourced disclosures across multiple therapeutic areas/indications. The cohort remains a source-lineage fixture, not a training sample. Market prices are fetched separately through a provider account or imported from a licensed CSV; see [the biopharma data guide](book/data-sources.md). No stock-price file has been provided yet, so there is no historical event-return result or fitted historical model.
 
-After a broader event cohort, archived point-in-time trial versions, and licensed price bars are available, build the local panel and run the gated walk-forward evaluator:
+Historical bars can be fetched locally from Alpaca or MarketData.app with `python scripts/fetch_alpaca_bars.py --provider marketdata`; follow the secure token setup and license-review steps in [the data guide](book/data-sources.md). After a broader event cohort, archived point-in-time trial versions, and approved price bars are available, build the local panel and run the gated walk-forward evaluator:
 
 ```bash
 python scripts/build_biopharma_event_panel.py
