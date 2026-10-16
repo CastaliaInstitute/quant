@@ -9,10 +9,12 @@ from __future__ import annotations
 
 import argparse
 import csv
+import getpass
 import hashlib
 import json
 import os
 import re
+import sys
 import urllib.parse
 import urllib.request
 from datetime import datetime, timedelta, timezone
@@ -107,7 +109,11 @@ def main() -> None:
     if args.provider == "alpaca" and (not key or not secret):
         raise SystemExit("Set APCA_API_KEY_ID and APCA_API_SECRET_KEY, or pass --provider marketdata with MARKETDATA_TOKEN.")
     if args.provider == "marketdata" and not marketdata_token:
-        raise SystemExit("Set MARKETDATA_TOKEN in your local shell; do not commit or paste it into a public file.")
+        if not sys.stdin.isatty():
+            raise SystemExit("Run interactively to enter the hidden MarketData.app token prompt, or set MARKETDATA_TOKEN in your local shell.")
+        marketdata_token = getpass.getpass("MarketData.app API token (input hidden): ").strip()
+        if not marketdata_token:
+            raise SystemExit("No MarketData.app token entered.")
     symbols = (
         sorted({symbol.strip().upper() for symbol in args.symbols.split(",") if symbol.strip()})
         if args.symbols else mapped_symbols()

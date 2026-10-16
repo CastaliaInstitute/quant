@@ -55,15 +55,13 @@ export APCA_API_SECRET_KEY='…'
 python scripts/fetch_alpaca_bars.py --feed sip
 ```
 
-For [MarketData.app](https://www.marketdata.app/docs/api/authentication/), request an API token from its customer dashboard; the provider emails the token to the account address. Enter it into a hidden shell prompt so it is not written into shell history, then run the local fetch:
+For [MarketData.app](https://www.marketdata.app/docs/api/authentication/), request an API token from its customer dashboard; the provider emails the token to the account address. Run the local fetch interactively; if `MARKETDATA_TOKEN` is unset, the script prompts for the token with hidden input (it is not echoed, written to shell history, or saved in the manifest):
 
 ```bash
-read -s 'MARKETDATA_TOKEN?Paste MarketData.app token: '
-export MARKETDATA_TOKEN
-echo
 python scripts/fetch_alpaca_bars.py --provider marketdata
-unset MARKETDATA_TOKEN
 ```
+
+For managed shells, `MARKETDATA_TOKEN` may be supplied through the host's secret manager instead; never add it to `.env`, source control, or the public Worker.
 
 The fetcher sends `Authorization: Bearer …` in the HTTPS header, one daily-candle request per symbol, and asks for split- and dividend-adjusted candles. It accepts the provider's cached HTTP 203 success response as well as HTTP 200, and converts its midnight-Eastern timestamps to exchange-session dates. The token is never written to the output manifest. MarketData.app documents a one-IP-at-a-time policy; switching the same account between machines/IPs within five minutes can temporarily block requests. Review your account's data entitlement and terms for this research and any derived public output. The generated manifest starts with `license_review_status: unverified`; the event-panel builder will reject it until the account/license review is explicitly approved. See the provider's [candle endpoint details](https://www.marketdata.app/docs/api/stocks/candles/) and [authentication guidance](https://www.marketdata.app/docs/api/authentication/).
 
