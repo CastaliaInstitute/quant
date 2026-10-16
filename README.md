@@ -30,6 +30,7 @@ The starter keeps these choices visible in code and experiment records. A user f
 - Page-local Python cells that run on the Cloudflare Python Worker in `worker/`. The Worker is stateless: the browser sends the page's cells in order to reconstruct variables for each run.
 - A small Python research package with one-period signal lag, proportional transaction costs, net return metrics, benchmark alignment, 1×/2×/4× cost sensitivity, and equal-weight / inverse-volatility portfolio allocation and rebalancing baselines with issuer and sector caps.
 - A seeded Gymnasium-compatible synthetic biotech catalyst environment, with separately sampled Phase II/III program advancement and market reactions. Advancement priors use published 2011–2020 aggregate transition rates; market reactions remain synthetic. Tabular Q-learning is compared with cash, buy-and-hold, a trend rule, and a pre-catalyst risk rule.
+- A deterministic multi-asset portfolio-construction demonstration compares cash, equal-weight, inverse-volatility, and trend rules with lagged execution, issuer/sector caps, a synthetic XBI-like benchmark, and 1×/2×/4× cost stress. Its report is labeled synthetic mechanics only.
 - A historical event-data pipeline for ClinicalTrials.gov, biomedical publication metadata, SEC issuer filings, and a user-supplied licensed stock-price file, with SPY and XBI context; point-in-time features exclude records unavailable at the decision cutoff, and source hashes are recorded in a local panel manifest. It estimates a pre-event two-factor market model and keeps abnormal-return outputs separate from pre-event model features. Fetched and processed datasets remain local and are excluded from Git.
 - A pinned audit of the MIT-licensed Clinical Trial Outcome human-label benchmark. Its [leakage review](book/research/cto-audit.md) quantifies a forbidden 97.05%-accurate current-status rule and explains why zero current registry fields are yet verified as point-in-time predictors; no labels feed the RL priors or market-return model.
 - An AI-impact monitoring lane for candidate-level discovery, clinical-trial operations, company/market effects, patient access and safety, workforce impacts, and environmental costs. The monitor separates curated outcomes from AI-exposure contrasts and does not interpret descriptive cohorts as causal AI effects.
@@ -51,6 +52,7 @@ python scripts/run_rl_study.py
 python scripts/run_rl_stress.py
 python scripts/run_rl_training_robustness.py
 python scripts/audit_rl_reward_incentives.py
+python scripts/build_synthetic_portfolio_demo.py
 python scripts/ingest_biopharma.py --with-sec-filings
 python scripts/monitor_ai_trials.py
 python scripts/audit_ai_impact.py

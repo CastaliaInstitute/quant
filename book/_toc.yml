@@ -9,6 +9,7 @@ chapters:
   - file: simulation
   - file: data-sources
   - file: research/metrics
+  - file: research/portfolio-simulation
   - file: research/evidence-review
   - file: research/cto-audit
   - file: research/ai-impact
