@@ -139,6 +139,7 @@ def main() -> None:
     parser.add_argument("--research-evidence", type=Path, default=ROOT / "data/biopharma/research_evidence.schema.csv")
     parser.add_argument("--sec-filings", type=Path, default=ROOT / "data/raw/sec_filings.csv")
     parser.add_argument("--prices", type=Path, default=ROOT / "data/raw/market_prices.csv")
+    parser.add_argument("--price-manifest", type=Path, default=ROOT / "data/raw/market-data-manifest.json")
     parser.add_argument(
         "--allow-unadjusted-close",
         action="store_true",
@@ -155,6 +156,23 @@ def main() -> None:
     research_evidence = read_csv(args.research_evidence) if args.research_evidence.exists() else pd.DataFrame()
     sec_filings = read_csv(args.sec_filings) if args.sec_filings.exists() else pd.DataFrame()
     prices = read_csv(args.prices)
+    if not args.price_manifest.exists():
+        raise SystemExit(
+            f"Price manifest not found: {args.price_manifest}; provide the provider's manifest "
+            "or a local manifest with provider, adjustment, license_review_status, and csv_sha256."
+        )
+    price_manifest = json.loads(args.price_manifest.read_text(encoding="utf-8"))
+    if not price_manifest.get("provider"):
+        raise SystemExit("Price manifest must identify the data provider")
+    if not price_manifest.get("adjustment"):
+        raise SystemExit("Price manifest must document its corporate-action adjustment policy")
+    if price_manifest.get("csv_sha256") != hashlib.sha256(args.prices.read_bytes()).hexdigest():
+        raise SystemExit("Price manifest csv_sha256 does not match the supplied price CSV")
+    if price_manifest.get("license_review_status") != "approved_for_research":
+        raise SystemExit(
+            "Price manifest license_review_status must be approved_for_research after reviewing "
+            "the provider's terms for this intended research use"
+        )
     required = {"date", "symbol"}
     if not required.issubset(prices.columns):
         raise SystemExit(f"Price input needs columns: {', '.join(sorted(required))}")
@@ -190,6 +208,16 @@ def main() -> None:
             "Price input is missing benchmark symbol(s): " + ", ".join(missing_benchmarks)
             + ". Fetch them with --symbols or pass an empty benchmark option to disable."
         )
+    required_issuers = set(events.ticker.astype(str).str.strip().str.upper())
+    related_issuers: set[str] = set()
+    if "related_tickers" in events.columns:
+        for value in events.related_tickers.astype(str):
+            related_issuers.update(
+                part.strip().upper() for part in value.replace(";", ",").split(",") if part.strip()
+            )
+    missing_issuers = sorted((required_issuers | related_issuers) - set(prices.symbol))
+    if missing_issuers:
+        raise SystemExit("Price input is missing event or related issuer symbol(s): " + ", ".join(missing_issuers))
     if "nct_id" not in trials or trials.nct_id.astype(str).str.upper().duplicated().any():
         raise SystemExit("Current-trial input must have one row per nct_id")
     if "pmid" not in publications:
@@ -464,6 +492,7 @@ def main() -> None:
         "trials": args.trials,
         "publications": args.publications,
         "prices": args.prices,
+        "price_manifest": args.price_manifest,
     }
     for key, path in (("trial_versions", args.trial_versions), ("research_evidence", args.research_evidence), ("sec_filings", args.sec_filings)):
         if path.exists():
@@ -471,6 +500,7 @@ def main() -> None:
     manifest = {
         "evidence_status": "historical_event_panel_requires_manual_timestamp_and_coverage_review",
         "row_count": len(rows),
+        "panel_sha256": hashlib.sha256(args.output.read_bytes()).hexdigest(),
         "price_field": price_column,
         "price_basis": price_basis,
         "benchmark_symbols": benchmark_symbols,
@@ -482,7 +512,14 @@ def main() -> None:
             "role": "descriptive outcomes only; never eligible pre-event model features",
         },
         "input_sha256": {key: hashlib.sha256(path.read_bytes()).hexdigest() for key, path in inputs.items()},
-        "input_paths": {key: str(path) for key, path in inputs.items()},
+        "input_paths": {key: str(path.resolve()) for key, path in inputs.items()},
+        "price_manifest": {
+            "provider": price_manifest["provider"],
+            "adjustment": price_manifest["adjustment"],
+            "license_review_status": price_manifest["license_review_status"],
+            "csv_sha256": price_manifest["csv_sha256"],
+            "manifest_sha256": hashlib.sha256(args.price_manifest.read_bytes()).hexdigest(),
+        },
         "cutoff_convention": "prior matched regular-session close; 16:00 America/New_York",
         "latest_registry_fields": "hindsight annotations only; excluded from model features",
         "market_data_redistribution": "Check provider license; raw/processed market data stays local by default.",

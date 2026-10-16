@@ -82,9 +82,15 @@ def main() -> None:
             positive = valid.adjusted_close.gt(0).all()
             unique = not valid.duplicated(["date", "symbol"]).any()
             observed_symbols = set(valid.symbol)
+            related_symbols: set[str] = set()
+            if "related_tickers" in events:
+                for value in events.related_tickers.astype(str):
+                    related_symbols.update(
+                        part.strip().upper() for part in value.replace(";", ",").split(",") if part.strip()
+                    )
             required_symbols = {"SPY", "XBI"} | set(
                 events.ticker.astype(str).str.strip().str.upper().replace("", pd.NA).dropna()
-            )
+            ) | related_symbols
             missing_symbols = sorted(required_symbols - observed_symbols)
             price_check.update({
                 "adjusted_close_column": True,

@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-10-15T16:10:33.962142+00:00",
+  "generated_at_utc": "2026-10-15T17:47:19.344472+00:00",
   "status": "coverage_only",
   "interpretation": "This audit measures curated evidence coverage. It does not estimate the causal effect of AI; observational comparisons remain vulnerable to selection, confounding, and publication bias.",
   "exposure_ledger": {
@@ -18,7 +18,7 @@
   },
   "outcome_ledger": {
     "path": "data/biopharma/ai_outcomes.csv",
-    "sha256": "50aaa66eb9ffd0e1d3d5241a4ecd728b7fbc2e3ef0f3ebf20e3223e75e2bdcaf",
+    "sha256": "5463221dc7f18644fc41f81a9e1060e6d61e93072c1fe1bcba414b45a11c5765",
     "records": 1,
     "domains": {
       "clinical_trial_measure": 1
@@ -30,6 +30,12 @@
     "reviewed_direct_ai_exposure_contrasts": 0,
     "impact_lanes": {
       "scientific": {
+        "dimensions": {
+          "clinical_efficacy": 1
+        },
+        "affected_groups": {
+          "trial_participants": 1
+        },
         "outcome_records": 1,
         "reviewed_records": 1,
         "reviewed_comparator_records": 1,
@@ -37,6 +43,8 @@
         "estimate_available": false
       },
       "operational": {
+        "dimensions": {},
+        "affected_groups": {},
         "outcome_records": 0,
         "reviewed_records": 0,
         "reviewed_comparator_records": 0,
@@ -44,6 +52,35 @@
         "estimate_available": false
       },
       "economic": {
+        "dimensions": {},
+        "affected_groups": {},
+        "outcome_records": 0,
+        "reviewed_records": 0,
+        "reviewed_comparator_records": 0,
+        "direct_ai_exposure_contrasts": 0,
+        "estimate_available": false
+      },
+      "patient_access_and_safety": {
+        "dimensions": {},
+        "affected_groups": {},
+        "outcome_records": 0,
+        "reviewed_records": 0,
+        "reviewed_comparator_records": 0,
+        "direct_ai_exposure_contrasts": 0,
+        "estimate_available": false
+      },
+      "workforce_and_society": {
+        "dimensions": {},
+        "affected_groups": {},
+        "outcome_records": 0,
+        "reviewed_records": 0,
+        "reviewed_comparator_records": 0,
+        "direct_ai_exposure_contrasts": 0,
+        "estimate_available": false
+      },
+      "environmental": {
+        "dimensions": {},
+        "affected_groups": {},
         "outcome_records": 0,
         "reviewed_records": 0,
         "reviewed_comparator_records": 0,
@@ -51,6 +88,16 @@
         "estimate_available": false
       }
     }
+  },
+  "pipeline_to_market_watch": {
+    "status": "coverage_only",
+    "dated_candidate_or_trial_exposures": 0,
+    "economic_outcome_records": 0,
+    "economic_outcomes_with_comparator": 0,
+    "direct_ai_exposure_comparisons": 0,
+    "historical_price_panel_available": false,
+    "event_return_estimate_available": false,
+    "interpretation": "Tracks candidate/trial AI disclosures alongside company and market outcomes. Price reactions need timestamped, point-in-time disclosures, licensed prices, and market/biotech controls; they are not clinical impact or causal AI effects."
   },
   "literature_watch": {
     "path": "data/biopharma/ai_literature.csv",

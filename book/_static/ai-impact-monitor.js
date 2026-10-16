@@ -7,8 +7,11 @@
   const note = root.querySelector('.ai-monitor-note');
   const lanes = [
     ['scientific', 'Scientific impact', 'Clinical efficacy or progression'],
-    ['operational', 'Operational impact', 'Trial time, execution, or development cost'],
-    ['economic', 'Economic impact', 'Company value, revenue, or market response'],
+    ['operational', 'Operational impact', 'Trial time, execution, cost, or productivity'],
+    ['economic', 'Economic impact', 'Company value, revenue, market response, or labor'],
+    ['patient_access_and_safety', 'Patient impact', 'Access, safety, and health equity'],
+    ['workforce_and_society', 'Workforce impact', 'Employment, work quality, and scientific roles'],
+    ['environmental', 'Environmental impact', 'Energy, compute, and emissions'],
   ];
   fetch('../_static/ai-impact-monitor.json', { cache: 'no-store' })
     .then(response => { if (!response.ok) throw new Error(`HTTP ${response.status}`); return response.json(); })
@@ -34,14 +37,21 @@
         card.className = 'ai-monitor-card';
         const heading = document.createElement('h4'); heading.textContent = title;
         const value = document.createElement('strong'); value.textContent = lane.estimate_available ? 'Estimate available' : `${lane.direct_ai_exposure_contrasts ?? 0} direct AI contrasts`;
-        const detail = document.createElement('p'); detail.textContent = `${lane.reviewed_records ?? 0} reviewed outcomes · ${lane.reviewed_comparator_records ?? 0} with a comparator · ${description}`;
+        const dimensions = Object.entries(lane.dimensions ?? {}).map(([name, count]) => `${name.replaceAll('_', ' ')} (${count})`).join(', ');
+        const affected = Object.entries(lane.affected_groups ?? {}).map(([name, count]) => `${name.replaceAll('_', ' ')} (${count})`).join(', ');
+        const detail = document.createElement('p'); detail.textContent = `${lane.reviewed_records ?? 0} reviewed outcomes · ${lane.reviewed_comparator_records ?? 0} with a comparator · ${description}${dimensions ? ` · observed dimensions: ${dimensions}` : ''}${affected ? ` · affected groups: ${affected}` : ''}`;
         const tag = document.createElement('span'); tag.className = 'ai-monitor-pill'; tag.textContent = lane.estimate_available ? 'Reviewed estimate' : 'No AI effect estimate';
         card.append(heading, value, detail, tag); grid.append(card);
       }
       const exposure = data.exposure_ledger ?? {};
       const outcomes = data.outcome_ledger ?? {};
-      status.textContent = `${exposure.reviewed_records ?? 0} reviewed AI exposure record(s) · ${outcomes.reviewed_records ?? 0} reviewed outcome(s) · ${outcomes.reviewed_direct_ai_exposure_contrasts ?? 0} direct AI-vs-conventional comparisons. Coverage is not an AI score.`;
-      note.textContent = data.current_case_note ?? data.interpretation ?? '';
+      const marketWatch = data.pipeline_to_market_watch ?? {};
+      status.textContent = `${exposure.reviewed_records ?? 0} reviewed AI exposure record(s) · ${outcomes.reviewed_records ?? 0} reviewed outcome(s) · ${outcomes.reviewed_direct_ai_exposure_contrasts ?? 0} direct AI-exposure comparisons. Coverage is not an AI score.`;
+      const market = document.createElement('p');
+      market.textContent = `Pipeline → market: ${marketWatch.dated_candidate_or_trial_exposures ?? 0} dated candidate/trial exposure(s) · ${marketWatch.economic_outcome_records ?? 0} company/market outcome(s) · ${marketWatch.historical_price_panel_available ? 'price panel present; event study still requires validation' : 'no historical price panel'} · no event-return estimate published.`;
+      const limits = document.createElement('p');
+      limits.textContent = `${data.current_case_note ?? ''} ${marketWatch.interpretation ?? data.interpretation ?? ''}`.trim();
+      note.replaceChildren(market, limits);
     })
     .catch(() => { status.textContent = 'Monitor data could not be loaded. See the linked evidence ledger and audit JSON.'; });
 })();
