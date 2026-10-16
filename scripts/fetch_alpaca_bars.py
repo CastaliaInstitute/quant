@@ -14,6 +14,7 @@ import hashlib
 import json
 import os
 import re
+import subprocess
 import sys
 import urllib.parse
 import urllib.request
@@ -23,6 +24,31 @@ from zoneinfo import ZoneInfo
 
 
 ROOT = Path(__file__).resolve().parents[1]
+MARKETDATA_KEYCHAIN_SERVICE = "QuantLab MarketData.app"
+MARKETDATA_KEYCHAIN_ACCOUNT = "MARKETDATA_TOKEN"
+
+
+def marketdata_keychain_token() -> str | None:
+    """Read the optional macOS login-Keychain token without printing it."""
+    if sys.platform != "darwin":
+        return None
+    result = subprocess.run(
+        [
+            "/usr/bin/security",
+            "find-generic-password",
+            "-s",
+            MARKETDATA_KEYCHAIN_SERVICE,
+            "-a",
+            MARKETDATA_KEYCHAIN_ACCOUNT,
+            "-w",
+        ],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if result.returncode == 0 and result.stdout.strip():
+        return result.stdout.strip()
+    return None
 
 
 def mapped_symbols() -> list[str]:
@@ -106,6 +132,8 @@ def main() -> None:
     key = os.environ.get("APCA_API_KEY_ID")
     secret = os.environ.get("APCA_API_SECRET_KEY")
     marketdata_token = os.environ.get("MARKETDATA_TOKEN")
+    if args.provider == "marketdata" and not marketdata_token:
+        marketdata_token = marketdata_keychain_token()
     if args.provider == "alpaca" and (not key or not secret):
         raise SystemExit("Set APCA_API_KEY_ID and APCA_API_SECRET_KEY, or pass --provider marketdata with MARKETDATA_TOKEN.")
     if args.provider == "marketdata" and not marketdata_token:

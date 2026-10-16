@@ -55,7 +55,13 @@ export APCA_API_SECRET_KEY='…'
 python scripts/fetch_alpaca_bars.py --feed sip
 ```
 
-For [MarketData.app](https://www.marketdata.app/docs/api/authentication/), request an API token from its customer dashboard; the provider emails the token to the account address. Run the local fetch interactively; if `MARKETDATA_TOKEN` is unset, the script prompts for the token with hidden input (it is not echoed, written to shell history, or saved in the manifest):
+For [MarketData.app](https://www.marketdata.app/docs/api/authentication/), request an API token from its customer dashboard; the provider emails the token to the account address. On macOS, you can store it in the login Keychain with a hidden prompt (the token is not placed in shell history or a command argument):
+
+```bash
+security add-generic-password -U -s "QuantLab MarketData.app" -a MARKETDATA_TOKEN -w
+```
+
+The fetcher checks `MARKETDATA_TOKEN` in the environment first, then this Keychain item, then offers a hidden per-fetch prompt when running interactively:
 
 ```bash
 python scripts/fetch_alpaca_bars.py --provider marketdata
